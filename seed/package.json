@@ -1,0 +1,16 @@
+{
+  "name": "gymmanagement-seed",
+  "version": "1.0.0",
+  "description": "Seed dữ liệu mẫu (Admin SDK) cho GymManagement_Android. Chạy trên máy của bạn, KHÔNG nhúng vào APK.",
+  "private": true,
+  "main": "seed.js",
+  "scripts": {
+    "seed": "node seed.js",
+    "check": "node seed.js --dry-run",
+    "delete-samples": "node seed.js --delete-samples"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}

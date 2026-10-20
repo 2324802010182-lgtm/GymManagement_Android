@@ -1,0 +1,686 @@
+rules_version = '2';
+
+// =============================================================================
+// GymManagement – Firestore Security Rules
+// Nguyên tắc: mặc định TỪ CHỐI; chỉ mở đúng quyền cho từng vai trò.
+//  - Hội viên: chỉ đọc/ghi dữ liệu của chính mình, gửi/hủy yêu cầu đăng ký.
+//  - Chủ Gym (role gym_owner + accountStatus active): chỉ thao tác trong Gym mình sở hữu.
+//  - Quản trị nền tảng: chỉ khi tồn tại platformAdmins/{uid} (do Admin SDK cấp).
+// Đồng bộ với FIRESTORE_SCHEMA.md, mapper Java và seed script.
+// =============================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------
+    // Hàm dùng chung
+    // ------------------------------------------------------------------
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function uid() {
+      return request.auth.uid;
+    }
+
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isPlatformAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/platformAdmins/$(request.auth.uid));
+    }
+
+    function isActiveMember() {
+      return signedIn() && me().role == 'member' && me().accountStatus == 'active';
+    }
+
+    function isActiveOwner() {
+      return signedIn() && me().role == 'gym_owner' && me().accountStatus == 'active';
+    }
+
+    function gymData(gymId) {
+      return get(/databases/$(database)/documents/gyms/$(gymId)).data;
+    }
+
+    // Chủ Gym đã được duyệt và là chủ sở hữu của đúng Gym này.
+    function ownsGym(gymId) {
+      return isActiveOwner() && gymData(gymId).ownerUid == request.auth.uid;
+    }
+
+    function changedKeys() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    function isStr(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+
+    function isOptStr(v, maxLen) {
+      return v is string && v.size() <= maxLen;
+    }
+
+    function isHttpsOrEmpty(v) {
+      return v is string && v.size() <= 500 && (v == '' || v.matches('^https://.+'));
+    }
+
+    // Tên đã được làm sạch: không khoảng trắng đầu/cuối, không 2 khoảng trắng liền nhau, không '/'.
+    function isCleanName(n) {
+      return n == n.trim() && !n.matches('.*  .*') && !n.matches('.*/.*');
+    }
+
+    // Mã ngày yyyyMMdd theo giờ Việt Nam (UTC+7) tính từ thời gian máy chủ.
+    function vnDateKey() {
+      let t = request.time + duration.value(7, 'h');
+      return string(t.year())
+        + (t.month() < 10 ? '0' : '') + string(t.month())
+        + (t.day() < 10 ? '0' : '') + string(t.day());
+    }
+
+    // ------------------------------------------------------------------
+    // users/{userId} – hồ sơ người dùng
+    // ------------------------------------------------------------------
+    match /users/{userId} {
+      allow read: if signedIn() && (uid() == userId || isPlatformAdmin());
+
+      // Người dùng chỉ được tạo hồ sơ của chính mình với vai trò an toàn:
+      //  member + active, hoặc gym_owner + pending (chờ quản trị duyệt).
+      allow create: if signedIn() && uid() == userId && validNewUser();
+
+      allow update: if signedIn()
+        && ((uid() == userId && validSelfUpdate()) || (isPlatformAdmin() && validAdminReview()));
+
+      allow delete: if false;
+
+      function validNewUser() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['uid', 'fullName', 'email', 'phone', 'role', 'accountStatus', 'createdAt', 'updatedAt'])
+          && d.keys().hasOnly(['uid', 'fullName', 'email', 'phone', 'role', 'accountStatus',
+                               'applicationNote', 'proposedGymName', 'createdAt', 'updatedAt'])
+          && d.uid == request.auth.uid
+          && isStr(d.fullName, 2, 80)
+          && d.email == request.auth.token.email
+          && isStr(d.phone, 9, 15)
+          && ((d.role == 'member' && d.accountStatus == 'active')
+              || (d.role == 'gym_owner' && d.accountStatus == 'pending'))
+          && (!('applicationNote' in d) || isOptStr(d.applicationNote, 300))
+          && (!('proposedGymName' in d) || isOptStr(d.proposedGymName, 80))
+          && d.createdAt == request.time
+          && d.updatedAt == request.time;
+      }
+
+      // Tự sửa: chỉ họ tên, số điện thoại, mục tiêu. Không thể đổi role/accountStatus/email.
+      function validSelfUpdate() {
+        let d = request.resource.data;
+        return changedKeys().hasOnly(['fullName', 'phone', 'goal', 'updatedAt'])
+          && isStr(d.fullName, 2, 80)
+          && isStr(d.phone, 9, 15)
+          && d.updatedAt == request.time
+          && (!('goal' in d) || validGoal(d.goal));
+      }
+
+      function validGoal(g) {
+        return g is map
+          && g.keys().hasOnly(['targetWeightKg', 'weeklyWorkoutTarget', 'note'])
+          && (!('targetWeightKg' in g) || g.targetWeightKg == null
+              || (g.targetWeightKg is number && g.targetWeightKg >= 20 && g.targetWeightKg <= 350))
+          && (!('weeklyWorkoutTarget' in g) || g.weeklyWorkoutTarget == null
+              || (g.weeklyWorkoutTarget is int && g.weeklyWorkoutTarget >= 1 && g.weeklyWorkoutTarget <= 14))
+          && (!('note' in g) || isOptStr(g.note, 200));
+      }
+
+      // Quản trị nền tảng chỉ đổi trạng thái tài khoản (không đổi vai trò).
+      function validAdminReview() {
+        let d = request.resource.data;
+        return changedKeys().hasOnly(['accountStatus', 'reviewedBy', 'reviewedAt', 'reviewNote', 'updatedAt'])
+          && resource.data.role in ['member', 'gym_owner']
+          && d.accountStatus in ['active', 'pending', 'rejected', 'suspended']
+          && d.reviewedBy == request.auth.uid
+          && d.reviewedAt == request.time
+          && d.updatedAt == request.time
+          && isOptStr(d.reviewNote, 300);
+      }
+
+      // ---------- users/{userId}/notifications ----------
+      match /notifications/{notificationId} {
+        allow read: if signedIn() && uid() == userId;
+
+        allow update: if signedIn() && uid() == userId
+          && changedKeys().hasOnly(['isRead', 'readAt'])
+          && request.resource.data.isRead == true
+          && request.resource.data.readAt == request.time;
+
+        allow delete: if signedIn() && uid() == userId;
+
+        allow create: if signedIn() && validNotificationShape()
+          && (memberRequestNotice() || ownerNotice() || adminNotice() || selfExpiringNotice());
+
+        function validNotificationShape() {
+          let d = request.resource.data;
+          return d.keys().hasAll(['recipientUid', 'gymId', 'gymName', 'title', 'body', 'type', 'relatedId',
+                                  'isRead', 'senderUid', 'createdAt'])
+            && d.keys().hasOnly(['recipientUid', 'gymId', 'gymName', 'title', 'body', 'type', 'relatedId',
+                                 'isRead', 'senderUid', 'createdAt'])
+            && d.recipientUid == userId
+            && d.senderUid == request.auth.uid
+            && d.isRead == false
+            && d.createdAt == request.time
+            && isStr(d.title, 1, 120)
+            && isStr(d.body, 1, 600)
+            && d.gymId is string && d.gymName is string
+            && d.type is string && d.relatedId is string;
+        }
+
+        // Hội viên báo cho Chủ Gym khi gửi yêu cầu mới (chỉ trong cùng thao tác tạo yêu cầu).
+        function memberRequestNotice() {
+          let d = request.resource.data;
+          let req = /databases/$(database)/documents/gyms/$(d.gymId)/membershipRequests/$(d.relatedId);
+          return d.type == 'membership_request'
+            && gymData(d.gymId).ownerUid == userId
+            && !exists(req)
+            && getAfter(req).data.memberUid == request.auth.uid;
+        }
+
+        // Chủ Gym chỉ gửi cho hội viên thuộc Gym mình (hoặc người đã gửi yêu cầu tới Gym mình).
+        function ownerNotice() {
+          let d = request.resource.data;
+          return d.type in ['request_approved', 'request_rejected', 'membership_cancelled',
+                            'schedule_created', 'schedule_updated', 'schedule_cancelled', 'announcement']
+            && ownsGym(d.gymId)
+            && (exists(/databases/$(database)/documents/gyms/$(d.gymId)/members/$(userId))
+                || existsAfter(/databases/$(database)/documents/gyms/$(d.gymId)/members/$(userId))
+                || get(/databases/$(database)/documents/gyms/$(d.gymId)/membershipRequests/$(d.relatedId)).data.memberUid == userId);
+        }
+
+        function adminNotice() {
+          return request.resource.data.type in ['owner_approved', 'owner_rejected'] && isPlatformAdmin();
+        }
+
+        // Hội viên tự tạo nhắc "gói sắp hết hạn" cho chính mình, dựa trên membership thật, mỗi gói một lần.
+        function selfExpiringNotice() {
+          let d = request.resource.data;
+          return userId == request.auth.uid
+            && d.type == 'membership_expiring'
+            && notificationId == 'expiring_' + d.relatedId
+            && get(/databases/$(database)/documents/gyms/$(d.gymId)/memberships/$(d.relatedId)).data.memberUid == request.auth.uid;
+        }
+      }
+
+      // ---------- users/{userId}/measurements ----------
+      match /measurements/{measurementId} {
+        allow read, delete: if signedIn() && uid() == userId;
+
+        allow create: if signedIn() && uid() == userId && validMeasurement()
+          && request.resource.data.keys().hasOnly(['weightKg', 'heightCm', 'bodyFatPercent', 'bmi', 'measuredAt',
+                                                    'note', 'updatedAt', 'isSampleData', 'createdAt'])
+          && request.resource.data.isSampleData == false
+          && request.resource.data.createdAt == request.time;
+
+        allow update: if signedIn() && uid() == userId && validMeasurement()
+          && changedKeys().hasOnly(['weightKg', 'heightCm', 'bodyFatPercent', 'bmi', 'measuredAt', 'note', 'updatedAt']);
+
+        function validMeasurement() {
+          let d = request.resource.data;
+          return d.weightKg is number && d.weightKg >= 20 && d.weightKg <= 350
+            && d.heightCm is number && d.heightCm >= 80 && d.heightCm <= 250
+            && (d.bodyFatPercent == null
+                || (d.bodyFatPercent is number && d.bodyFatPercent >= 2 && d.bodyFatPercent <= 70))
+            && d.bmi is number
+            && math.abs(d.bmi - d.weightKg / ((d.heightCm / 100.0) * (d.heightCm / 100.0))) < 0.06
+            && d.measuredAt is timestamp
+            && d.measuredAt <= request.time + duration.value(5, 'm')
+            && isOptStr(d.note, 300)
+            && d.updatedAt == request.time;
+        }
+      }
+
+      // ---------- users/{userId}/workoutLogs ----------
+      match /workoutLogs/{logId} {
+        allow read, delete: if signedIn() && uid() == userId;
+        allow create: if signedIn() && uid() == userId && validLog();
+        allow update: if false;
+
+        function validLog() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(['exerciseId', 'exerciseName', 'category', 'sets', 'reps', 'durationMinutes',
+                                   'note', 'completedAt', 'source', 'isSampleData', 'createdAt'])
+            && d.exerciseId is string
+            && isStr(d.exerciseName, 1, 80)
+            && d.category is string
+            && d.sets is int && d.sets >= 1 && d.sets <= 50
+            && d.reps is int && d.reps >= 0 && d.reps <= 500
+            && d.durationMinutes is int && d.durationMinutes >= 1 && d.durationMinutes <= 600
+            && isOptStr(d.note, 300)
+            && d.completedAt is timestamp
+            && d.completedAt <= request.time + duration.value(5, 'm')
+            && d.source in ['exercise_library', 'manual']
+            && d.isSampleData == false
+            && d.createdAt == request.time;
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // platformAdmins/{adminUid} – chỉ Admin SDK được ghi
+    // ------------------------------------------------------------------
+    match /platformAdmins/{adminUid} {
+      allow read: if signedIn() && uid() == adminUid;
+      allow write: if false;
+    }
+
+    // ------------------------------------------------------------------
+    // exercises – thư viện bài tập (seed bằng Admin SDK)
+    // ------------------------------------------------------------------
+    match /exercises/{exerciseId} {
+      allow read: if signedIn() && (resource.data.isActive == true || isPlatformAdmin());
+      allow write: if false;
+    }
+
+    // ------------------------------------------------------------------
+    // gymNameReservations/{key} – bảo đảm tên thương hiệu là duy nhất
+    // key = tên đã làm sạch và viết thường (== gyms.normalizedName)
+    // ------------------------------------------------------------------
+    match /gymNameReservations/{key} {
+      allow read: if signedIn();
+
+      allow create: if isActiveOwner()
+        && request.resource.data.keys().hasOnly(['gymId', 'ownerUid', 'name', 'createdAt'])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.gymId is string
+        && request.resource.data.name is string
+        && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/gyms/$(request.resource.data.gymId)).data.normalizedName == key
+        && getAfter(/databases/$(database)/documents/gyms/$(request.resource.data.gymId)).data.ownerUid == request.auth.uid;
+
+      // Chỉ trả lại tên cũ khi Gym đã đổi sang tên khác trong cùng thao tác.
+      allow delete: if isActiveOwner()
+        && resource.data.ownerUid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/gyms/$(resource.data.gymId)).data.normalizedName != key;
+
+      allow update: if false;
+    }
+
+    // ------------------------------------------------------------------
+    // gyms/{gymId} – thương hiệu
+    // ------------------------------------------------------------------
+    match /gyms/{gymId} {
+      allow read: if signedIn()
+        && (resource.data.status == 'active' || resource.data.ownerUid == request.auth.uid || isPlatformAdmin());
+
+      allow create: if isActiveOwner() && validGymCreate();
+
+      allow update: if signedIn()
+        && ((isActiveOwner() && resource.data.ownerUid == request.auth.uid && validGymOwnerUpdate())
+            || (isPlatformAdmin() && validGymAdminUpdate()));
+
+      allow delete: if false;
+
+      function validGymFields(d) {
+        return isStr(d.name, 2, 80) && isCleanName(d.name)
+          && d.normalizedName == d.name.lower()
+          && isStr(d.address, 5, 200)
+          && isOptStr(d.area, 100)
+          && isOptStr(d.phone, 15)
+          && isOptStr(d.description, 1000)
+          && isOptStr(d.openingHours, 120)
+          && isHttpsOrEmpty(d.logoUrl)
+          && isHttpsOrEmpty(d.coverUrl)
+          && d.galleryUrls is list && d.galleryUrls.size() <= 10;
+      }
+
+      function validGymCreate() {
+        let d = request.resource.data;
+        let res = /databases/$(database)/documents/gymNameReservations/$(d.normalizedName);
+        return d.keys().hasAll(['name', 'normalizedName', 'ownerUid', 'ownerName', 'address', 'area', 'phone',
+                                'description', 'openingHours', 'logoUrl', 'coverUrl', 'galleryUrls', 'imageCredit',
+                                'status', 'isSampleData', 'createdAt', 'updatedAt'])
+          && d.keys().hasOnly(['name', 'normalizedName', 'ownerUid', 'ownerName', 'address', 'area', 'phone',
+                               'description', 'openingHours', 'logoUrl', 'coverUrl', 'galleryUrls', 'imageCredit',
+                               'status', 'isSampleData', 'createdAt', 'updatedAt'])
+          && validGymFields(d)
+          && d.ownerUid == request.auth.uid
+          && isStr(d.ownerName, 1, 80)
+          && d.status in ['active', 'hidden']
+          && d.isSampleData == false
+          && d.imageCredit == ''
+          && d.createdAt == request.time
+          && d.updatedAt == request.time
+          && !exists(res)
+          && getAfter(res).data.gymId == gymId;
+      }
+
+      function validGymOwnerUpdate() {
+        let d = request.resource.data;
+        return changedKeys().hasOnly(['name', 'normalizedName', 'address', 'area', 'phone', 'description',
+                                      'openingHours', 'logoUrl', 'coverUrl', 'galleryUrls', 'status', 'updatedAt'])
+          && validGymFields(d)
+          && d.updatedAt == request.time
+          && (!changedKeys().hasAny(['status'])
+              || (resource.data.status != 'suspended' && d.status in ['active', 'hidden']))
+          && (!changedKeys().hasAny(['normalizedName'])
+              || (getAfter(/databases/$(database)/documents/gymNameReservations/$(d.normalizedName)).data.gymId == gymId
+                  && !existsAfter(/databases/$(database)/documents/gymNameReservations/$(resource.data.normalizedName))));
+      }
+
+      function validGymAdminUpdate() {
+        return changedKeys().hasOnly(['status', 'updatedAt'])
+          && request.resource.data.status in ['active', 'suspended']
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      // ---------- packages ----------
+      match /packages/{packageId} {
+        allow read: if signedIn()
+          && (ownsGym(gymId) || isPlatformAdmin()
+              || (resource.data.isActive == true && gymData(gymId).status == 'active'));
+
+        allow create: if ownsGym(gymId) && validPackage(request.resource.data)
+          && request.resource.data.keys().hasAll(['gymId', 'name', 'price', 'durationDays', 'description', 'benefits',
+                                                   'isActive', 'isSampleData', 'createdAt', 'updatedAt'])
+          && request.resource.data.keys().hasOnly(['gymId', 'name', 'price', 'durationDays', 'description', 'benefits',
+                                                    'isActive', 'isSampleData', 'createdAt', 'updatedAt'])
+          && request.resource.data.isSampleData == false
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+
+        allow update: if ownsGym(gymId) && validPackage(request.resource.data)
+          && changedKeys().hasOnly(['name', 'price', 'durationDays', 'description', 'benefits', 'isActive', 'updatedAt'])
+          && request.resource.data.updatedAt == request.time;
+
+        allow delete: if ownsGym(gymId);
+
+        function validPackage(d) {
+          return d.gymId == gymId
+            && isStr(d.name, 2, 80)
+            && d.price is int && d.price >= 0 && d.price <= 1000000000
+            && d.durationDays is int && d.durationDays >= 1 && d.durationDays <= 3650
+            && isOptStr(d.description, 1000)
+            && d.benefits is list && d.benefits.size() <= 20
+            && d.isActive is bool;
+        }
+      }
+
+      // ---------- membershipRequests ----------
+      match /membershipRequests/{requestId} {
+        allow read: if signedIn()
+          && (resource.data.memberUid == request.auth.uid || ownsGym(gymId) || isPlatformAdmin());
+
+        allow create: if isActiveMember() && validNewRequest();
+
+        allow update: if signedIn() && (memberCancel() || ownerReview());
+
+        allow delete: if false;
+
+        function pendingMarker(memberUid) {
+          return /databases/$(database)/documents/gyms/$(gymId)/pendingRequests/$(memberUid);
+        }
+
+        // Yêu cầu mới: đúng UID, gói đang mở bán của ĐÚNG Gym, snapshot giá/tên/thời hạn khớp gói,
+        // trạng thái pending và chưa có yêu cầu nào khác đang chờ (pending marker).
+        function validNewRequest() {
+          let d = request.resource.data;
+          let pkg = get(/databases/$(database)/documents/gyms/$(gymId)/packages/$(d.packageId)).data;
+          let gym = gymData(gymId);
+          return d.keys().hasAll(['gymId', 'gymName', 'memberUid', 'memberName', 'memberEmail', 'memberPhone',
+                                  'packageId', 'packageName', 'packagePrice', 'packageDurationDays', 'note',
+                                  'status', 'createdAt', 'updatedAt'])
+            && d.keys().hasOnly(['gymId', 'gymName', 'memberUid', 'memberName', 'memberEmail', 'memberPhone',
+                                 'packageId', 'packageName', 'packagePrice', 'packageDurationDays', 'note',
+                                 'status', 'createdAt', 'updatedAt'])
+            && d.memberUid == request.auth.uid
+            && d.memberName == me().fullName
+            && d.memberPhone == me().phone
+            && d.memberEmail == request.auth.token.email
+            && d.gymId == gymId
+            && gym.status == 'active'
+            && d.gymName == gym.name
+            && pkg.isActive == true
+            && d.packageName == pkg.name
+            && d.packagePrice == pkg.price
+            && d.packageDurationDays == pkg.durationDays
+            && isOptStr(d.note, 300)
+            && d.status == 'pending'
+            && d.createdAt == request.time
+            && d.updatedAt == request.time
+            && !exists(pendingMarker(request.auth.uid))
+            && getAfter(pendingMarker(request.auth.uid)).data.requestId == requestId;
+        }
+
+        // Hội viên tự hủy yêu cầu đang chờ (và gỡ marker trong cùng thao tác).
+        function memberCancel() {
+          return resource.data.memberUid == request.auth.uid
+            && resource.data.status == 'pending'
+            && request.resource.data.status == 'cancelled'
+            && changedKeys().hasOnly(['status', 'updatedAt'])
+            && request.resource.data.updatedAt == request.time
+            && !(existsAfter(pendingMarker(request.auth.uid))
+                 && getAfter(pendingMarker(request.auth.uid)).data.requestId == requestId);
+        }
+
+        // Chủ Gym duyệt / từ chối. Hội viên KHÔNG thể tự duyệt.
+        function ownerReview() {
+          let d = request.resource.data;
+          let marker = pendingMarker(resource.data.memberUid);
+          return ownsGym(gymId)
+            && resource.data.status == 'pending'
+            && d.reviewedBy == request.auth.uid
+            && d.reviewedAt == request.time
+            && d.updatedAt == request.time
+            && !(existsAfter(marker) && getAfter(marker).data.requestId == requestId)
+            && ((d.status == 'approved'
+                 && changedKeys().hasOnly(['status', 'reviewedBy', 'reviewedAt', 'membershipId', 'updatedAt'])
+                 && d.membershipId == requestId
+                 && existsAfter(/databases/$(database)/documents/gyms/$(gymId)/memberships/$(requestId)))
+                || (d.status == 'rejected'
+                    && changedKeys().hasOnly(['status', 'reviewedBy', 'reviewedAt', 'rejectReason', 'updatedAt'])
+                    && isOptStr(d.rejectReason, 300)));
+        }
+      }
+
+      // ---------- pendingRequests/{memberUid} – chặn gửi trùng yêu cầu ----------
+      match /pendingRequests/{memberUid} {
+        allow read: if signedIn() && (memberUid == request.auth.uid || ownsGym(gymId));
+
+        allow create: if signedIn() && memberUid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['requestId', 'memberUid', 'createdAt'])
+          && request.resource.data.memberUid == request.auth.uid
+          && request.resource.data.requestId is string
+          && request.resource.data.createdAt == request.time
+          && !exists(/databases/$(database)/documents/gyms/$(gymId)/membershipRequests/$(request.resource.data.requestId))
+          && getAfter(/databases/$(database)/documents/gyms/$(gymId)/membershipRequests/$(request.resource.data.requestId)).data.memberUid == request.auth.uid;
+
+        allow delete: if signedIn()
+          && (ownsGym(gymId)
+              || (memberUid == request.auth.uid
+                  && getAfter(/databases/$(database)/documents/gyms/$(gymId)/membershipRequests/$(resource.data.requestId)).data.status != 'pending'));
+
+        allow update: if false;
+      }
+
+      // ---------- memberships ----------
+      match /memberships/{membershipId} {
+        allow read: if signedIn()
+          && (resource.data.memberUid == request.auth.uid || ownsGym(gymId) || isPlatformAdmin());
+
+        // Chỉ tạo được khi yêu cầu cùng ID chuyển pending → approved trong CÙNG thao tác.
+        // ID membership = ID yêu cầu nên không thể tạo 2 membership từ 1 yêu cầu.
+        allow create: if ownsGym(gymId) && validMembershipCreate();
+
+        allow update: if ownsGym(gymId)
+          && changedKeys().hasOnly(['status', 'cancelReason', 'updatedAt'])
+          && request.resource.data.status in ['active', 'cancelled']
+          && isOptStr(request.resource.data.cancelReason, 300)
+          && request.resource.data.updatedAt == request.time;
+
+        allow delete: if false;
+
+        function validMembershipCreate() {
+          let d = request.resource.data;
+          let reqPath = /databases/$(database)/documents/gyms/$(gymId)/membershipRequests/$(membershipId);
+          let before = get(reqPath).data;
+          return d.keys().hasAll(['gymId', 'gymName', 'memberUid', 'memberName', 'packageId', 'packageName',
+                                  'packagePrice', 'durationDays', 'requestId', 'status', 'startAt', 'endAt',
+                                  'approvedBy', 'createdAt', 'updatedAt'])
+            && d.keys().hasOnly(['gymId', 'gymName', 'memberUid', 'memberName', 'packageId', 'packageName',
+                                 'packagePrice', 'durationDays', 'requestId', 'status', 'startAt', 'endAt',
+                                 'approvedBy', 'createdAt', 'updatedAt'])
+            && before.status == 'pending'
+            && getAfter(reqPath).data.status == 'approved'
+            && d.requestId == membershipId
+            && d.gymId == gymId
+            && d.gymName == before.gymName
+            && d.memberUid == before.memberUid
+            && d.memberName == before.memberName
+            && d.packageId == before.packageId
+            && d.packageName == before.packageName
+            && d.packagePrice == before.packagePrice
+            && d.durationDays == before.packageDurationDays
+            && d.status == 'active'
+            && d.approvedBy == request.auth.uid
+            && d.startAt is timestamp
+            && d.endAt is timestamp
+            && d.endAt == d.startAt + duration.value(d.durationDays, 'd')
+            && d.startAt >= request.time - duration.value(1, 'd')
+            && d.startAt <= request.time + duration.value(3650, 'd')
+            && d.createdAt == request.time
+            && d.updatedAt == request.time;
+        }
+      }
+
+      // ---------- members/{memberUid} – hồ sơ hội viên trong phạm vi Gym ----------
+      match /members/{memberUid} {
+        allow read: if signedIn() && (memberUid == request.auth.uid || ownsGym(gymId) || isPlatformAdmin());
+
+        allow create: if ownsGym(gymId) && validMemberSummary()
+          && request.resource.data.joinedAt == request.time;
+
+        allow update: if ownsGym(gymId) && validMemberSummary()
+          && changedKeys().hasOnly(['fullName', 'email', 'phone', 'latestMembershipId', 'latestPackageName',
+                                    'latestEndAt', 'updatedAt']);
+
+        allow delete: if false;
+
+        function validMemberSummary() {
+          let d = request.resource.data;
+          let ms = getAfter(/databases/$(database)/documents/gyms/$(gymId)/memberships/$(d.latestMembershipId)).data;
+          return d.keys().hasOnly(['memberUid', 'gymId', 'fullName', 'email', 'phone', 'latestMembershipId',
+                                   'latestPackageName', 'latestEndAt', 'joinedAt', 'updatedAt', 'isSampleData'])
+            && d.memberUid == memberUid
+            && d.gymId == gymId
+            && ms.memberUid == memberUid
+            && d.latestEndAt == ms.endAt
+            && isStr(d.fullName, 1, 80)
+            && d.updatedAt == request.time;
+        }
+      }
+
+      // ---------- schedules ----------
+      match /schedules/{scheduleId} {
+        allow read: if signedIn()
+          && (resource.data.memberUid == request.auth.uid || ownsGym(gymId) || isPlatformAdmin());
+
+        allow create: if ownsGym(gymId) && validSchedule()
+          && request.resource.data.keys().hasAll(['gymId', 'gymName', 'memberUid', 'memberName', 'title',
+                                                   'description', 'location', 'startAt', 'endAt', 'status',
+                                                   'createdBy', 'isSampleData', 'createdAt', 'updatedAt'])
+          && request.resource.data.keys().hasOnly(['gymId', 'gymName', 'memberUid', 'memberName', 'title',
+                                                    'description', 'location', 'startAt', 'endAt', 'status',
+                                                    'createdBy', 'isSampleData', 'createdAt', 'updatedAt'])
+          && request.resource.data.status == 'scheduled'
+          && request.resource.data.createdBy == request.auth.uid
+          && request.resource.data.isSampleData == false
+          && request.resource.data.createdAt == request.time;
+
+        allow update: if ownsGym(gymId) && validSchedule()
+          && changedKeys().hasOnly(['title', 'description', 'location', 'startAt', 'endAt', 'status',
+                                    'memberName', 'gymName', 'updatedAt']);
+
+        allow delete: if false;
+
+        function validSchedule() {
+          let d = request.resource.data;
+          return d.gymId == gymId
+            && exists(/databases/$(database)/documents/gyms/$(gymId)/members/$(d.memberUid))
+            && isStr(d.title, 2, 80)
+            && isOptStr(d.description, 500)
+            && isOptStr(d.location, 80)
+            && d.startAt is timestamp
+            && d.endAt is timestamp
+            && d.endAt > d.startAt
+            && d.status in ['scheduled', 'completed', 'cancelled']
+            && d.updatedAt == request.time;
+        }
+      }
+
+      // ---------- attendance/{memberUid_yyyyMMdd} ----------
+      match /attendance/{attendanceId} {
+        allow read: if signedIn()
+          && (resource.data.memberUid == request.auth.uid || ownsGym(gymId) || isPlatformAdmin());
+
+        // Chỉ Chủ Gym ghi nhận; membership phải còn hiệu lực; mỗi hội viên một lượt/ngày (ID theo ngày giờ VN).
+        allow create: if ownsGym(gymId) && validAttendance();
+
+        // Cho phép Chủ Gym xóa lượt ghi nhầm.
+        allow delete: if ownsGym(gymId);
+
+        allow update: if false;
+
+        function validAttendance() {
+          let d = request.resource.data;
+          let ms = get(/databases/$(database)/documents/gyms/$(gymId)/memberships/$(d.membershipId)).data;
+          return d.keys().hasOnly(['gymId', 'gymName', 'memberUid', 'memberName', 'membershipId', 'packageName',
+                                   'dateKey', 'checkInAt', 'recordedBy', 'recordedByName'])
+            && d.gymId == gymId
+            && d.recordedBy == request.auth.uid
+            && d.checkInAt == request.time
+            && d.dateKey == vnDateKey()
+            && attendanceId == d.memberUid + '_' + d.dateKey
+            && ms.memberUid == d.memberUid
+            && ms.status == 'active'
+            && ms.startAt <= request.time
+            && ms.endAt > request.time
+            && isStr(d.memberName, 1, 80);
+        }
+      }
+
+      // ---------- notifications (lịch sử thông báo chung của Gym) ----------
+      match /notifications/{notificationId} {
+        allow read: if signedIn()
+          && (ownsGym(gymId) || exists(/databases/$(database)/documents/gyms/$(gymId)/members/$(request.auth.uid)));
+
+        allow create: if ownsGym(gymId)
+          && request.resource.data.keys().hasOnly(['gymId', 'gymName', 'title', 'body', 'audience',
+                                                    'recipientCount', 'createdBy', 'createdAt'])
+          && request.resource.data.gymId == gymId
+          && request.resource.data.createdBy == request.auth.uid
+          && isStr(request.resource.data.title, 2, 80)
+          && isStr(request.resource.data.body, 2, 500)
+          && request.resource.data.audience in ['all_members', 'active_members']
+          && request.resource.data.recipientCount is int
+          && request.resource.data.createdAt == request.time;
+
+        allow update, delete: if false;
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // Truy vấn collection group: hội viên chỉ đọc bản ghi của CHÍNH MÌNH
+    // (truy vấn phải có điều kiện memberUid == uid, xem firestore.indexes.json)
+    // ------------------------------------------------------------------
+    match /{path=**}/membershipRequests/{requestId} {
+      allow read: if signedIn() && resource.data.memberUid == request.auth.uid;
+    }
+
+    match /{path=**}/memberships/{membershipId} {
+      allow read: if signedIn() && resource.data.memberUid == request.auth.uid;
+    }
+
+    match /{path=**}/schedules/{scheduleId} {
+      allow read: if signedIn() && resource.data.memberUid == request.auth.uid;
+    }
+
+    match /{path=**}/attendance/{attendanceId} {
+      allow read: if signedIn() && resource.data.memberUid == request.auth.uid;
+    }
+  }
+}

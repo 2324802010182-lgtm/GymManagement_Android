@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="315"
+                android:endColor="#7F0F12"
+                android:startColor="#E53935" />
+            <corners android:radius="22dp" />
+        </shape>
+    </item>
+    <item
+        android:bottom="-24dp"
+        android:gravity="end|bottom"
+        android:right="-18dp"
+        android:width="190dp"
+        android:height="190dp"
+        android:drawable="@drawable/ic_banner_dumbbell" />
+</layer-list>

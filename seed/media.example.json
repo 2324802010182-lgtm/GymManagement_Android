@@ -1,0 +1,10 @@
+{
+  "_huong_dan": "Đổi tên file thành media.json. Chỉ điền URL https mà bạn ĐÃ mở và xác nhận phát được và có quyền sử dụng. Để trống nếu chưa có. videoType: mp4 | hls | dash.",
+  "bench-press-barbell": {
+    "videoUrl": "",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "imageUrl": ""
+  }
+}

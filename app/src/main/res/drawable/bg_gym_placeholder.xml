@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="315"
+                android:endColor="#2A2A2A"
+                android:startColor="#3A1B1C" />
+        </shape>
+    </item>
+    <item
+        android:gravity="center"
+        android:width="56dp"
+        android:height="56dp"
+        android:drawable="@drawable/ic_placeholder_dumbbell" />
+</layer-list>

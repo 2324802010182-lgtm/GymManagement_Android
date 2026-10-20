@@ -1,0 +1,260 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/nguoi_dung/$(uid);
+    }
+
+    function gymPath(gymId) {
+      return /databases/$(database)/documents/phong_gym/$(gymId);
+    }
+
+    function hasProfile() {
+      return signedIn() && exists(userPath(request.auth.uid));
+    }
+
+    function myProfile() {
+      return get(userPath(request.auth.uid)).data;
+    }
+
+    function activeUser() {
+      return hasProfile() && myProfile().trang_thai == true;
+    }
+
+    function sameGym(gymId) {
+      return activeUser() && myProfile().gym_id == gymId;
+    }
+
+    function gymAdmin(gymId) {
+      return sameGym(gymId) && myProfile().vai_tro == 'quan_tri_gym';
+    }
+
+    // Tài khoản chủ Gym mới đăng ký chỉ có quyền chờ duyệt.
+    // Người quản lý dự án phải cấp vai trò quan_tri_gym từ môi trường tin cậy.
+    function approvedOwnerWithoutGym() {
+      return activeUser()
+        && myProfile().vai_tro == 'quan_tri_gym'
+        && myProfile().gym_id == '';
+    }
+
+    function activeGymExists(gymId) {
+      return gymId is string
+        && gymId != ''
+        && exists(gymPath(gymId))
+        && get(gymPath(gymId)).data.trang_thai == 'hoat_dong';
+    }
+
+    function packageBelongsToGym(packageId, gymId) {
+      return packageId is string
+        && exists(/databases/$(database)/documents/goi_tap/$(packageId))
+        && get(/databases/$(database)/documents/goi_tap/$(packageId)).data.gym_id == gymId;
+    }
+
+    function userBelongsToGym(uid, gymId) {
+      return uid is string
+        && exists(userPath(uid))
+        && get(userPath(uid)).data.gym_id == gymId
+        && get(userPath(uid)).data.vai_tro == 'hoi_vien';
+    }
+
+    match /nguoi_dung/{uid} {
+      // Hội viên tự đăng ký vào Gym đang hoạt động; chủ Gym chỉ được tạo hồ sơ chờ duyệt.
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.trang_thai == true
+        && request.resource.data.gym_id is string
+        && (
+          (request.resource.data.vai_tro == 'chu_gym_cho_duyet'
+            && request.resource.data.gym_id == '')
+          ||
+          (request.resource.data.vai_tro == 'hoi_vien'
+            && activeGymExists(request.resource.data.gym_id))
+        );
+
+      allow read: if signedIn()
+        && (request.auth.uid == uid || gymAdmin(resource.data.gym_id));
+
+      allow update: if signedIn() && (
+        (
+          request.auth.uid == uid
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.vai_tro == resource.data.vai_tro
+          && request.resource.data.trang_thai == resource.data.trang_thai
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ho_ten', 'so_dien_thoai', 'ten_thuong_hieu', 'gym_id'])
+          && (
+            request.resource.data.gym_id == resource.data.gym_id
+            || (
+              resource.data.vai_tro == 'quan_tri_gym'
+              && resource.data.gym_id == ''
+              && request.resource.data.gym_id is string
+              && request.resource.data.gym_id != ''
+              && exists(gymPath(request.resource.data.gym_id))
+              && get(gymPath(request.resource.data.gym_id)).data.chu_gym_id == uid
+            )
+          )
+        )
+        || (
+          gymAdmin(resource.data.gym_id)
+          && resource.data.vai_tro == 'hoi_vien'
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.gym_id == resource.data.gym_id
+          && request.resource.data.vai_tro == resource.data.vai_tro
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['trang_thai'])
+        )
+      );
+
+      allow delete: if false;
+    }
+
+    match /phong_gym/{gymId} {
+      // Danh mục thương hiệu phải đọc được trước khi hội viên chọn Gym đăng ký.
+      allow read: if true;
+
+      allow create: if signedIn()
+        && approvedOwnerWithoutGym()
+        && request.resource.data.chu_gym_id == request.auth.uid
+        && request.resource.data.trang_thai == 'hoat_dong'
+        && request.resource.data.ten_thuong_hieu is string
+        && request.resource.data.ten_thuong_hieu.size() > 1
+        && request.resource.data.ten_thuong_hieu_chuan is string;
+
+      allow update: if signedIn()
+        && gymAdmin(gymId)
+        && resource.data.chu_gym_id == request.auth.uid
+        && request.resource.data.chu_gym_id == resource.data.chu_gym_id;
+
+      allow delete: if false;
+    }
+
+    match /goi_tap/{packageId} {
+      allow read: if signedIn() && sameGym(resource.data.gym_id);
+      allow create: if signedIn() && gymAdmin(request.resource.data.gym_id);
+      allow update: if signedIn()
+        && gymAdmin(resource.data.gym_id)
+        && request.resource.data.gym_id == resource.data.gym_id;
+      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+
+    match /dang_ky_goi/{registrationId} {
+      allow read: if signedIn()
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+
+      allow create: if signedIn()
+        && request.resource.data.uid_nguoi_dung == request.auth.uid
+        && sameGym(request.resource.data.gym_id)
+        && packageBelongsToGym(request.resource.data.goi_id, request.resource.data.gym_id)
+        && request.resource.data.trang_thai == 'cho_xac_nhan';
+
+      allow update: if signedIn()
+        && gymAdmin(resource.data.gym_id)
+        && request.resource.data.gym_id == resource.data.gym_id
+        && request.resource.data.uid_nguoi_dung == resource.data.uid_nguoi_dung
+        && request.resource.data.goi_id == resource.data.goi_id
+        && request.resource.data.nguoi_duyet_uid == request.auth.uid;
+
+      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+
+    match /lich_tap/{scheduleId} {
+      allow read: if signedIn() && sameGym(resource.data.gym_id);
+      allow create: if signedIn() && gymAdmin(request.resource.data.gym_id);
+      allow update: if signedIn()
+        && gymAdmin(resource.data.gym_id)
+        && request.resource.data.gym_id == resource.data.gym_id;
+      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+
+    match /bai_tap/{exerciseId} {
+      allow read: if signedIn() && sameGym(resource.data.gym_id);
+      allow create: if signedIn() && gymAdmin(request.resource.data.gym_id);
+      allow update: if signedIn()
+        && gymAdmin(resource.data.gym_id)
+        && request.resource.data.gym_id == resource.data.gym_id;
+      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+
+    match /chi_so_co_the/{measurementId} {
+      allow read: if signedIn()
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+
+      allow create: if signedIn()
+        && request.resource.data.uid_nguoi_dung == request.auth.uid
+        && sameGym(request.resource.data.gym_id);
+
+      allow update: if signedIn()
+        && request.resource.data.uid_nguoi_dung == resource.data.uid_nguoi_dung
+        && request.resource.data.gym_id == resource.data.gym_id
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+
+      allow delete: if signedIn()
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+    }
+
+    match /tien_do/{progressId} {
+      allow read: if signedIn()
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+
+      allow create: if signedIn()
+        && request.resource.data.uid_nguoi_dung == request.auth.uid
+        && sameGym(request.resource.data.gym_id);
+
+      allow update: if signedIn()
+        && resource.data.uid_nguoi_dung == request.auth.uid
+        && request.resource.data.uid_nguoi_dung == request.auth.uid
+        && request.resource.data.gym_id == resource.data.gym_id;
+
+      allow delete: if signedIn()
+        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+    }
+
+    match /thong_bao/{notificationId} {
+      allow read: if signedIn() && (
+        gymAdmin(resource.data.gym_id)
+        || (sameGym(resource.data.gym_id)
+          && (!('uid_nhan' in resource.data)
+            || resource.data.uid_nhan == ''
+            || resource.data.uid_nhan == request.auth.uid))
+      );
+
+      allow create: if signedIn()
+        && gymAdmin(request.resource.data.gym_id)
+        && request.resource.data.nguoi_tao_uid == request.auth.uid
+        && (
+          !('uid_nhan' in request.resource.data)
+          || request.resource.data.uid_nhan == ''
+          || userBelongsToGym(request.resource.data.uid_nhan, request.resource.data.gym_id)
+        );
+
+      allow update: if signedIn() && (
+        gymAdmin(resource.data.gym_id)
+        || (
+          sameGym(resource.data.gym_id)
+          && (!('uid_nhan' in resource.data)
+            || resource.data.uid_nhan == ''
+            || resource.data.uid_nhan == request.auth.uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['danh_sach_da_doc'])
+          && request.resource.data.danh_sach_da_doc is list
+          && request.resource.data.danh_sach_da_doc.hasAll(resource.data.danh_sach_da_doc)
+          && request.resource.data.danh_sach_da_doc.size() == resource.data.danh_sach_da_doc.size() + 1
+          && request.resource.data.danh_sach_da_doc.hasAny([request.auth.uid])
+        )
+      );
+
+      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+
+    match /diem_danh/{checkinId} {
+      allow read: if signedIn() && gymAdmin(resource.data.gym_id);
+      allow create: if signedIn()
+        && gymAdmin(request.resource.data.gym_id)
+        && userBelongsToGym(request.resource.data.uid_hoi_vien, request.resource.data.gym_id)
+        && request.resource.data.nguoi_tao_uid == request.auth.uid;
+      allow update, delete: if signedIn() && gymAdmin(resource.data.gym_id);
+    }
+  }
+}
