@@ -83,41 +83,90 @@ public class KhoDuLieu {
         if (firebaseSanSang && auth != null) auth.signOut();
     }
 
-    public void dangNhap(String email, String matKhau, KetQua<Map<String, Object>> ketQua) {
+
+    public void dangNhap(String email, String matKhau,
+                         KetQua<Map<String, Object>> ketQua) {
         if (!kiemTraFirebase(ketQua)) return;
+
         auth.signInWithEmailAndPassword(email.trim(), matKhau)
                 .addOnSuccessListener(authResult -> {
-                    String uid = authResult.getUser() == null ? "" : authResult.getUser().getUid();
+                    String uid = authResult.getUser() == null
+                            ? "" : authResult.getUser().getUid();
+
                     if (uid.isEmpty()) {
                         auth.signOut();
-                        ketQua.thatBai("Không lấy được UID tài khoản từ Firebase Authentication.");
+                        ketQua.thatBai(
+                                "Không lấy được UID tài khoản từ Firebase Authentication."
+                        );
                         return;
                     }
-                    layMot("nguoi_dung", uid, new KetQua<Map<String, Object>>() {
-                        @Override
-                        public void thanhCong(Map<String, Object> profile) {
-                            if (profile == null) {
-                                auth.signOut();
-                                ketQua.thatBai("Tài khoản chưa có hồ sơ trong Firestore. Hãy kiểm tra document nguoi_dung/" + uid + ".");
-                                return;
-                            }
-                            if (Boolean.FALSE.equals(profile.get("trang_thai"))) {
-                                auth.signOut();
-                                ketQua.thatBai("Tài khoản đang bị khóa. Vui lòng liên hệ quản trị Gym.");
-                                return;
-                            }
-                            ketQua.thanhCong(profile);
-                        }
 
-                        @Override
-                        public void thatBai(String thongBao) {
-                            auth.signOut();
-                            ketQua.thatBai(thongBao);
-                        }
-                    });
+                    // Bước 1: Tìm hồ sơ người dùng thông thường.
+                    layMot("nguoi_dung", uid,
+                            new KetQua<Map<String, Object>>() {
+                                @Override
+                                public void thanhCong(Map<String, Object> profile) {
+                                    if (profile != null) {
+                                        // Giữ nguyên cách xử lý tài khoản thông thường.
+                                        if (Boolean.FALSE.equals(
+                                                profile.get("trang_thai"))) {
+                                            auth.signOut();
+                                            ketQua.thatBai(
+                                                    "Tài khoản đang bị khóa. Vui lòng liên hệ quản trị Gym."
+                                            );
+                                            return;
+                                        }
+
+                                        ketQua.thanhCong(profile);
+                                        return;
+                                    }
+
+                                    // Bước 2: Không có hồ sơ thì kiểm tra quản trị viên.
+                                    layMot("platformAdmins", uid,
+                                            new KetQua<Map<String, Object>>() {
+                                                @Override
+                                                public void thanhCong(
+                                                        Map<String, Object> adminProfile) {
+
+                                                    if (adminProfile == null) {
+                                                        auth.signOut();
+                                                        ketQua.thatBai(
+                                                                "Không tìm thấy hồ sơ trong nguoi_dung hoặc platformAdmins. UID: "
+                                                                        + uid
+                                                        );
+                                                        return;
+                                                    }
+
+                                                    // Gán vai trò quản trị cho ứng dụng.
+                                                    adminProfile.put("uid", uid);
+                                                    adminProfile.put("id", uid);
+                                                    adminProfile.put(
+                                                            "vai_tro", "quan_tri_nen_tang"
+                                                    );
+
+                                                    ketQua.thanhCong(adminProfile);
+                                                }
+
+                                                @Override
+                                                public void thatBai(String thongBao) {
+                                                    auth.signOut();
+                                                    ketQua.thatBai(thongBao);
+                                                }
+                                            });
+                                }
+
+                                @Override
+                                public void thatBai(String thongBao) {
+                                    auth.signOut();
+                                    ketQua.thatBai(thongBao);
+                                }
+                            });
                 })
-                .addOnFailureListener(e -> ketQua.thatBai(thongBaoLoi(e)));
+                .addOnFailureListener(
+                        e -> ketQua.thatBai(thongBaoLoi(e))
+                );
     }
+
 
     public void dangKy(String email, String matKhau, Map<String, Object> profile,
                        KetQua<Map<String, Object>> ketQua) {
