@@ -82,6 +82,7 @@ public class OwnerMainActivity extends BaseActivity {
 
     private void show(String tag) {
         current = tag;
+        b.ownerNav.setVisibility("more".equals(tag) ? android.view.View.GONE : android.view.View.VISIBLE);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction t = fm.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         for (String s : TAGS) {

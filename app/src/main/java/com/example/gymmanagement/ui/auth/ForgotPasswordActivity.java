@@ -15,6 +15,8 @@ import com.example.gymmanagement.util.Validators;
 import com.example.gymmanagement.viewmodel.AuthViewModel;
 
 public class ForgotPasswordActivity extends BaseActivity {
+    public static final String EXTRA_EMAIL = "email";
+
     private ActivityForgotPasswordBinding b;
     private AuthViewModel vm;
 
@@ -30,6 +32,8 @@ public class ForgotPasswordActivity extends BaseActivity {
         setContentView(b.getRoot());
         UiUtil.applyInsets(b.getRoot(), true, true);
         b.toolbar.setNavigationOnClickListener(v -> finish());
+        String initialEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+        if (initialEmail != null) b.forgotEmail.setText(initialEmail);
         vm = new ViewModelProvider(this).get(AuthViewModel.class);
         b.forgotButton.setOnClickListener(v -> {
             b.forgotEmailLayout.setError(null);

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gymmanagement.R;
+import com.example.gymmanagement.databinding.ActivityLoginBinding;
+import com.example.gymmanagement.databinding.ActivityRegisterMemberBinding;
+import com.example.gymmanagement.databinding.ActivityRegisterOwnerBinding;
+import com.example.gymmanagement.databinding.FragmentProfileBinding;
+import com.example.gymmanagement.databinding.ScreenBrandSetupBinding;
 import com.example.gymmanagement.du_lieu.KhoDuLieu;
 
 import java.text.NumberFormat;
@@ -448,23 +454,42 @@ public class MainActivity extends AppCompatActivity {
     // F01 - ĐĂNG NHẬP / ĐĂNG KÝ / ĐẶT LẠI MẬT KHẨU
     // ---------------------------------------------------------------------
 
+    private void hienManHinh(View content, String title) {
+        manHinhHienTai = title;
+        thanTrang = null;
+        khungChinh.removeAllViews();
+        khungChinh.addView(content, new FrameLayout.LayoutParams(-1, -1));
+    }
+
     private void hienDangNhap() {
-        taoTrang("GYM MANAGEMENT", "Ứng dụng quản lý phòng Gym đa thương hiệu", null, false);
-        themChu("Luyện tập tốt hơn. Quản lý thông minh hơn.", 16, TRANG, true);
-        themChu("Đăng nhập để tiếp tục", 13, XAM, false);
-        EditText email = truong("Email", "name@example.com", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, "");
-        EditText password = truong("Mật khẩu", "Nhập mật khẩu", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD, "");
-        nut("ĐĂNG NHẬP", true, () -> {
-            String e = email.getText().toString().trim();
-            String p = password.getText().toString();
-            if (e.isEmpty()) { email.setError("Vui lòng nhập email"); email.requestFocus(); return; }
-            if (p.isEmpty()) { password.setError("Vui lòng nhập mật khẩu"); password.requestFocus(); return; }
-            kho.dangNhap(e, p, new KhoDuLieu.KetQua<Map<String, Object>>() {
+        ActivityLoginBinding login = ActivityLoginBinding.inflate(getLayoutInflater());
+        hienManHinh(login.getRoot(), "GYM MANAGEMENT");
+        login.loginButton.setOnClickListener(v -> {
+            login.loginEmailLayout.setError(null);
+            login.loginPasswordLayout.setError(null);
+            login.loginError.setVisibility(View.GONE);
+            String email = String.valueOf(login.loginEmail.getText()).trim();
+            String password = String.valueOf(login.loginPassword.getText());
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                login.loginEmailLayout.setError(getString(R.string.error_email_invalid));
+                login.loginEmail.requestFocus();
+                return;
+            }
+            if (password.isEmpty()) {
+                login.loginPasswordLayout.setError(getString(R.string.error_required));
+                login.loginPassword.requestFocus();
+                return;
+            }
+            login.loginProgress.setVisibility(View.VISIBLE);
+            login.loginButton.setEnabled(false);
+            kho.dangNhap(email, password, new KhoDuLieu.KetQua<Map<String, Object>>() {
                 @Override public void thanhCong(Map<String, Object> data) {
                     if (Boolean.FALSE.equals(data.get("trang_thai"))) {
                         kho.dangXuat();
-                        hienDangNhap();
-                        thongBao("Tài khoản đã bị khóa.");
+                        login.loginProgress.setVisibility(View.GONE);
+                        login.loginButton.setEnabled(true);
+                        login.loginError.setText("Tài khoản đã bị khóa.");
+                        login.loginError.setVisibility(View.VISIBLE);
                         return;
                     }
                     uid = KhoDuLieu.chuoi(data.get("uid"));
@@ -475,13 +500,18 @@ public class MainActivity extends AppCompatActivity {
                         else hienBangDieuKhien();
                     });
                 }
-                @Override public void thatBai(String thongBao) { baoLoi(thongBao); }
+                @Override public void thatBai(String error) {
+                    login.loginProgress.setVisibility(View.GONE);
+                    login.loginButton.setEnabled(true);
+                    login.loginError.setText(error);
+                    login.loginError.setVisibility(View.VISIBLE);
+                }
             });
         });
-        nut("TẠO TÀI KHOẢN MỚI", false, this::hienDangKy);
-        nutNho("Quên mật khẩu?", false, this::hienDatLaiMatKhau);
+        login.loginForgot.setOnClickListener(v -> hienDatLaiMatKhau());
+        login.loginRegisterMember.setOnClickListener(v -> hienDangKy(false));
+        login.loginRegisterOwner.setOnClickListener(v -> hienDangKy(true));
     }
-
     private void nutLoading(String message) {
         ProgressBar bar = new ProgressBar(this);
         bar.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(DO));
@@ -508,78 +538,93 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void hienDangKy() {
-        taoTrang("TẠO TÀI KHOẢN", "Chọn đúng vai trò để thiết lập tài khoản", this::hienDangNhap, false);
+    private void hienDangKy(boolean owner) {
+        if (owner) {
+            ActivityRegisterOwnerBinding register = ActivityRegisterOwnerBinding.inflate(getLayoutInflater());
+            register.regGymLayout.setVisibility(View.GONE);
+            register.regNoteLayout.setVisibility(View.GONE);
+            register.regHint.setText(R.string.register_owner_hint);
+            hienManHinh(register.getRoot(), getString(R.string.register_owner_title));
+            register.toolbar.setNavigationOnClickListener(v -> hienDangNhap());
+            ganSuKienDangKy(true, register.regNameLayout, register.regName,
+                    register.regEmailLayout, register.regEmail,
+                    register.regPhoneLayout, register.regPhone,
+                    register.regPasswordLayout, register.regPassword,
+                    register.regConfirmLayout, register.regConfirm,
+                    register.regError, register.regProgress, register.regButton);
+        } else {
+            ActivityRegisterMemberBinding register = ActivityRegisterMemberBinding.inflate(getLayoutInflater());
+            hienManHinh(register.getRoot(), getString(R.string.register_member_title));
+            register.toolbar.setNavigationOnClickListener(v -> hienDangNhap());
+            ganSuKienDangKy(false, register.regNameLayout, register.regName,
+                    register.regEmailLayout, register.regEmail,
+                    register.regPhoneLayout, register.regPhone,
+                    register.regPasswordLayout, register.regPassword,
+                    register.regConfirmLayout, register.regConfirm,
+                    register.regError, register.regProgress, register.regButton);
+        }
+    }
 
-        EditText hoTen = truong("Họ và tên", "Nguyễn Văn A",
-                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS, "");
-        EditText email = truong("Email", "name@example.com",
-                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, "");
-        EditText dienThoai = truong("Số điện thoại", "0123456789",
-                InputType.TYPE_CLASS_PHONE, "");
-        EditText matKhau = truong("Mật khẩu (ít nhất 6 ký tự)", "Mật khẩu",
-                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD, "");
-        EditText xacNhan = truong("Xác nhận mật khẩu", "Nhập lại mật khẩu",
-                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD, "");
-
-        themChu("Bạn đăng ký với vai trò nào?", 14, TRANG, true);
-        Spinner vaiTro = spinner(java.util.Arrays.asList("Chủ phòng gym", "Hội viên"));
-        themChu("Hội viên không cần chọn phòng Gym ở bước này. Sau khi đăng nhập, bạn có thể tìm Gym và đăng ký gói tập.",
-                12, XAM, false);
-
-        nut("ĐĂNG KÝ", true, () -> {
-            String name = hoTen.getText().toString().trim();
-            String mail = email.getText().toString().trim();
-            String phone = dienThoai.getText().toString().trim();
-            String pass = matKhau.getText().toString();
-            String confirm = xacNhan.getText().toString();
-
-            if (name.isEmpty()) {
-                hoTen.setError("Vui lòng nhập họ tên");
-                hoTen.requestFocus();
+    private void ganSuKienDangKy(boolean owner,
+                                 com.google.android.material.textfield.TextInputLayout nameLayout, EditText name,
+                                 com.google.android.material.textfield.TextInputLayout emailLayout, EditText email,
+                                 com.google.android.material.textfield.TextInputLayout phoneLayout, EditText phone,
+                                 com.google.android.material.textfield.TextInputLayout passwordLayout, EditText password,
+                                 com.google.android.material.textfield.TextInputLayout confirmLayout, EditText confirm,
+                                 TextView errorView, View progress, Button submit) {
+        submit.setOnClickListener(v -> {
+            nameLayout.setError(null);
+            emailLayout.setError(null);
+            phoneLayout.setError(null);
+            passwordLayout.setError(null);
+            confirmLayout.setError(null);
+            errorView.setVisibility(View.GONE);
+            String fullName = String.valueOf(name.getText()).trim().replaceAll("\\s+", " ");
+            String mail = String.valueOf(email.getText()).trim();
+            String phoneNumber = String.valueOf(phone.getText()).trim();
+            String pass = String.valueOf(password.getText());
+            String passAgain = String.valueOf(confirm.getText());
+            if (fullName.length() < 2 || fullName.length() > 80) {
+                nameLayout.setError(getString(R.string.error_name));
+                name.requestFocus();
                 return;
             }
-            if (mail.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
-                email.setError("Email không hợp lệ");
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+                emailLayout.setError(getString(R.string.error_email_invalid));
                 email.requestFocus();
                 return;
             }
-            if (!phone.matches("[0-9]{9,11}")) {
-                dienThoai.setError("Số điện thoại gồm 9–11 chữ số");
-                dienThoai.requestFocus();
+            if (!phoneNumber.matches("[0-9]{9,11}")) {
+                phoneLayout.setError(getString(R.string.error_phone_invalid));
+                phone.requestFocus();
                 return;
             }
             if (pass.length() < 6) {
-                matKhau.setError("Mật khẩu cần ít nhất 6 ký tự");
-                matKhau.requestFocus();
+                passwordLayout.setError(getString(R.string.error_password_short));
+                password.requestFocus();
                 return;
             }
-            if (!pass.equals(confirm)) {
-                xacNhan.setError("Mật khẩu xác nhận không khớp");
-                xacNhan.requestFocus();
+            if (!pass.equals(passAgain)) {
+                confirmLayout.setError(getString(R.string.error_password_mismatch));
+                confirm.requestFocus();
                 return;
             }
 
-            boolean owner = vaiTro.getSelectedItemPosition() == 0;
             Map<String, Object> profile = new HashMap<>();
-            profile.put("ho_ten", name);
+            profile.put("ho_ten", fullName);
             profile.put("email", mail);
-            profile.put("so_dien_thoai", phone);
+            profile.put("so_dien_thoai", phoneNumber);
             profile.put("vai_tro", owner ? "quan_tri_gym" : "hoi_vien");
-
-            // Cả chủ Gym và hội viên đều bắt đầu với gym_id rỗng.
-            // Chủ Gym tạo thương hiệu sau đăng ký; hội viên chọn Gym khi đăng ký gói.
             profile.put("gym_id", "");
             profile.put("trang_thai", true);
             profile.put("ngay_tao", System.currentTimeMillis());
-
+            progress.setVisibility(View.VISIBLE);
+            submit.setEnabled(false);
             kho.dangKy(mail, pass, profile, new KhoDuLieu.KetQua<Map<String, Object>>() {
-                @Override
-                public void thanhCong(Map<String, Object> newProfile) {
+                @Override public void thanhCong(Map<String, Object> newProfile) {
                     nguoiDung = newProfile;
                     uid = KhoDuLieu.chuoi(newProfile.get("uid"));
                     if (uid.isEmpty()) uid = KhoDuLieu.chuoi(newProfile.get("id"));
-
                     if (owner) {
                         hienTaoThuongHieu();
                     } else {
@@ -587,41 +632,57 @@ public class MainActivity extends AppCompatActivity {
                         hienBangDieuKhien();
                     }
                 }
-
-                @Override
-                public void thatBai(String thongBao) {
-                    baoLoi(thongBao);
+                @Override public void thatBai(String message) {
+                    progress.setVisibility(View.GONE);
+                    submit.setEnabled(true);
+                    errorView.setText(message);
+                    errorView.setVisibility(View.VISIBLE);
                 }
             });
         });
-        nut("QUAY LẠI ĐĂNG NHẬP", false, this::hienDangNhap);
     }
-
     // ---------------------------------------------------------------------
     // F03 - ĐĂNG KÝ THƯƠNG HIỆU GYM / THIẾT LẬP THƯƠNG HIỆU
     // ---------------------------------------------------------------------
 
     private void hienTaoThuongHieu() {
-        taoTrang("TẠO THƯƠNG HIỆU GYM", "Tên thương hiệu là duy nhất và được hiển thị cho hội viên", null, false);
-        themChu("Thông tin này sẽ được dùng để khách hàng tìm thấy Gym của bạn.", 13, XAM, false);
-        EditText ten = truong("Tên thương hiệu Gym", "Ví dụ: Quốc Anh Gym", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
-        EditText diaChi = truong("Địa chỉ", "Ví dụ: Bình Dương", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
-        EditText phone = truong("Số điện thoại phòng Gym", "0123456789", InputType.TYPE_CLASS_PHONE, "");
-        nut("TẠO THƯƠNG HIỆU GYM", true, () -> {
-            String brandName = ten.getText().toString().trim().replaceAll("\\s+", " ");
-            String address = diaChi.getText().toString().trim();
-            String contact = phone.getText().toString().trim();
-            if (brandName.isEmpty()) { ten.setError("Vui lòng nhập tên thương hiệu"); ten.requestFocus(); return; }
-            if (address.isEmpty()) { diaChi.setError("Vui lòng nhập địa chỉ"); diaChi.requestFocus(); return; }
-            if (!contact.matches("[0-9]{9,11}")) { phone.setError("Số điện thoại gồm 9–11 chữ số"); phone.requestFocus(); return; }
+        ScreenBrandSetupBinding brand = ScreenBrandSetupBinding.inflate(getLayoutInflater());
+        hienManHinh(brand.getRoot(), getString(R.string.brand_setup_title));
+        brand.brandLogout.setOnClickListener(v -> xuLyDangXuat());
+        brand.brandCreate.setOnClickListener(v -> {
+            brand.brandNameLayout.setError(null);
+            brand.brandAddressLayout.setError(null);
+            brand.brandPhoneLayout.setError(null);
+            brand.brandError.setVisibility(View.GONE);
+            String brandName = String.valueOf(brand.brandName.getText()).trim().replaceAll("\\s+", " ");
+            String address = String.valueOf(brand.brandAddress.getText()).trim();
+            String contact = String.valueOf(brand.brandPhone.getText()).trim();
+            if (brandName.length() < 2 || brandName.length() > 80) {
+                brand.brandNameLayout.setError(getString(R.string.error_name));
+                brand.brandName.requestFocus();
+                return;
+            }
+            if (address.isEmpty()) {
+                brand.brandAddressLayout.setError(getString(R.string.error_required));
+                brand.brandAddress.requestFocus();
+                return;
+            }
+            if (!contact.matches("[0-9]{9,11}")) {
+                brand.brandPhoneLayout.setError(getString(R.string.error_phone_invalid));
+                brand.brandPhone.requestFocus();
+                return;
+            }
+
+            brand.brandProgress.setVisibility(View.VISIBLE);
+            brand.brandCreate.setEnabled(false);
             kho.layTatCa("phong_gym", new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
                 @Override public void thanhCong(List<Map<String, Object>> all) {
                     String normalized = KhoDuLieu.chuanHoaTen(brandName);
-                    for (Map<String, Object> g : all) {
-                        String old = KhoDuLieu.chuoi(g.get("ten_thuong_hieu_chuan"));
-                        if (old.isEmpty()) old = KhoDuLieu.chuanHoaTen(KhoDuLieu.chuoi(g.get("ten_thuong_hieu")));
+                    for (Map<String, Object> gym : all) {
+                        String old = KhoDuLieu.chuoi(gym.get("ten_thuong_hieu_chuan"));
+                        if (old.isEmpty()) old = KhoDuLieu.chuanHoaTen(KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")));
                         if (normalized.equals(old)) {
-                            baoLoi("Tên thương hiệu đã tồn tại. Vui lòng chọn tên khác.");
+                            hienLoiThuongHieu(brand, "Tên thương hiệu đã tồn tại. Vui lòng chọn tên khác.");
                             return;
                         }
                     }
@@ -635,9 +696,9 @@ public class MainActivity extends AppCompatActivity {
                     gym.put("trang_thai", "hoat_dong");
                     gym.put("ngay_tao", System.currentTimeMillis());
                     kho.them("phong_gym", gym, new KhoDuLieu.KetQua<String>() {
-                        @Override public void thanhCong(String gymId) {
+                        @Override public void thanhCong(String newGymId) {
                             Map<String, Object> patch = new HashMap<>();
-                            patch.put("gym_id", gymId);
+                            patch.put("gym_id", newGymId);
                             patch.put("ten_thuong_hieu", brandName);
                             kho.capNhat("nguoi_dung", uid, patch, new KhoDuLieu.KetQua<Boolean>() {
                                 @Override public void thanhCong(Boolean ok) {
@@ -646,18 +707,29 @@ public class MainActivity extends AppCompatActivity {
                                     thongBao("Đã tạo thương hiệu Gym thành công.");
                                     hienBangDieuKhien();
                                 }
-                                @Override public void thatBai(String error) { baoLoi("Đã tạo thương hiệu nhưng cập nhật hồ sơ thất bại: " + error); }
+                                @Override public void thatBai(String error) {
+                                    hienLoiThuongHieu(brand, "Đã tạo Gym nhưng không cập nhật được hồ sơ: " + error);
+                                }
                             });
                         }
-                        @Override public void thatBai(String error) { baoLoi("Không tạo được thương hiệu: " + error); }
+                        @Override public void thatBai(String error) {
+                            hienLoiThuongHieu(brand, "Không tạo được thương hiệu: " + error);
+                        }
                     });
                 }
-                @Override public void thatBai(String error) { baoLoi("Không kiểm tra được tên thương hiệu: " + error); }
+                @Override public void thatBai(String error) {
+                    hienLoiThuongHieu(brand, "Không kiểm tra được tên thương hiệu: " + error);
+                }
             });
         });
-        nut("ĐĂNG XUẤT", false, () -> { kho.dangXuat(); uid = ""; nguoiDung.clear(); hienDangNhap(); });
     }
 
+    private void hienLoiThuongHieu(ScreenBrandSetupBinding brand, String message) {
+        brand.brandProgress.setVisibility(View.GONE);
+        brand.brandCreate.setEnabled(true);
+        brand.brandError.setText(message);
+        brand.brandError.setVisibility(View.VISIBLE);
+    }
     // ---------------------------------------------------------------------
     // F02 - DASHBOARD CHỦ GYM / HỘI VIÊN
     // ---------------------------------------------------------------------
@@ -1694,9 +1766,129 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void hienHoSo() {
-        taoTrang("HỒ SƠ CÁ NHÂN", "Quản lý thông tin tài khoản", this::hienBangDieuKhien, true);
+        FragmentProfileBinding profile = FragmentProfileBinding.inflate(getLayoutInflater());
+        manHinhHienTai = getString(R.string.profile_title).toUpperCase(new Locale("vi", "VN"));
+        String name = tenNguoiDung();
+        String email = KhoDuLieu.chuoi(nguoiDung.get("email"));
+        String phone = KhoDuLieu.chuoi(nguoiDung.get("so_dien_thoai"));
+        profile.pfName.setText(name);
+        profile.pfAvatar.setText(name.substring(0, 1).toUpperCase(new Locale("vi", "VN")));
+        profile.pfEmail.setText(email);
+        profile.pfEmailValue.setText(email);
+        profile.pfPhone.setText(phone.isEmpty() ? getString(R.string.profile_no_phone_value) : phone);
+        profile.pfRole.setText(laQuanTri() ? R.string.profile_role_owner : R.string.profile_role_member);
+        try {
+            String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            profile.pfVersion.setText(getString(R.string.profile_brand_version, version));
+        } catch (Exception ignored) {
+            profile.pfVersion.setText(getString(R.string.profile_brand_version, "1.0.0"));
+        }
+
+        if (laQuanTri()) {
+            profile.pfGymLabel.setText(R.string.profile_owner_brand_label);
+            profile.pfGymName.setText(TextUtils.isEmpty(tenGymHienTai)
+                    ? getString(R.string.profile_no_registered_gym) : tenGymHienTai);
+            profile.pfPackageLabel.setVisibility(View.GONE);
+            profile.pfPackageName.setVisibility(View.GONE);
+            profile.pfMembershipDetails.setVisibility(View.GONE);
+            profile.pfMembershipCard.setOnClickListener(v -> hienCaiDatGym());
+        } else {
+            profile.pfGymName.setText(R.string.profile_no_registered_gym);
+            profile.pfPackageName.setText(R.string.profile_no_current_package);
+            profile.pfPackageLabel.setVisibility(View.GONE);
+            profile.pfMembershipDetails.setVisibility(View.GONE);
+            profile.pfMembershipCard.setOnClickListener(v -> hienDanhSachGymDangKyGoi());
+            hienGoiTapTrenHoSo(profile);
+        }
+
+        profile.pfBack.setOnClickListener(v -> hienBangDieuKhien());
+        profile.pfMenu.setOnClickListener(v -> hienMenuHoSo(profile.pfMenu));
+        profile.pfEdit.setOnClickListener(v -> hienFormHoSo());
+        profile.pfAvatarEdit.setOnClickListener(v -> hienFormHoSo());
+        profile.pfPhoneRow.setOnClickListener(v -> hienFormHoSo());
+        profile.pfPasswordRow.setOnClickListener(v -> guiEmailDatLaiMatKhauHoSo());
+        profile.pfLogoutRow.setOnClickListener(v -> xuLyDangXuat());
+
+        khungChinh.removeAllViews();
+        khungChinh.addView(profile.getRoot(), new FrameLayout.LayoutParams(-1, -1));
+    }
+
+    private void hienGoiTapTrenHoSo(FragmentProfileBinding profile) {
+        kho.layTheoTruong("dang_ky_goi", "uid_nguoi_dung", uid,
+                new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
+                    @Override public void thanhCong(List<Map<String, Object>> all) {
+                        Map<String, Object> current = null;
+                        for (Map<String, Object> item : all) {
+                            String status = KhoDuLieu.chuoi(item.get("trang_thai"));
+                            if (!"dang_hoat_dong".equals(status) && !"cho_xac_nhan".equals(status)) continue;
+                            if (current == null || laySo(item, "ngay_dang_ky") > laySo(current, "ngay_dang_ky")) {
+                                current = item;
+                            }
+                        }
+                        if (current == null) return;
+                        final Map<String, Object> membership = current;
+                        profile.pfPackageLabel.setVisibility(View.VISIBLE);
+                        profile.pfPackageName.setVisibility(View.VISIBLE);
+                        profile.pfMembershipDetails.setVisibility(View.VISIBLE);
+                        profile.pfPackageName.setText(KhoDuLieu.chuoi(membership.get("ten_goi")));
+                        profile.pfMembershipUntil.setText(getString(R.string.profile_until_date,
+                                ngay(laySo(membership, "ngay_ket_thuc"))));
+                        boolean active = "dang_hoat_dong".equals(KhoDuLieu.chuoi(membership.get("trang_thai")));
+                        int color = getColor(active ? R.color.success : R.color.warning);
+                        profile.pfMembershipStatus.setText(active ? R.string.profile_membership_active
+                                : R.string.profile_membership_pending);
+                        profile.pfMembershipStatus.setTextColor(color);
+                        profile.pfStatusDot.setBackgroundTintList(
+                                android.content.res.ColorStateList.valueOf(color));
+                        String selectedGymId = KhoDuLieu.chuoi(membership.get("gym_id"));
+                        if (!selectedGymId.isEmpty()) {
+                            kho.layMot("phong_gym", selectedGymId,
+                                    new KhoDuLieu.KetQua<Map<String, Object>>() {
+                                        @Override public void thanhCong(Map<String, Object> gym) {
+                                            if (gym != null) profile.pfGymName.setText(
+                                                    KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")));
+                                        }
+                                        @Override public void thatBai(String error) { }
+                                    });
+                        }
+                    }
+                    @Override public void thatBai(String error) { }
+                });
+    }
+
+    private void hienMenuHoSo(View anchor) {
+        PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add("Thông báo").setOnMenuItemClickListener(item -> { hienThongBao(); return true; });
+        if (laQuanTri()) {
+            menu.getMenu().add("Thương hiệu Gym").setOnMenuItemClickListener(item -> { hienCaiDatGym(); return true; });
+            menu.getMenu().add("Gói tập").setOnMenuItemClickListener(item -> { hienGoiTap(); return true; });
+            menu.getMenu().add("Hội viên").setOnMenuItemClickListener(item -> { hienHoiVien(); return true; });
+            menu.getMenu().add("Lịch tập").setOnMenuItemClickListener(item -> { hienLichTap(); return true; });
+            menu.getMenu().add("Điểm danh").setOnMenuItemClickListener(item -> { hienDiemDanh(); return true; });
+        } else {
+            menu.getMenu().add("Đăng ký gói tập").setOnMenuItemClickListener(item -> { hienDanhSachGymDangKyGoi(); return true; });
+            menu.getMenu().add("Lịch tập").setOnMenuItemClickListener(item -> { hienLichTap(); return true; });
+            menu.getMenu().add("Chỉ số cơ thể").setOnMenuItemClickListener(item -> { hienChiSoCoThe(); return true; });
+            menu.getMenu().add("Tiến độ tập luyện").setOnMenuItemClickListener(item -> { hienTienDo(); return true; });
+        }
+        menu.show();
+    }
+
+    private void guiEmailDatLaiMatKhauHoSo() {
+        kho.guiEmailDatLaiMatKhau(KhoDuLieu.chuoi(nguoiDung.get("email")),
+                new KhoDuLieu.KetQua<Boolean>() {
+                    @Override public void thanhCong(Boolean ok) {
+                        thongBao("Nếu email tồn tại, Firebase sẽ gửi hướng dẫn đặt lại mật khẩu.");
+                    }
+                    @Override public void thatBai(String error) { baoLoi(error); }
+                });
+    }
+
+    private void hienFormHoSo() {
+        String title = getString(R.string.profile_edit).toUpperCase(new Locale("vi", "VN"));
+        taoTrang(title, "Cập nhật tên và số điện thoại", this::hienHoSo, false);
         the("VAI TRÒ", laQuanTri() ? "Quản trị Gym" : "Hội viên");
-        the("THƯƠNG HIỆU GYM", tenGymHienTai);
+        if (laQuanTri()) the("THƯƠNG HIỆU GYM", tenGymHienTai);
         EditText name = truong("Họ và tên", "Họ tên", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS, KhoDuLieu.chuoi(nguoiDung.get("ho_ten")));
         EditText email = truong("Email tài khoản", "Email", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, KhoDuLieu.chuoi(nguoiDung.get("email")));
         email.setEnabled(false);
@@ -1710,23 +1902,28 @@ public class MainActivity extends AppCompatActivity {
             patch.put("ho_ten", n);
             patch.put("so_dien_thoai", p);
             kho.capNhat("nguoi_dung", uid, patch, new KhoDuLieu.KetQua<Boolean>() {
-                @Override public void thanhCong(Boolean ok) { nguoiDung.putAll(patch); thongBao("Đã cập nhật hồ sơ."); hienHoSo(); }
+                @Override public void thanhCong(Boolean ok) {
+                    nguoiDung.putAll(patch);
+                    thongBao(getString(R.string.profile_saved));
+                    hienHoSo();
+                }
                 @Override public void thatBai(String error) { baoLoi(error); }
             });
         });
-        nut("ĐỔI / ĐẶT LẠI MẬT KHẨU", false, () -> kho.guiEmailDatLaiMatKhau(KhoDuLieu.chuoi(nguoiDung.get("email")), new KhoDuLieu.KetQua<Boolean>() {
-            @Override public void thanhCong(Boolean ok) { thongBao("Nếu email tồn tại, Firebase sẽ gửi hướng dẫn đặt lại mật khẩu."); }
-            @Override public void thatBai(String error) { baoLoi(error); }
-        }));
+        nut("ĐỔI / ĐẶT LẠI MẬT KHẨU", false, this::guiEmailDatLaiMatKhauHoSo);
         nut("ĐĂNG XUẤT", false, this::xuLyDangXuat);
     }
-
     // ---------------------------------------------------------------------
     // ĐIỀU HƯỚNG BACK
     // ---------------------------------------------------------------------
 
     @Override
     public void onBackPressed() {
+        String editProfileTitle = getString(R.string.profile_edit).toUpperCase(new Locale("vi", "VN"));
+        if (editProfileTitle.equals(manHinhHienTai)) {
+            hienHoSo();
+            return;
+        }
         if (TextUtils.isEmpty(uid)) {
             if (!"GYM MANAGEMENT".equals(manHinhHienTai)) hienDangNhap();
             else super.onBackPressed();
