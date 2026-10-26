@@ -71,6 +71,7 @@ public class OwnerDashboardFragment extends Fragment {
         b.dashBell.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.NOTIFICATIONS, null));
         b.dashGoSchedule.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.SCHEDULES, null));
         b.dashGoAttendance.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.ATTENDANCE, null));
+        b.dashExerciseLibrary.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.EXERCISE_LIBRARY, null));
         b.dashCreateBrand.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.BRAND, null));
 
         vm.stats().observe(getViewLifecycleOwner(), r -> {

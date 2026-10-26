@@ -8,6 +8,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.PopupMenu;
@@ -31,7 +35,11 @@ import com.example.gymmanagement.databinding.ActivityRegisterMemberBinding;
 import com.example.gymmanagement.databinding.ActivityRegisterOwnerBinding;
 import com.example.gymmanagement.databinding.FragmentProfileBinding;
 import com.example.gymmanagement.databinding.ScreenBrandSetupBinding;
+import com.example.gymmanagement.data.ExerciseCatalog;
 import com.example.gymmanagement.du_lieu.KhoDuLieu;
+import com.example.gymmanagement.model.Exercise;
+import com.example.gymmanagement.ui.components.VideoPlayerView;
+import com.example.gymmanagement.util.ImageLoader;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -65,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
     private String uid = "";
     private Map<String, Object> nguoiDung = new HashMap<>();
     private String tenGymHienTai = "Gym của bạn";
+    private final List<Exercise> exerciseCatalog = new ArrayList<>();
+    private String exerciseCategory = "";
+    private String exerciseDifficulty = "";
+    private String exerciseQuery = "";
+    private LinearLayout exerciseFilterHost;
+    private LinearLayout exerciseListHost;
+    private TextView exerciseCount;
+    private VideoPlayerView activeExerciseVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         kiemTraPhienDangNhap();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (activeExerciseVideo != null) activeExerciseVideo.start();
+    }
+
+    @Override
+    protected void onStop() {
+        if (activeExerciseVideo != null) activeExerciseVideo.stop();
+        super.onStop();
     }
 
     /** Chặn toàn bộ luồng ứng dụng khi chưa liên kết Firebase thật. */
@@ -136,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void taoTrang(String tieuDe, String moTa, Runnable quayLai, boolean coThanhDieuHuong) {
+        if (activeExerciseVideo != null) {
+            activeExerciseVideo.stop();
+            activeExerciseVideo = null;
+        }
         manHinhHienTai = tieuDe;
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -1267,58 +1299,229 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void hienThuVienBaiTap() {
-        taoTrang("THƯ VIỆN BÀI TẬP", tenGymHienTai, this::hienBangDieuKhien, true);
-        if (laQuanTri()) nut("+ THÊM BÀI TẬP", true, () -> hienFormBaiTap(null));
-        EditText search = oNhap("Tìm tên hoặc nhóm cơ", InputType.TYPE_CLASS_TEXT, "");
+        taoTrang("THƯ VIỆN BÀI TẬP", "Dành cho hội viên và chủ Gym", this::hienBangDieuKhien, true);
+        exerciseCategory = "";
+        exerciseDifficulty = "";
+        exerciseQuery = "";
+        exerciseCatalog.clear();
+        try {
+            exerciseCatalog.addAll(ExerciseCatalog.load(this));
+        } catch (Exception e) {
+            themChu("Không tải được danh mục bài tập trong ứng dụng.", 14, XAM, false);
+            return;
+        }
+
+        EditText search = oNhap("Tìm tên bài tập, nhóm cơ hoặc dụng cụ", InputType.TYPE_CLASS_TEXT, "");
         Button searchButton = nut("TÌM KIẾM", false, null);
-        LinearLayout listHost = new LinearLayout(this);
-        listHost.setOrientation(LinearLayout.VERTICAL);
-        thanTrang.addView(listHost);
-        searchButton.setOnClickListener(v -> napVaHienBaiTap(search.getText().toString().trim(), listHost));
-        napVaHienBaiTap("", listHost);
-    }
+        exerciseFilterHost = new LinearLayout(this);
+        exerciseFilterHost.setOrientation(LinearLayout.VERTICAL);
+        thanTrang.addView(exerciseFilterHost);
+        exerciseCount = themChu("", 12, XAM, false);
+        exerciseListHost = new LinearLayout(this);
+        exerciseListHost.setOrientation(LinearLayout.VERTICAL);
+        thanTrang.addView(exerciseListHost);
 
-    private void napVaHienBaiTap(String query, LinearLayout listHost) {
-        listHost.removeAllViews();
-        ProgressBar bar = new ProgressBar(this);
-        bar.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(DO));
-        listHost.addView(bar, new LinearLayout.LayoutParams(dp(35), dp(35)));
-        kho.layTheoTruong("bai_tap", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
-            @Override public void thanhCong(List<Map<String, Object>> items) {
-                listHost.removeAllViews();
-                List<Map<String, Object>> filtered = new ArrayList<>();
-                for (Map<String, Object> item : items) {
-                    String content = (KhoDuLieu.chuoi(item.get("ten_bai_tap")) + " " + KhoDuLieu.chuoi(item.get("nhom_co"))).toLowerCase(new Locale("vi", "VN"));
-                    if (query.isEmpty() || content.contains(query.toLowerCase(new Locale("vi", "VN")))) filtered.add(item);
-                }
-                if (filtered.isEmpty()) {
-                    TextView empty = chu(laQuanTri() ? "Chưa có bài tập. Hãy thêm nội dung cho hội viên." : "Không tìm thấy bài tập phù hợp.", 13, XAM, false);
-                    listHost.addView(empty);
-                }
-                for (Map<String, Object> item : filtered) {
-                    LinearLayout card = theTrong(listHost, KhoDuLieu.chuoi(item.get("ten_bai_tap")), "Nhóm cơ: " + KhoDuLieu.chuoi(item.get("nhom_co")) + "\nĐộ khó: " + KhoDuLieu.chuoi(item.get("do_kho")) + "\nDụng cụ: " + KhoDuLieu.chuoi(item.get("dung_cu")) + "\n" + KhoDuLieu.chuoi(item.get("so_hiep")) + " hiệp × " + KhoDuLieu.chuoi(item.get("so_lan")));
-                    themNutVaoThe(card, "XEM HƯỚNG DẪN", true, () -> xemChiTietBaiTap(item));
-                    if (laQuanTri()) {
-                        themNutVaoThe(card, "SỬA", false, () -> hienFormBaiTap(item));
-                        themNutVaoThe(card, "XÓA", false, () -> new AlertDialog.Builder(MainActivity.this).setTitle("Xóa bài tập?").setNegativeButton("Hủy", null).setPositiveButton("Xóa", (d, w) -> kho.xoa("bai_tap", KhoDuLieu.chuoi(item.get("id")), new KhoDuLieu.KetQua<Boolean>() {
-                            @Override public void thanhCong(Boolean ok) { napVaHienBaiTap(query, listHost); }
-                            @Override public void thatBai(String error) { baoLoi(error); }
-                        })).show());
-                    }
-                }
+        search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                exerciseQuery = s.toString().trim().toLowerCase(Locale.ROOT);
+                renderExerciseList();
             }
-            @Override public void thatBai(String error) { listHost.removeAllViews(); baoLoi("Không tải được thư viện bài tập: " + error); }
+            @Override public void afterTextChanged(Editable s) { }
         });
+        searchButton.setOnClickListener(v -> {
+            exerciseQuery = search.getText().toString().trim().toLowerCase(Locale.ROOT);
+            renderExerciseList();
+        });
+        renderExerciseFilters();
+        renderExerciseList();
     }
 
-    private void xemChiTietBaiTap(Map<String, Object> item) {
-        String message = "Nhóm cơ: " + KhoDuLieu.chuoi(item.get("nhom_co"))
-                + "\nĐộ khó: " + KhoDuLieu.chuoi(item.get("do_kho"))
-                + "\nDụng cụ: " + KhoDuLieu.chuoi(item.get("dung_cu"))
-                + "\nGợi ý: " + KhoDuLieu.chuoi(item.get("so_hiep")) + " hiệp × " + KhoDuLieu.chuoi(item.get("so_lan"))
-                + "\n\nHƯỚNG DẪN\n" + KhoDuLieu.chuoi(item.get("huong_dan"))
-                + "\n\nLƯU Ý AN TOÀN\nBắt đầu với mức độ phù hợp, giữ tư thế đúng và dừng lại nếu thấy đau bất thường.";
-        new AlertDialog.Builder(this).setTitle(KhoDuLieu.chuoi(item.get("ten_bai_tap"))).setMessage(message).setPositiveButton("Đóng", null).show();
+    private void renderExerciseFilters() {
+        if (exerciseFilterHost == null) return;
+        exerciseFilterHost.removeAllViews();
+        String[] categories = new String[Exercise.CATEGORIES.length + 1];
+        categories[0] = "Tất cả";
+        System.arraycopy(Exercise.CATEGORIES, 0, categories, 1, Exercise.CATEGORIES.length);
+        String[] difficulties = new String[Exercise.DIFFICULTIES.length + 1];
+        difficulties[0] = "Tất cả";
+        System.arraycopy(Exercise.DIFFICULTIES, 0, difficulties, 1, Exercise.DIFFICULTIES.length);
+        addExerciseChipRow(categories, true);
+        addExerciseChipRow(difficulties, false);
+    }
+
+    private void addExerciseChipRow(String[] values, boolean categoryFilter) {
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setHorizontalScrollBarEnabled(false);
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setPadding(0, dp(2), dp(8), dp(5));
+        for (int i = 0; i < values.length; i++) {
+            String value = i == 0 ? "" : values[i];
+            String selected = categoryFilter ? exerciseCategory : exerciseDifficulty;
+            boolean checked = selected.equals(value);
+            TextView chip = chu(values[i], 12, checked ? TRANG : XAM, checked);
+            chip.setGravity(Gravity.CENTER);
+            chip.setPadding(dp(13), dp(7), dp(13), dp(7));
+            chip.setBackground(nenVien(checked ? DO : DEN_PHU, checked ? DO : Color.rgb(67, 67, 67), 18));
+            LinearLayout.LayoutParams chipParams = new LinearLayout.LayoutParams(-2, -2);
+            chipParams.rightMargin = dp(7);
+            row.addView(chip, chipParams);
+            chip.setOnClickListener(v -> {
+                if (categoryFilter) exerciseCategory = value;
+                else exerciseDifficulty = value;
+                renderExerciseFilters();
+                renderExerciseList();
+            });
+        }
+        scroll.addView(row, new HorizontalScrollView.LayoutParams(-2, -2));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
+        params.bottomMargin = dp(2);
+        exerciseFilterHost.addView(scroll, params);
+    }
+
+    private void renderExerciseList() {
+        if (exerciseListHost == null || exerciseCount == null) return;
+        exerciseListHost.removeAllViews();
+        List<Exercise> filtered = new ArrayList<>();
+        for (Exercise exercise : exerciseCatalog) {
+            if (!exerciseCategory.isEmpty() && !exerciseCategory.equals(exercise.category)) continue;
+            if (!exerciseDifficulty.isEmpty() && !exerciseDifficulty.equals(exercise.difficulty)) continue;
+            if (!exerciseQuery.isEmpty() && !exercise.searchText().contains(exerciseQuery)) continue;
+            filtered.add(exercise);
+        }
+        exerciseCount.setText(filtered.size() + " bài tập");
+        if (filtered.isEmpty()) {
+            exerciseListHost.addView(chu("Không tìm thấy bài tập phù hợp. Hãy đổi từ khóa hoặc bộ lọc.", 13, XAM, false));
+            return;
+        }
+        for (Exercise exercise : filtered) addExerciseCard(exercise);
+    }
+
+    private void addExerciseCard(Exercise exercise) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.HORIZONTAL);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setPadding(dp(11), dp(11), dp(11), dp(11));
+        card.setBackground(nenVien(DEN_THE, Color.rgb(48, 48, 48), 15));
+        card.setClickable(true);
+        card.setFocusable(true);
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(-1, -2);
+        cardParams.bottomMargin = dp(11);
+        exerciseListHost.addView(card, cardParams);
+
+        ImageView image = new ImageView(this);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        image.setBackground(nenVien(DEN_PHU, Color.rgb(55, 55, 55), 11));
+        image.setClipToOutline(true);
+        ImageLoader.load(image, exercise.imageUrl, R.drawable.bg_gym_placeholder);
+        card.addView(image, new LinearLayout.LayoutParams(dp(88), dp(88)));
+
+        LinearLayout details = new LinearLayout(this);
+        details.setOrientation(LinearLayout.VERTICAL);
+        details.setPadding(dp(11), 0, 0, 0);
+        card.addView(details, new LinearLayout.LayoutParams(0, -2, 1));
+        TextView name = chu(exercise.name, 15, TRANG, true);
+        name.setMaxLines(2);
+        details.addView(name);
+        TextView category = chu(exercise.category + " · " + exercise.difficulty, 12, XAM, false);
+        LinearLayout.LayoutParams categoryParams = new LinearLayout.LayoutParams(-1, -2);
+        categoryParams.topMargin = dp(4);
+        details.addView(category, categoryParams);
+        TextView equipment = chu("Dụng cụ: " + exercise.equipment, 12, XAM, false);
+        equipment.setMaxLines(1);
+        equipment.setEllipsize(TextUtils.TruncateAt.END);
+        details.addView(equipment);
+        TextView dosage = chu(exercise.recommendedSets + " hiệp · " + exercise.recommendedReps + " lần", 11, XAM, false);
+        details.addView(dosage);
+        if (exercise.hasVideo()) {
+            TextView video = chu("▶ Có video hướng dẫn", 11, DO, true);
+            details.addView(video);
+        }
+        if (!exercise.imageAttribution.isEmpty() || !exercise.videoAttribution.isEmpty()) {
+            String author = !exercise.imageAttribution.isEmpty()
+                    ? exercise.imageAttribution : exercise.videoAttribution;
+            String license = !exercise.imageLicense.isEmpty()
+                    ? exercise.imageLicense : exercise.videoLicense;
+            TextView credit = chu("Media: " + author + " · " + license, 9, XAM, false);
+            credit.setMaxLines(1);
+            credit.setEllipsize(TextUtils.TruncateAt.END);
+            details.addView(credit);
+        }
+        card.setOnClickListener(v -> xemChiTietBaiTap(exercise));
+    }
+
+    private void xemChiTietBaiTap(Exercise exercise) {
+        taoTrang("CHI TIẾT BÀI TẬP", exercise.category + " · " + exercise.difficulty,
+                this::hienThuVienBaiTap, true);
+        if (exercise.hasVideo()) {
+            themChu("VIDEO HƯỚNG DẪN", 14, XAM, true);
+            VideoPlayerView video = new VideoPlayerView(this);
+            String poster = exercise.videoThumbnailUrl.isEmpty() ? exercise.imageUrl : exercise.videoThumbnailUrl;
+            video.setSource(exercise.videoUrl, exercise.videoType, poster);
+            LinearLayout.LayoutParams videoParams = new LinearLayout.LayoutParams(-1, -2);
+            videoParams.bottomMargin = dp(10);
+            thanTrang.addView(video, videoParams);
+            activeExerciseVideo = video;
+            video.start();
+        } else {
+            ImageView image = new ImageView(this);
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ImageLoader.load(image, exercise.imageUrl, R.drawable.bg_gym_placeholder);
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(-1, dp(200));
+            imageParams.bottomMargin = dp(10);
+            thanTrang.addView(image, imageParams);
+            themChu("Chưa có video cho bài này. Xem các bước hướng dẫn bên dưới.", 12, XAM, false);
+        }
+
+        if (!exercise.videoAttribution.isEmpty() || !exercise.imageAttribution.isEmpty()) {
+            StringBuilder credit = new StringBuilder();
+            if (!exercise.imageAttribution.isEmpty()) {
+                credit.append("Ảnh: ").append(exercise.imageAttribution).append(" · ").append(exercise.imageLicense);
+            }
+            if (!exercise.videoAttribution.isEmpty()) {
+                if (credit.length() > 0) credit.append('\n');
+                credit.append("Video: ").append(exercise.videoAttribution).append(" · ").append(exercise.videoLicense);
+            }
+            TextView attribution = themChu(credit.toString() + "\nNguồn và giấy phép: wger.de", 10, XAM, false);
+            String source = !exercise.videoSourceUrl.isEmpty() ? exercise.videoSourceUrl : exercise.imageSourceUrl;
+            attribution.setOnClickListener(v -> openExternalUrl(source));
+            String licenseUrl = !exercise.videoLicenseUrl.isEmpty()
+                    ? exercise.videoLicenseUrl : exercise.imageLicenseUrl;
+            TextView licenseLink = themChu("Mở giấy phép " + (!exercise.videoLicense.isEmpty()
+                    ? exercise.videoLicense : exercise.imageLicense), 10, DO, false);
+            licenseLink.setOnClickListener(v -> openExternalUrl(licenseUrl));
+        }
+
+        themChu(exercise.name, 22, TRANG, true);
+        the("NHÓM CƠ TÁC ĐỘNG", "Chính: " + TextUtils.join(", ", exercise.targetMuscles)
+                + "\nPhụ: " + (exercise.secondaryMuscles.isEmpty() ? "Không có" : TextUtils.join(", ", exercise.secondaryMuscles)));
+        the("THÔNG SỐ GỢI Ý", exercise.recommendedSets + " hiệp · " + exercise.recommendedReps
+                + " lần · nghỉ " + exercise.recommendedRestSeconds + " giây\nDụng cụ: " + exercise.equipment);
+        if (!exercise.description.isEmpty()) the("GIỚI THIỆU", exercise.description);
+        if (!exercise.setupPosition.isEmpty()) the("TƯ THẾ CHUẨN BỊ", exercise.setupPosition);
+        if (!exercise.bodyPlacement.isEmpty()) the("VỊ TRÍ ĐẶT TAY / CHÂN / THÂN", exercise.bodyPlacement);
+        if (!exercise.instructions.isEmpty()) {
+            StringBuilder steps = new StringBuilder();
+            for (int i = 0; i < exercise.instructions.size(); i++) {
+                if (steps.length() > 0) steps.append('\n');
+                steps.append(i + 1).append(". ").append(exercise.instructions.get(i));
+            }
+            the("CÁC BƯỚC THỰC HIỆN", steps.toString());
+        }
+        if (!exercise.breathingGuide.isEmpty()) the("NHỊP THỞ", exercise.breathingGuide);
+        if (!exercise.rangeOfMotion.isEmpty()) the("BIÊN ĐỘ CHUYỂN ĐỘNG", exercise.rangeOfMotion);
+        if (!exercise.commonMistakes.isEmpty()) the("LỖI THƯỜNG GẶP", "• " + TextUtils.join("\n• ", exercise.commonMistakes));
+        if (!exercise.safetyNotes.isEmpty()) the("LƯU Ý AN TOÀN", "• " + TextUtils.join("\n• ", exercise.safetyNotes));
+    }
+
+    private void openExternalUrl(String url) {
+        if (url == null || !url.startsWith("https://")) return;
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)));
+        } catch (Exception e) {
+            thongBao("Không mở được liên kết nguồn.");
+        }
     }
 
     private void hienFormBaiTap(Map<String, Object> old) {

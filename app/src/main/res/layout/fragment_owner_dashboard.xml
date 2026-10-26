@@ -200,6 +200,15 @@
             </com.example.gymmanagement.ui.components.StateLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/dash_exercise_library"
+                style="@style/Widget.Gym.Button.Small.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/ex_library_home_title"
+                app:icon="@drawable/ic_fitness" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/dash_create_brand"
                 style="@style/Widget.Gym.Button"
                 android:layout_width="match_parent"

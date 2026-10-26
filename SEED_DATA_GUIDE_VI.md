@@ -25,19 +25,16 @@ Mật khẩu **không có giá trị mặc định** và không bao giờ nằm 
 | Thương hiệu | 3 gym (kèm `gymNameReservations`), mỗi gym 3–4 gói (có 1 gói tạm ẩn) |
 | Kịch bản hội viên | `m1`: gói còn hạn ở Quốc Anh Gym + 1 gói đã hết hạn ở FitLife, có lịch tập, điểm danh, chỉ số cơ thể, nhật ký tập, mục tiêu; `m2`: yêu cầu đang chờ ở FitLife; `m3`: yêu cầu bị từ chối ở TDMU; `m4`: gói sắp hết hạn ở TDMU |
 | Thông báo | Vài thông báo cá nhân + 1 thông báo chung của Gym |
-| Bài tập | 24 bài / 7 nhóm (Ngực, Lưng, Chân, Vai, Tay, Bụng, Cardio) kèm hướng dẫn chữ chi tiết (tư thế, vị trí, các bước, nhịp thở, biên độ, lỗi thường gặp, an toàn) |
+| Bài tập | 78 bài / 7 nhóm (Ngực, Lưng, Chân, Vai, Tay, Bụng, Cardio) kèm hướng dẫn chữ chi tiết (tư thế, vị trí, các bước, nhịp thở, biên độ, lỗi thường gặp, an toàn); 40 bài có video minh họa |
 
 ## Idempotent
 - Tài liệu có ID cố định. Chạy lại: dữ liệu *tham chiếu* (gym, gói, bài tập) được cập nhật (`merge`), dữ liệu *giao dịch* (yêu cầu, membership, lịch, điểm danh, nhật ký, thông báo) **chỉ tạo nếu chưa có** — không nhân đôi, không dịch chuyển thời gian.
 - Tài khoản Auth tạo nếu chưa tồn tại (theo email).
 
 ## Video và hình ảnh
-Dự án **không tự gắn video/ảnh**: `videoUrl`, `imageUrl` mặc định để trống và app hiển thị “Chưa có video hướng dẫn”. Lý do: không thể xác minh bản quyền/khả năng phát của URL từ môi trường tạo dự án.
-Để thêm media thật:
-1. Tự tìm video/ảnh bạn **có quyền sử dụng**, mở thử để chắc chắn phát được.
-2. Copy `media.example.json` → `media.json`, điền `videoUrl` (https, định dạng `mp4`, `hls` hoặc `dash`), tùy chọn `videoThumbnailUrl`, `videoDurationSeconds`, `imageUrl`.
-   (Trang YouTube không phải file video — ExoPlayer cần URL trực tiếp tới `.mp4`/`.m3u8`/`.mpd`.)
-3. `node seed.js` lại — script kiểm tra URL phải bắt đầu bằng `https://`.
+Danh mục tích hợp trong app có 78 bài, kèm 40 video minh họa có ghi tác giả, nguồn và giấy phép trong trang chi tiết. Ảnh xem trước được đóng gói trong APK; video phát trực tuyến nên cần kết nối mạng. Thư viện vẫn có đủ tên bài và hướng dẫn chữ khi ngoại tuyến.
+
+`seed/data/exercises.js` gộp dữ liệu bài tập với `seed/data/exercise-media.json`; `seed/seed.js` sẽ ghi các trường media này vào Firestore khi chạy seed. Muốn tạo lại ảnh xem trước và `app/src/main/assets/exercises.json`, chạy `node tools/generate_exercise_assets.js` khi có `ffmpeg.exe` trong PATH và kết nối internet. Các URL media bổ sung riêng cho Firestore vẫn có thể đặt trong `seed/media.json`; script kiểm tra URL HTTPS và kiểu video.
 
 ## Xóa dữ liệu mẫu
 ```bash

@@ -1,6 +1,12 @@
 package com.example.gymmanagement.ui.member;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gymmanagement.R;
+import com.example.gymmanagement.data.Session;
 import com.example.gymmanagement.databinding.FragmentExerciseDetailBinding;
 import com.example.gymmanagement.databinding.ItemGuideSectionBinding;
 import com.example.gymmanagement.databinding.ItemGuideLineBinding;
@@ -61,14 +68,19 @@ public class ExerciseDetailFragment extends Fragment {
         b.exdMuscles.setText(getString(R.string.ex_muscles_line, join(ex.targetMuscles),
                 ex.secondaryMuscles.isEmpty() ? getString(R.string.none) : join(ex.secondaryMuscles)));
 
-        if (ex.hasVideo()) {
+        boolean hasVideo = ex.hasVideo();
+        b.exdVideoTitle.setVisibility(hasVideo ? View.VISIBLE : View.GONE);
+        b.exdImage.setVisibility(hasVideo ? View.GONE : View.VISIBLE);
+        if (hasVideo) {
             b.exdVideo.setVisibility(View.VISIBLE);
             b.exdNoVideo.setVisibility(View.GONE);
-            b.exdVideo.setSource(ex.videoUrl, ex.videoType);
+            String poster = ex.videoThumbnailUrl.isEmpty() ? ex.imageUrl : ex.videoThumbnailUrl;
+            b.exdVideo.setSource(ex.videoUrl, ex.videoType, poster);
         } else {
             b.exdVideo.setVisibility(View.GONE);
             b.exdNoVideo.setVisibility(View.VISIBLE);
         }
+        bindMediaCredits();
 
         // HƯỚNG DẪN THỰC HIỆN – nội dung riêng của từng bài, lấy từ Firestore
         addSection(getString(R.string.guide_setup), ex.setupPosition, null, false);
@@ -83,12 +95,16 @@ public class ExerciseDetailFragment extends Fragment {
         if (ex.isSampleData) info.append("\n\n").append(getString(R.string.ex_sample_note));
         b.exdInfo.setText(info.toString().trim());
 
-        b.exdComplete.setOnClickListener(v -> CompleteExerciseSheet.newInstance().show(getChildFragmentManager(), "done"));
-        vm.action.observe(getViewLifecycleOwner(), ev -> {
-            if (ev == null || ev.peek().status == Resource.Status.LOADING || ev.getIfNotHandled() == null) return;
-            Resource<String> r = ev.peek();
-            UiUtil.snack(b.getRoot(), r.status == Resource.Status.SUCCESS ? r.data : r.error.message);
-        });
+        boolean canLogWorkout = Session.user != null && Session.user.isMember();
+        b.exdComplete.setVisibility(canLogWorkout ? View.VISIBLE : View.GONE);
+        if (canLogWorkout) {
+            b.exdComplete.setOnClickListener(v -> CompleteExerciseSheet.newInstance().show(getChildFragmentManager(), "done"));
+            vm.action.observe(getViewLifecycleOwner(), ev -> {
+                if (ev == null || ev.peek().status == Resource.Status.LOADING || ev.getIfNotHandled() == null) return;
+                Resource<String> r = ev.peek();
+                UiUtil.snack(b.getRoot(), r.status == Resource.Status.SUCCESS ? r.data : r.error.message);
+            });
+        }
     }
 
     public Exercise exercise() {
@@ -97,6 +113,57 @@ public class ExerciseDetailFragment extends Fragment {
 
     private String join(List<String> l) {
         return String.join(", ", l);
+    }
+
+    private void bindMediaCredits() {
+        SpannableStringBuilder credits = new SpannableStringBuilder();
+        appendCredit(credits, "Ảnh", ex.imageAttribution, ex.imageLicense,
+                ex.imageSourceUrl, ex.imageLicenseUrl);
+        appendCredit(credits, "Video", ex.videoAttribution, ex.videoLicense,
+                ex.videoSourceUrl, ex.videoLicenseUrl);
+        b.exdMediaCredit.setVisibility(credits.length() == 0 ? View.GONE : View.VISIBLE);
+        if (credits.length() > 0) {
+            b.exdMediaCredit.setText(credits);
+            b.exdMediaCredit.setMovementMethod(LinkMovementMethod.getInstance());
+            b.exdMediaCredit.setLinkTextColor(requireContext().getColor(R.color.primary));
+        }
+    }
+
+    private void appendCredit(SpannableStringBuilder out, String type, String author, String license,
+                              String sourceUrl, String licenseUrl) {
+        if (author == null || author.trim().isEmpty() || license == null || license.trim().isEmpty()) return;
+        if (out.length() > 0) out.append('\n');
+        out.append(type).append(": ");
+        int authorStart = out.length();
+        out.append(author);
+        if (isHttps(sourceUrl)) addLink(out, authorStart, out.length(), sourceUrl);
+        out.append(" · ");
+        int licenseStart = out.length();
+        out.append(license);
+        if (isHttps(licenseUrl)) addLink(out, licenseStart, out.length(), licenseUrl);
+        if (isHttps(sourceUrl)) {
+            out.append(" · ");
+            int sourceStart = out.length();
+            out.append("wger.de");
+            addLink(out, sourceStart, out.length(), sourceUrl);
+        }
+    }
+
+    private void addLink(SpannableStringBuilder text, int start, int end, String url) {
+        text.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                } catch (Exception ignored) {
+                    UiUtil.snack(b.getRoot(), getString(R.string.video_error));
+                }
+            }
+        }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private boolean isHttps(String url) {
+        return url != null && url.startsWith("https://");
     }
 
     private void addSection(String title, String text, List<String> lines, boolean numbered) {

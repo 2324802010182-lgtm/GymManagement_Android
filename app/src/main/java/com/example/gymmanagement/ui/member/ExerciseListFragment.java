@@ -42,6 +42,7 @@ public class ExerciseListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vm = new ViewModelProvider(this).get(ExerciseViewModel.class);
+        requireActivity().setTitle(R.string.ex_title);
         adapter = new ExerciseAdapter(this::open);
         b.exList.setLayoutManager(new LinearLayoutManager(requireContext()));
         b.exList.setAdapter(adapter);
@@ -77,10 +78,10 @@ public class ExerciseListFragment extends Fragment {
             if (r == null) return;
             boolean f = vm.isFiltering();
             b.exState.render(r, getString(f ? R.string.ex_empty_filter_title : R.string.ex_empty_title),
-                    getString(f ? R.string.ex_empty_filter_msg : R.string.ex_empty_msg), vm::load);
+                    getString(f ? R.string.ex_empty_filter_msg : R.string.ex_empty_msg), () -> vm.load(requireContext()));
             adapter.setItems(r.status == Resource.Status.SUCCESS ? r.data : null);
         });
-        if (vm.list().getValue() == null) vm.load();
+        if (vm.list().getValue() == null) vm.load(requireContext());
     }
 
     private void fillChips(ChipGroup group, String[] labels, boolean category) {

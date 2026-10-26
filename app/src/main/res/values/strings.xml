@@ -42,6 +42,7 @@
     <string name="loading_wait">Đang tải dữ liệu, vui lòng đợi giây lát.</string>
     <string name="logout_confirm">Bạn có chắc muốn đăng xuất khỏi tài khoản này?</string>
     <string name="video_error">Không phát được video. Kiểm tra kết nối mạng rồi thử lại.</string>
+    <string name="video_play">Phát video hướng dẫn</string>
     <string name="bmi_disclaimer">BMI chỉ mang tính tham khảo và không thay thế tư vấn của bác sĩ hoặc huấn luyện viên.</string>
     <string name="bmi_preview_empty">Nhập cân nặng và chiều cao để xem BMI</string>
     <string name="state_error_title">Đã xảy ra lỗi</string>
@@ -235,6 +236,8 @@
     <string name="sched_owner_empty_title">Chưa có lịch tập</string>
     <string name="sched_owner_empty_msg">Nhấn Tạo lịch tập để gán buổi tập cho hội viên còn hạn.</string>
     <string name="ex_title">Thư viện bài tập</string>
+    <string name="ex_library_home_title">Thư viện bài tập</string>
+    <string name="ex_library_home_subtitle">Tìm bài tập theo nhóm cơ và xem hướng dẫn thực hiện</string>
     <string name="ex_search_hint">Tìm bài tập theo tên</string>
     <string name="ex_empty_title">Chưa có bài tập</string>
     <string name="ex_empty_msg">Thư viện bài tập chưa có dữ liệu. Hãy chạy seed data theo hướng dẫn (SEED_DATA_GUIDE_VI.md).</string>
@@ -243,6 +246,8 @@
     <string name="ex_equipment_line">Dụng cụ: %1$s</string>
     <string name="ex_sets_line">%1$d hiệp · %2$s lần</string>
     <string name="ex_has_video">Có video</string>
+    <string name="ex_image_credit">Ảnh: %1$s · %2$s</string>
+    <string name="ex_video_credit">Video: %1$s · %2$s</string>
     <string name="ex_no_video">Chưa có video hướng dẫn cho bài tập này.</string>
     <string name="ex_image_desc">Hình minh họa bài tập</string>
     <string name="ex_sample_note">Nội dung hướng dẫn mang tính tham khảo. Hãy tập đúng kỹ thuật và dừng lại nếu thấy đau.</string>

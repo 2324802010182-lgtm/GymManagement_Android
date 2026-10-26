@@ -96,6 +96,17 @@
                     android:layout_marginStart="4dp"
                     android:textColor="@color/primary" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/exi_media_credit"
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="10sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

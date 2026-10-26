@@ -94,7 +94,9 @@ public class HomeFragment extends Fragment {
         b.homeBannerButton.setOnClickListener(v -> b.homeScroll.smoothScrollTo(0, b.homeSectionTitle.getTop() - UiUtil.dp(16)));
         b.homeBell.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.NOTIFICATIONS, null));
         b.homeMyCard.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.MY_GYMS, null));
+        b.homeExerciseLibrary.setOnClickListener(v -> HostActivity.open(requireContext(), HostActivity.EXERCISE_LIBRARY, null));
         Motion.press(b.homeMyCard);
+        Motion.press(b.homeExerciseLibrary);
         Motion.appear(b.homeBanner, 0);
 
         vm.gyms().observe(getViewLifecycleOwner(), r -> {

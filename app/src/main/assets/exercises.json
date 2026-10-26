@@ -1,0 +1,3752 @@
+[
+  {
+    "id": "bench-press-barbell",
+    "name": "Đẩy ngực nằm ngang với tạ đòn",
+    "description": "Bài compound nền tảng giúp phát triển sức mạnh và khối lượng cơ ngực.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau"
+    ],
+    "equipment": "Tạ đòn, ghế phẳng, giá đỡ",
+    "imageUrl": "asset://exercise-thumbnails/bench-press-barbell.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/73/2bdb390c-312c-4497-a722-5eed2c823e5a.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/bench-press-barbell.jpg",
+    "videoDurationSeconds": 16,
+    "setupPosition": "Nằm ngửa trên ghế, mắt thẳng hàng với thanh tạ, hai bàn chân đặt vững trên sàn, ưỡn nhẹ lưng trên và siết bả vai về phía sau.",
+    "bodyPlacement": "Hai tay nắm thanh tạ rộng hơn vai một chút, cổ tay thẳng trên cẳng tay; bả vai ép xuống ghế; mông luôn chạm ghế.",
+    "instructions": [
+      "Gỡ thanh tạ khỏi giá, giữ tay duỗi thẳng phía trên ngực.",
+      "Hạ thanh tạ có kiểm soát đến vị trí thấp ngực (ngang núm vú), khuỷu tay hợp thân người khoảng 45–60 độ.",
+      "Chạm nhẹ hoặc sát ngực, không nảy thanh tạ.",
+      "Đẩy thanh tạ lên theo đường hơi chếch về phía vai cho đến khi duỗi tay.",
+      "Hoàn thành các lần lặp rồi đặt thanh tạ về giá một cách chắc chắn."
+    ],
+    "breathingGuide": "Hít vào khi hạ tạ, thở ra khi đẩy tạ lên.",
+    "rangeOfMotion": "Hạ đến khi thanh tạ sát ngực, đẩy lên đến khi tay gần duỗi thẳng nhưng không khóa cứng khuỷu.",
+    "commonMistakes": [
+      "Nảy thanh tạ trên ngực.",
+      "Banh khuỷu tay 90 độ so với thân người gây áp lực lên vai.",
+      "Nhấc mông khỏi ghế để đẩy nặng hơn."
+    ],
+    "safetyNotes": [
+      "Nên có người hỗ trợ (spotter) khi tập mức tạ nặng.",
+      "Luôn dùng chốt khóa tạ hai đầu thanh.",
+      "Dừng ngay nếu đau nhói ở vai."
+    ],
+    "recommendedSets": 4,
+    "recommendedReps": "6–10",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/73",
+    "videoSourceName": "Bench Press",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/73",
+    "imageSourceName": "Bench Press"
+  },
+  {
+    "id": "push-up",
+    "name": "Hít đất",
+    "description": "Bài tập thể trọng đơn giản, rèn sức mạnh thân trên và sự ổn định của thân người.",
+    "category": "Ngực",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Không cần dụng cụ",
+    "imageUrl": "asset://exercise-thumbnails/push-up.jpg",
+    "videoUrl": "https://upload.wikimedia.org/wikipedia/commons/9/98/Interval_Push-ups.webm",
+    "videoType": "webm",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/push-up.jpg",
+    "videoDurationSeconds": 51,
+    "setupPosition": "Chống tay xuống sàn, thân người thành một đường thẳng từ đầu đến gót chân, bụng siết nhẹ.",
+    "bodyPlacement": "Hai bàn tay đặt rộng hơn vai một chút, các ngón tay hướng về trước; khuỷu tay hơi chếch ra sau thân.",
+    "instructions": [
+      "Siết cơ bụng và mông để giữ thân thẳng.",
+      "Hạ người xuống bằng cách gập khuỷu tay cho đến khi ngực gần chạm sàn.",
+      "Giữ cổ trung tính, mắt nhìn xuống sàn phía trước tay.",
+      "Đẩy sàn để nâng người về vị trí ban đầu.",
+      "Nếu quá khó, thực hiện với hai đầu gối chạm sàn."
+    ],
+    "breathingGuide": "Hít vào khi hạ người, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến khi ngực cách sàn vài cm; duỗi tay hoàn toàn ở trên nhưng không khóa cứng khuỷu.",
+    "commonMistakes": [
+      "Võng lưng hoặc nhô mông lên cao.",
+      "Chỉ hạ nửa biên độ.",
+      "Banh khuỷu tay quá rộng."
+    ],
+    "safetyNotes": [
+      "Khởi động cổ tay trước khi tập.",
+      "Dừng nếu đau cổ tay hoặc vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Taco fleur (Cavemantraining)",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://commons.wikimedia.org/wiki/File:Interval_Push-ups.webm",
+    "videoSourceName": "Interval chest push-up demonstration",
+    "imageAttribution": "Taco fleur (Cavemantraining)",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Interval_Push-ups.webm",
+    "imageSourceName": "Interval chest push-up demonstration"
+  },
+  {
+    "id": "dumbbell-fly",
+    "name": "Ép ngực với tạ đơn",
+    "description": "Bài tập cô lập giúp kéo giãn và siết cơ ngực.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước"
+    ],
+    "equipment": "Tạ đơn, ghế phẳng",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm ngửa trên ghế, hai tay cầm tạ đơn duỗi phía trên ngực, lòng bàn tay hướng vào nhau, khuỷu hơi gập.",
+    "bodyPlacement": "Giữ khuỷu tay gập nhẹ cố định trong suốt chuyển động; bả vai ép vào ghế.",
+    "instructions": [
+      "Mở hai tay sang hai bên theo cung tròn như đang ôm một thân cây lớn.",
+      "Hạ đến khi cảm thấy ngực giãn nhẹ, ngang tầm vai.",
+      "Siết cơ ngực để đưa tạ về vị trí ban đầu theo cung tròn.",
+      "Không để hai tạ chạm nhau mạnh ở phía trên."
+    ],
+    "breathingGuide": "Hít vào khi mở tay, thở ra khi khép tay.",
+    "rangeOfMotion": "Mở đến ngang ngực hoặc thấp hơn một chút, không hạ quá sâu gây căng vai.",
+    "commonMistakes": [
+      "Dùng tạ quá nặng làm gập duỗi khuỷu liên tục.",
+      "Hạ tạ quá thấp khiến vai chịu lực.",
+      "Chuyển động giật."
+    ],
+    "safetyNotes": [
+      "Chọn mức tạ nhẹ hơn bài đẩy ngực.",
+      "Dừng nếu đau vùng trước vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "incline-dumbbell-press",
+    "name": "Đẩy ngực dốc lên với tạ đơn",
+    "description": "Nhấn mạnh phần ngực trên và vai trước.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực trên"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau"
+    ],
+    "equipment": "Tạ đơn, ghế dốc 30–45 độ",
+    "imageUrl": "asset://exercise-thumbnails/incline-dumbbell-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/537/b9c937e9-daeb-42a9-be8e-7a77e368478c.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/incline-dumbbell-press.jpg",
+    "videoDurationSeconds": 27,
+    "setupPosition": "Ngồi trên ghế dốc 30–45 độ, lưng áp chặt vào lưng ghế, đặt tạ đơn lên đùi rồi đưa lên ngang ngực.",
+    "bodyPlacement": "Hai tạ ngang ngực trên, cổ tay thẳng, bàn chân vững trên sàn.",
+    "instructions": [
+      "Đẩy hai tạ lên phía trên ngực cho đến khi tay gần duỗi thẳng.",
+      "Dừng ngắn ở đỉnh, siết ngực.",
+      "Hạ tạ chậm xuống ngang ngực, khuỷu tay hợp thân người khoảng 45–60 độ.",
+      "Lặp lại không để lưng nảy khỏi ghế."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đẩy.",
+    "rangeOfMotion": "Hạ đến khi tạ ngang ngực, đẩy lên đến gần duỗi tay.",
+    "commonMistakes": [
+      "Chỉnh ghế quá dốc khiến vai làm việc nhiều hơn ngực.",
+      "Hai tạ lệch nhau.",
+      "Ưỡn lưng quá mức."
+    ],
+    "safetyNotes": [
+      "Đặt tạ xuống đúng cách khi kết thúc bài, tránh ném tạ.",
+      "Nên có người hỗ trợ ở mức tạ nặng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/537",
+    "videoSourceName": "Incline Bench Press - Dumbbell",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/537",
+    "imageSourceName": "Incline Bench Press - Dumbbell"
+  },
+  {
+    "id": "seated-cable-row",
+    "name": "Kéo cáp ngồi",
+    "description": "Phát triển lưng giữa và cải thiện tư thế.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Lưng giữa"
+    ],
+    "secondaryMuscles": [
+      "Xô",
+      "Tay trước",
+      "Vai sau"
+    ],
+    "equipment": "Máy kéo cáp ngồi",
+    "imageUrl": "asset://exercise-thumbnails/seated-cable-row.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/512/fff4c294-93f0-4926-b3a2-bf59ad4afaa5.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/seated-cable-row.jpg",
+    "videoDurationSeconds": 10,
+    "setupPosition": "Ngồi thẳng lưng, đặt chân lên bệ, đầu gối hơi gập, nắm tay cầm với tay duỗi.",
+    "bodyPlacement": "Ngực ưỡn nhẹ, vai thả lỏng xuống xa tai, khuỷu tay gần thân người.",
+    "instructions": [
+      "Siết bả vai về phía sau để bắt đầu kéo.",
+      "Kéo tay cầm về phía bụng dưới, khuỷu tay lướt sát thân.",
+      "Dừng 1 giây khi hai bả vai chụm vào nhau.",
+      "Thả tay chậm về vị trí duỗi, cảm nhận lưng giãn nhẹ."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi thả.",
+    "rangeOfMotion": "Kéo đến khi tay cầm chạm bụng, thả đến khi tay duỗi gần thẳng.",
+    "commonMistakes": [
+      "Ngả người ra sau để lấy đà.",
+      "Nhún vai lên tai.",
+      "Cong lưng khi thả tay."
+    ],
+    "safetyNotes": [
+      "Giữ lưng thẳng trung tính.",
+      "Dùng mức tạ vừa sức để không phải giật."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/512",
+    "videoSourceName": "Rowing seated, narrow grip",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/512",
+    "imageSourceName": "Rowing seated, narrow grip"
+  },
+  {
+    "id": "one-arm-dumbbell-row",
+    "name": "Chèo tạ đơn một tay",
+    "description": "Tập từng bên lưng, giúp cân bằng lực hai bên.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Xô",
+      "Lưng giữa"
+    ],
+    "secondaryMuscles": [
+      "Tay trước",
+      "Vai sau"
+    ],
+    "equipment": "Tạ đơn, ghế phẳng",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Một tay và một gối đặt lên ghế, lưng song song sàn, tay còn lại cầm tạ buông thẳng.",
+    "bodyPlacement": "Cột sống trung tính, vai không xoay, chân đứng vững vàng trên sàn.",
+    "instructions": [
+      "Kéo tạ lên về phía hông bằng cách đưa khuỷu tay ra sau.",
+      "Siết cơ lưng ở đỉnh, giữ thân người ổn định.",
+      "Hạ tạ chậm có kiểm soát.",
+      "Hoàn thành số lần rồi đổi bên."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi hạ.",
+    "rangeOfMotion": "Kéo đến khi khuỷu tay vượt qua lưng, hạ đến khi tay duỗi thẳng.",
+    "commonMistakes": [
+      "Xoay thân người để kéo tạ.",
+      "Dùng đà bằng cách giật tạ.",
+      "Cong lưng."
+    ],
+    "safetyNotes": [
+      "Giữ cổ thẳng hàng với cột sống.",
+      "Chọn mức tạ cho phép kiểm soát toàn bộ chuyển động."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "lat-pulldown",
+    "name": "Kéo xô trước với máy",
+    "description": "Phát triển bề rộng lưng; tiền đề cho bài kéo xà.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Xô"
+    ],
+    "secondaryMuscles": [
+      "Tay trước",
+      "Lưng giữa"
+    ],
+    "equipment": "Máy kéo xô",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi vào máy, đệm giữ đùi chặt, nắm thanh kéo rộng hơn vai, người hơi ngả ra sau.",
+    "bodyPlacement": "Ngực ưỡn, bả vai ép xuống, cổ tay thẳng.",
+    "instructions": [
+      "Kéo thanh xuống phía trước, đưa khuỷu tay xuống và về hai bên sườn.",
+      "Chạm thanh ngang xương đòn hoặc phần ngực trên.",
+      "Siết lưng 1 giây rồi thả thanh lên chậm.",
+      "Duỗi tay đầy đủ ở phía trên trước lần lặp tiếp theo."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi thả.",
+    "rangeOfMotion": "Từ tay duỗi hoàn toàn đến khi thanh chạm ngực trên.",
+    "commonMistakes": [
+      "Kéo thanh ra sau gáy.",
+      "Ngả người quá nhiều.",
+      "Dùng tay nhiều hơn lưng."
+    ],
+    "safetyNotes": [
+      "Tránh kéo thanh qua sau đầu.",
+      "Giảm tạ nếu không giữ được tư thế."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "romanian-deadlift",
+    "name": "Deadlift kiểu Romania",
+    "description": "Rèn chuỗi cơ mặt sau cơ thể với kỹ thuật bản lề hông.",
+    "category": "Lưng",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Đùi sau",
+      "Cơ dựng sống"
+    ],
+    "secondaryMuscles": [
+      "Mông"
+    ],
+    "equipment": "Tạ đòn hoặc tạ đơn",
+    "imageUrl": "asset://exercise-thumbnails/romanian-deadlift.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/507/307e7276-a14d-4ea0-b579-f5b0dbc6f5af.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/romanian-deadlift.jpg",
+    "videoDurationSeconds": 13,
+    "setupPosition": "Đứng thẳng, hai chân rộng bằng hông, cầm tạ ở phía trước đùi, đầu gối hơi mở khóa.",
+    "bodyPlacement": "Tạ trượt sát đùi, lưng thẳng, ngực mở, mắt nhìn xuống sàn phía trước.",
+    "instructions": [
+      "Đẩy hông ra sau, thân người nghiêng về trước, đầu gối chỉ gập nhẹ.",
+      "Hạ tạ dọc theo đùi và cẳng chân đến khi thấy đùi sau căng.",
+      "Giữ lưng phẳng suốt quá trình.",
+      "Siết mông, đẩy hông về trước để đứng thẳng."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đứng lên.",
+    "rangeOfMotion": "Hạ đến ngang gối hoặc ngang cẳng chân tùy độ linh hoạt, lưng không được cong.",
+    "commonMistakes": [
+      "Cong lưng dưới.",
+      "Gập đầu gối thành động tác squat.",
+      "Để tạ xa khỏi người."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với mức tạ rất nhẹ để học kỹ thuật.",
+      "Nên có huấn luyện viên kiểm tra tư thế.",
+      "Dừng nếu đau lưng dưới."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–10",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/507",
+    "videoSourceName": "Romanian Deadlift",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/507",
+    "imageSourceName": "Romanian Deadlift"
+  },
+  {
+    "id": "barbell-squat",
+    "name": "Squat với tạ đòn",
+    "description": "Bài tập nền tảng cho sức mạnh thân dưới.",
+    "category": "Chân",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Tạ đòn, giá squat",
+    "imageUrl": "asset://exercise-thumbnails/barbell-squat.jpg",
+    "videoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Squat_-_exercise_demonstration_video.webm",
+    "videoType": "webm",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/barbell-squat.jpg",
+    "videoDurationSeconds": 7,
+    "setupPosition": "Đặt thanh tạ trên phần cơ thang phía sau vai, đứng với hai chân rộng bằng vai hoặc hơn một chút, mũi chân hơi mở.",
+    "bodyPlacement": "Nắm thanh tạ chắc, khuỷu tay hướng xuống, ngực mở, mắt nhìn thẳng.",
+    "instructions": [
+      "Siết bụng, hít sâu rồi bắt đầu ngồi xuống bằng cách đẩy hông ra sau và gập gối.",
+      "Hạ người đến khi đùi song song sàn hoặc thấp hơn nếu linh hoạt.",
+      "Gối đi cùng hướng mũi chân, không đổ vào trong.",
+      "Đạp mạnh qua cả bàn chân để đứng thẳng lên.",
+      "Duỗi hông hoàn toàn ở trên."
+    ],
+    "breathingGuide": "Hít vào trước khi hạ, thở ra khi đứng lên.",
+    "rangeOfMotion": "Đùi ít nhất song song với sàn, gót chân luôn chạm sàn.",
+    "commonMistakes": [
+      "Gối đổ vào trong.",
+      "Gót chân nhấc lên.",
+      "Cong lưng ở đáy."
+    ],
+    "safetyNotes": [
+      "Dùng giá an toàn hoặc người hỗ trợ.",
+      "Tăng tạ từ từ.",
+      "Dừng nếu đau đầu gối."
+    ],
+    "recommendedSets": 4,
+    "recommendedReps": "6–10",
+    "recommendedRestSeconds": 120,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "FitnessScape",
+    "videoLicense": "CC BY 3.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "videoSourceUrl": "https://commons.wikimedia.org/wiki/File:Squat_-_exercise_demonstration_video.webm",
+    "videoSourceName": "Weighted squat demonstration",
+    "imageAttribution": "FitnessScape",
+    "imageLicense": "CC BY 3.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Squat_-_exercise_demonstration_video.webm",
+    "imageSourceName": "Weighted squat demonstration"
+  },
+  {
+    "id": "leg-press",
+    "name": "Đạp đùi với máy",
+    "description": "Bài tập chân an toàn hơn squat cho người mới.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi trước"
+    ],
+    "secondaryMuscles": [
+      "Mông",
+      "Đùi sau"
+    ],
+    "equipment": "Máy leg press",
+    "imageUrl": "asset://exercise-thumbnails/leg-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/371/6aae16b4-01b9-4eb4-935c-3250f84d2c59.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/leg-press.jpg",
+    "videoDurationSeconds": 35,
+    "setupPosition": "Ngồi vào máy, lưng và mông áp sát đệm, đặt chân lên bệ rộng bằng vai.",
+    "bodyPlacement": "Bàn chân phẳng trên bệ, đầu gối hướng cùng mũi chân.",
+    "instructions": [
+      "Mở khóa an toàn, hạ bệ chậm bằng cách gập gối.",
+      "Hạ đến khi gối gập khoảng 90 độ, mông không nhấc khỏi đệm.",
+      "Đạp bệ lên bằng cả bàn chân.",
+      "Không khóa cứng đầu gối ở trên."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đạp.",
+    "rangeOfMotion": "Gối gập khoảng 90 độ, duỗi gần hết nhưng không khóa gối.",
+    "commonMistakes": [
+      "Khóa gối ở đỉnh.",
+      "Nhấc mông khỏi đệm.",
+      "Hạ quá sâu khiến lưng dưới cong."
+    ],
+    "safetyNotes": [
+      "Luôn dùng chốt an toàn.",
+      "Không đặt tay lên đầu gối để đẩy."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/371",
+    "videoSourceName": "Leg Press",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/371",
+    "imageSourceName": "Leg Press"
+  },
+  {
+    "id": "walking-lunge",
+    "name": "Bước chân chùng (Lunge)",
+    "description": "Rèn sức mạnh và thăng bằng từng chân.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Bắp chân"
+    ],
+    "equipment": "Tạ đơn (tùy chọn)",
+    "imageUrl": "asset://exercise-thumbnails/walking-lunge.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/206/47a65c45-6fd1-4181-b71a-3a6c882e516b.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/walking-lunge.jpg",
+    "videoDurationSeconds": 14,
+    "setupPosition": "Đứng thẳng, hai chân khép, tay cầm tạ hai bên hoặc chống hông.",
+    "bodyPlacement": "Thân người thẳng, ngực mở, mắt nhìn phía trước.",
+    "instructions": [
+      "Bước một chân về trước một bước dài.",
+      "Hạ người cho đến khi cả hai gối gập khoảng 90 độ.",
+      "Gối trước nằm trên mắt cá chân, gối sau gần chạm sàn.",
+      "Đạp chân trước để trở về hoặc bước tiếp chân sau lên."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đứng lên.",
+    "rangeOfMotion": "Gối sau cách sàn vài cm, gối trước không vượt quá nhiều mũi chân.",
+    "commonMistakes": [
+      "Bước quá ngắn.",
+      "Thân người đổ về trước.",
+      "Gối trước đổ vào trong."
+    ],
+    "safetyNotes": [
+      "Tập gần tường hoặc có chỗ vịn nếu mất thăng bằng.",
+      "Dừng nếu đau đầu gối."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10 mỗi chân",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/206",
+    "videoSourceName": "Dumbbell Lunges Walking",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/206",
+    "imageSourceName": "Dumbbell Lunges Walking"
+  },
+  {
+    "id": "hip-thrust",
+    "name": "Cầu mông (Hip thrust)",
+    "description": "Tập trung phát triển cơ mông.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Ghế phẳng, tạ (tùy chọn)",
+    "imageUrl": "asset://exercise-thumbnails/hip-thrust.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/294/45bacf4b-1bb6-4d47-8bd1-9f00eddd4019.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/hip-thrust.jpg",
+    "videoDurationSeconds": 30,
+    "setupPosition": "Ngồi trên sàn, tựa lưng trên (dưới bả vai) vào mép ghế, hai chân co, bàn chân đặt vững.",
+    "bodyPlacement": "Cằm hơi cúi, đầu gối hướng cùng mũi chân, tạ (nếu có) đặt ở nếp hông.",
+    "instructions": [
+      "Đạp bàn chân xuống sàn và đẩy hông lên cho đến khi thân người song song sàn.",
+      "Siết mạnh cơ mông ở đỉnh, dừng 1 giây.",
+      "Hạ hông xuống chậm có kiểm soát."
+    ],
+    "breathingGuide": "Thở ra khi đẩy hông lên, hít vào khi hạ.",
+    "rangeOfMotion": "Từ hông gần chạm sàn đến khi thân và đùi thành một đường thẳng.",
+    "commonMistakes": [
+      "Ưỡn lưng quá mức ở đỉnh.",
+      "Đẩy bằng mũi chân.",
+      "Hạ hông quá nhanh."
+    ],
+    "safetyNotes": [
+      "Đệm tạ ở hông để tránh đau.",
+      "Giữ ghế cố định không trượt."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/294",
+    "videoSourceName": "Hip Thrust",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/294",
+    "imageSourceName": "Hip Thrust"
+  },
+  {
+    "id": "dumbbell-shoulder-press",
+    "name": "Đẩy vai với tạ đơn",
+    "description": "Phát triển sức mạnh và khối lượng vai.",
+    "category": "Vai",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Vai giữa",
+      "Vai trước"
+    ],
+    "secondaryMuscles": [
+      "Tay sau"
+    ],
+    "equipment": "Tạ đơn, ghế có tựa lưng",
+    "imageUrl": "asset://exercise-thumbnails/dumbbell-shoulder-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/567/64f33c19-1d96-4b7c-af17-6c6a4941c614.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/dumbbell-shoulder-press.jpg",
+    "videoDurationSeconds": 23,
+    "setupPosition": "Ngồi thẳng lưng trên ghế, tạ đơn ngang vai, lòng bàn tay hướng về phía trước.",
+    "bodyPlacement": "Cẳng tay thẳng đứng, bụng siết nhẹ, lưng áp vào ghế.",
+    "instructions": [
+      "Đẩy hai tạ lên phía trên đầu cho đến khi tay gần duỗi.",
+      "Dừng ngắn ở đỉnh, không khóa cứng khuỷu.",
+      "Hạ tạ chậm về ngang tai."
+    ],
+    "breathingGuide": "Thở ra khi đẩy, hít vào khi hạ.",
+    "rangeOfMotion": "Từ ngang tai đến gần duỗi tay.",
+    "commonMistakes": [
+      "Ưỡn lưng quá mức.",
+      "Đẩy tạ ra phía trước.",
+      "Nhún vai."
+    ],
+    "safetyNotes": [
+      "Chọn tạ vừa sức.",
+      "Dừng nếu đau khớp vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/567",
+    "videoSourceName": "Shoulder Press, Dumbbells",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/567",
+    "imageSourceName": "Shoulder Press, Dumbbells"
+  },
+  {
+    "id": "lateral-raise",
+    "name": "Nâng tạ đơn sang ngang",
+    "description": "Bài cô lập tạo bề ngang vai.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Vai giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước"
+    ],
+    "equipment": "Tạ đơn nhẹ",
+    "imageUrl": "asset://exercise-thumbnails/lateral-raise.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/348/de69928a-8a35-4096-821c-1f46de5e0e03.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/lateral-raise.jpg",
+    "videoDurationSeconds": 18,
+    "setupPosition": "Đứng thẳng, hai tay cầm tạ đơn nhẹ hai bên người, khuỷu tay hơi gập.",
+    "bodyPlacement": "Thân người cố định, vai thả lỏng.",
+    "instructions": [
+      "Nâng hai tạ sang hai bên cho đến ngang vai.",
+      "Khuỷu tay dẫn dắt, bàn tay thấp hơn khuỷu một chút.",
+      "Dừng ngắn rồi hạ tạ chậm."
+    ],
+    "breathingGuide": "Thở ra khi nâng, hít vào khi hạ.",
+    "rangeOfMotion": "Nâng đến ngang vai, không cao hơn.",
+    "commonMistakes": [
+      "Dùng đà đu người.",
+      "Nhún vai.",
+      "Dùng tạ quá nặng."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với tạ rất nhẹ.",
+      "Giữ cổ thả lỏng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/348",
+    "videoSourceName": "Lateral Raises",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/348",
+    "imageSourceName": "Lateral Raises"
+  },
+  {
+    "id": "face-pull",
+    "name": "Kéo cáp về mặt (Face pull)",
+    "description": "Tăng cường vai sau và cơ xoay vai, tốt cho tư thế.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Vai sau"
+    ],
+    "secondaryMuscles": [
+      "Lưng trên",
+      "Cơ xoay vai"
+    ],
+    "equipment": "Máy cáp, dây kéo",
+    "imageUrl": "asset://exercise-thumbnails/face-pull.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/222/245a824b-cd39-45f2-b251-2c0b7efead0d.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/face-pull.jpg",
+    "videoDurationSeconds": 9,
+    "setupPosition": "Gắn dây vào ròng rọc ngang mặt, cầm hai đầu dây, lùi lại để căng cáp.",
+    "bodyPlacement": "Hai tay duỗi trước mặt, lòng bàn tay hướng vào nhau, chân vững.",
+    "instructions": [
+      "Kéo dây về phía mặt, tách hai tay sang hai bên.",
+      "Khuỷu tay cao ngang vai, siết bả vai về sau.",
+      "Dừng ngắn rồi thả chậm về vị trí đầu."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi thả.",
+    "rangeOfMotion": "Kéo đến khi hai tay ở hai bên tai.",
+    "commonMistakes": [
+      "Dùng tạ quá nặng làm ngả người.",
+      "Khuỷu tay thấp.",
+      "Giật dây."
+    ],
+    "safetyNotes": [
+      "Tập chậm và kiểm soát.",
+      "Dừng nếu đau vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/222",
+    "videoSourceName": "Facepull",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/222",
+    "imageSourceName": "Facepull"
+  },
+  {
+    "id": "dumbbell-curl",
+    "name": "Cuốn tạ đơn bắp tay",
+    "description": "Bài tập cơ bản cho cơ nhị đầu cánh tay.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Tạ đơn",
+    "imageUrl": "asset://exercise-thumbnails/dumbbell-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/92/8bfb917c-3d0d-49b9-8073-5d7e01c1b894.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/dumbbell-curl.jpg",
+    "videoDurationSeconds": 11,
+    "setupPosition": "Đứng thẳng, hai tay cầm tạ đơn hai bên, lòng bàn tay hướng về trước.",
+    "bodyPlacement": "Khuỷu tay sát thân, vai thả lỏng.",
+    "instructions": [
+      "Cuốn tạ lên bằng cách gập khuỷu tay.",
+      "Siết bắp tay ở đỉnh.",
+      "Hạ tạ chậm về vị trí đầu.",
+      "Có thể tập xen kẽ từng tay."
+    ],
+    "breathingGuide": "Thở ra khi cuốn, hít vào khi hạ.",
+    "rangeOfMotion": "Từ tay duỗi gần hết đến khi tạ gần vai.",
+    "commonMistakes": [
+      "Đu người lấy đà.",
+      "Khuỷu tay trôi ra trước.",
+      "Hạ tạ quá nhanh."
+    ],
+    "safetyNotes": [
+      "Không khóa cứng khuỷu ở đáy.",
+      "Giảm tạ nếu đau khuỷu."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/92",
+    "videoSourceName": "Biceps Curls With Dumbbell",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/92",
+    "imageSourceName": "Biceps Curls With Dumbbell"
+  },
+  {
+    "id": "cable-triceps-pushdown",
+    "name": "Đẩy tay sau với cáp",
+    "description": "Cô lập cơ tam đầu cánh tay.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy cáp, thanh hoặc dây",
+    "imageUrl": "asset://exercise-thumbnails/cable-triceps-pushdown.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/659/1f2eb3b6-3185-429f-8330-26dc88f39aff.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/cable-triceps-pushdown.jpg",
+    "videoDurationSeconds": 15,
+    "setupPosition": "Đứng đối diện máy cáp, nắm thanh ngang ngực, khuỷu tay sát hai bên thân.",
+    "bodyPlacement": "Thân người thẳng, hơi nghiêng về trước, bụng siết nhẹ.",
+    "instructions": [
+      "Đẩy thanh xuống cho đến khi tay duỗi hoàn toàn.",
+      "Siết tay sau ở đáy trong 1 giây.",
+      "Để thanh lên chậm đến khi cẳng tay gần song song sàn."
+    ],
+    "breathingGuide": "Thở ra khi đẩy xuống, hít vào khi thả lên.",
+    "rangeOfMotion": "Từ cẳng tay song song sàn đến khi tay duỗi thẳng.",
+    "commonMistakes": [
+      "Khuỷu tay mở ra ngoài.",
+      "Dùng thân người đè xuống.",
+      "Thả thanh quá nhanh."
+    ],
+    "safetyNotes": [
+      "Giữ cổ tay thẳng.",
+      "Giảm tạ nếu đau khuỷu."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/659",
+    "videoSourceName": "Triceps Extensions on Cable",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/659",
+    "imageSourceName": "Triceps Extensions on Cable"
+  },
+  {
+    "id": "bench-dips",
+    "name": "Hít xà ghế (Bench dips)",
+    "description": "Bài tập thể trọng cho tay sau.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Ngực dưới"
+    ],
+    "equipment": "Ghế phẳng",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi mép ghế, hai tay chống hai bên hông, trượt mông ra khỏi ghế, hai chân duỗi hoặc co gối.",
+    "bodyPlacement": "Hai bàn tay hướng về phía trước, khuỷu tay chỉ về sau.",
+    "instructions": [
+      "Hạ người xuống bằng cách gập khuỷu tay đến khoảng 90 độ.",
+      "Giữ lưng sát mép ghế.",
+      "Đẩy người lên cho đến khi tay duỗi."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Khuỷu gập khoảng 90 độ, không hạ quá sâu.",
+    "commonMistakes": [
+      "Hạ quá sâu gây áp lực lên vai.",
+      "Banh khuỷu ra ngoài.",
+      "Nhún vai."
+    ],
+    "safetyNotes": [
+      "Dừng nếu đau vai.",
+      "Cho gối gập để giảm độ khó."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "plank",
+    "name": "Plank",
+    "description": "Bài tập giữ tĩnh tăng sức bền cơ lõi.",
+    "category": "Bụng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ bụng",
+      "Cơ lõi"
+    ],
+    "secondaryMuscles": [
+      "Vai",
+      "Mông"
+    ],
+    "equipment": "Không cần dụng cụ",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chống hai khuỷu tay và mũi chân xuống sàn, khuỷu tay dưới vai.",
+    "bodyPlacement": "Thân người thẳng từ đầu đến gót chân; cổ trung tính.",
+    "instructions": [
+      "Siết bụng, siết mông.",
+      "Giữ thân thẳng, không võng lưng.",
+      "Thở đều trong thời gian giữ.",
+      "Kết thúc khi sắp mất tư thế đúng."
+    ],
+    "breathingGuide": "Thở đều, không nín thở.",
+    "rangeOfMotion": "Tư thế giữ tĩnh, không chuyển động.",
+    "commonMistakes": [
+      "Võng lưng.",
+      "Nhô mông cao.",
+      "Nín thở."
+    ],
+    "safetyNotes": [
+      "Dừng nếu đau lưng dưới.",
+      "Có thể tập trên đầu gối để dễ hơn."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "30–60 giây",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "crunch",
+    "name": "Gập bụng (Crunch)",
+    "description": "Bài cô lập cơ bụng trên.",
+    "category": "Bụng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ bụng"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm ngửa, gập gối, bàn chân đặt sàn, hai tay đặt nhẹ sau đầu hoặc chéo ngực.",
+    "bodyPlacement": "Lưng dưới tiếp xúc sàn, cằm cách ngực một nắm tay.",
+    "instructions": [
+      "Siết bụng để nâng vai khỏi sàn.",
+      "Dừng ngắn ở đỉnh.",
+      "Hạ vai xuống chậm có kiểm soát."
+    ],
+    "breathingGuide": "Thở ra khi gập, hít vào khi hạ.",
+    "rangeOfMotion": "Chỉ nâng vai và lưng trên khỏi sàn.",
+    "commonMistakes": [
+      "Kéo cổ bằng tay.",
+      "Dùng đà.",
+      "Nâng cả lưng dưới."
+    ],
+    "safetyNotes": [
+      "Giữ cổ thả lỏng.",
+      "Dừng nếu đau cổ hoặc lưng dưới."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–20",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "lying-leg-raise",
+    "name": "Nâng chân nằm",
+    "description": "Tập trung phần bụng dưới.",
+    "category": "Bụng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Bụng dưới"
+    ],
+    "secondaryMuscles": [
+      "Cơ gập hông"
+    ],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm ngửa, hai chân duỗi khép, hai tay để dưới mông hoặc dọc thân.",
+    "bodyPlacement": "Lưng dưới ép sát sàn.",
+    "instructions": [
+      "Nâng hai chân lên đến vuông góc với sàn.",
+      "Hạ chân chậm nhưng không chạm sàn.",
+      "Giữ lưng dưới không võng."
+    ],
+    "breathingGuide": "Thở ra khi nâng, hít vào khi hạ.",
+    "rangeOfMotion": "Từ sát sàn đến vuông góc với sàn.",
+    "commonMistakes": [
+      "Võng lưng khi hạ chân.",
+      "Dùng đà.",
+      "Hạ chân quá nhanh."
+    ],
+    "safetyNotes": [
+      "Co gối nếu lưng dưới đau.",
+      "Dừng nếu đau lưng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "treadmill-run",
+    "name": "Chạy bộ trên máy",
+    "description": "Bài cardio phổ biến, dễ điều chỉnh cường độ.",
+    "category": "Cardio",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Bắp chân",
+      "Mông"
+    ],
+    "equipment": "Máy chạy bộ",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng trên băng chạy, gắn dây an toàn vào quần áo, bắt đầu với tốc độ đi bộ.",
+    "bodyPlacement": "Người thẳng, mắt nhìn phía trước, vai thả lỏng.",
+    "instructions": [
+      "Khởi động bằng đi bộ nhanh 3–5 phút.",
+      "Tăng dần tốc độ đến mức chạy nhẹ có thể vừa chạy vừa nói chuyện.",
+      "Duy trì nhịp tay chân tự nhiên.",
+      "Hạ tốc độ dần trong 3–5 phút cuối để hồi phục."
+    ],
+    "breathingGuide": "Thở đều theo nhịp bước.",
+    "rangeOfMotion": "Sải bước tự nhiên, không bước quá dài.",
+    "commonMistakes": [
+      "Bám tay vào thành máy.",
+      "Chạy quá nhanh khi chưa khởi động.",
+      "Nhìn xuống chân."
+    ],
+    "safetyNotes": [
+      "Luôn dùng dây an toàn.",
+      "Mang giày phù hợp.",
+      "Dừng nếu chóng mặt hoặc đau ngực."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "15–30 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "jump-rope",
+    "name": "Nhảy dây",
+    "description": "Bài cardio cường độ cao, cải thiện phối hợp và sức bền.",
+    "category": "Cardio",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tim mạch",
+      "Bắp chân"
+    ],
+    "secondaryMuscles": [
+      "Vai",
+      "Cẳng tay"
+    ],
+    "equipment": "Dây nhảy",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng thẳng, hai tay cầm dây, khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay quay dây, nhảy nhẹ trên mũi chân.",
+    "instructions": [
+      "Quay dây bằng cổ tay, không dùng cả cánh tay.",
+      "Nhảy cao vừa đủ để dây đi qua.",
+      "Tiếp đất nhẹ nhàng bằng nửa bàn chân trước.",
+      "Duy trì nhịp đều."
+    ],
+    "breathingGuide": "Thở đều, thoải mái.",
+    "rangeOfMotion": "Nhảy thấp, đầu gối hơi gập khi tiếp đất.",
+    "commonMistakes": [
+      "Nhảy quá cao.",
+      "Tiếp đất bằng gót.",
+      "Quay dây bằng vai."
+    ],
+    "safetyNotes": [
+      "Tập trên bề mặt có độ đàn hồi.",
+      "Dừng nếu đau cẳng chân hoặc mắt cá."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "1–2 phút",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "stationary-bike",
+    "name": "Đạp xe tại chỗ",
+    "description": "Cardio ít chấn thương khớp, phù hợp người mới.",
+    "category": "Cardio",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Bắp chân",
+      "Mông"
+    ],
+    "equipment": "Xe đạp tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chỉnh yên sao cho khi bàn đạp ở thấp nhất, gối hơi gập nhẹ.",
+    "bodyPlacement": "Lưng thẳng, tay nắm nhẹ tay lái, bàn chân đặt vững trên bàn đạp.",
+    "instructions": [
+      "Khởi động ở mức kháng lực thấp 3–5 phút.",
+      "Tăng kháng lực vừa phải và đạp với nhịp đều.",
+      "Giữ lưng thẳng, vai thả lỏng.",
+      "Giảm kháng lực khi hồi phục cuối bài."
+    ],
+    "breathingGuide": "Thở đều và sâu.",
+    "rangeOfMotion": "Đạp tròn đều, không giật.",
+    "commonMistakes": [
+      "Yên quá thấp hoặc quá cao.",
+      "Gù lưng.",
+      "Siết tay lái quá chặt."
+    ],
+    "safetyNotes": [
+      "Uống đủ nước.",
+      "Dừng nếu chóng mặt."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "20–30 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "decline-barbell-press",
+    "name": "Đẩy ngực dốc xuống với tạ đòn",
+    "description": "Biến thể đẩy ngực nhấn mạnh vùng ngực dưới; cần chỉnh ghế và chốt an toàn trước khi tập.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực dưới"
+    ],
+    "secondaryMuscles": [
+      "Tay sau",
+      "Vai trước"
+    ],
+    "equipment": "Tạ đòn, ghế dốc xuống",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm chắc trên ghế, hai bàn chân đặt vững dưới sàn và siết nhẹ thân giữa.",
+    "bodyPlacement": "Nắm thanh hơi rộng hơn vai; cổ tay ở trên khuỷu tay, bả vai kéo nhẹ về sau.",
+    "instructions": [
+      "Tháo thanh khỏi giá và giữ ổn định phía trên ngực.",
+      "Hạ tạ có kiểm soát về vùng ngực dưới, khuỷu tay chếch khoảng 45–60 độ.",
+      "Đẩy tạ lên theo đường hơi chếch về vai; kết thúc với khuỷu tay mềm, không khóa cứng."
+    ],
+    "breathingGuide": "Hít vào khi hạ tạ, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến khi tạ gần ngực mà vai vẫn thoải mái; không nảy tạ.",
+    "commonMistakes": [
+      "Bật tạ khỏi ngực.",
+      "Banh khuỷu tay ngang vai.",
+      "Nhấc mông khỏi ghế."
+    ],
+    "safetyNotes": [
+      "Dùng chốt an toàn hoặc người hỗ trợ khi tập nặng.",
+      "Dừng lại nếu đau nhói ở vai hoặc ngực."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "machine-chest-press",
+    "name": "Đẩy ngực với máy",
+    "description": "Bài đẩy ngực có đường chuyển động ổn định, phù hợp để làm quen với lực đẩy.",
+    "category": "Ngực",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau"
+    ],
+    "equipment": "Máy đẩy ngực",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chỉnh ghế để tay cầm ngang giữa ngực; lưng và đầu tựa thoải mái vào đệm.",
+    "bodyPlacement": "Nắm tay cầm chắc, cổ tay thẳng; giữ bàn chân đặt vững trên sàn.",
+    "instructions": [
+      "Ép nhẹ bả vai vào lưng ghế và siết thân giữa.",
+      "Đẩy tay cầm ra trước đến khi tay gần duỗi thẳng.",
+      "Từ từ đưa tay cầm về vị trí đầu mà không để tạ chạm mạnh."
+    ],
+    "breathingGuide": "Thở ra khi đẩy, hít vào khi đưa tay cầm về.",
+    "rangeOfMotion": "Chỉ mở cánh tay đến mức vai không bị kéo căng hoặc đau.",
+    "commonMistakes": [
+      "Nhún vai về phía tai.",
+      "Duỗi khóa cứng khuỷu tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn mức tạ có thể kiểm soát trong toàn bộ lượt tập.",
+      "Dừng nếu thấy đau ở vai hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "cable-crossover",
+    "name": "Ép ngực với cáp",
+    "description": "Bài cô lập cơ ngực với lực căng liên tục từ hệ thống cáp.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước"
+    ],
+    "equipment": "Máy kéo cáp hai bên",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng giữa hai ròng rọc hoặc nằm trên ghế; chọn mức tạ nhẹ để kiểm soát đường đi.",
+    "bodyPlacement": "Giữ khuỷu tay hơi cong và cố định; ngực mở, vai hạ xa tai.",
+    "instructions": [
+      "Đưa hai tay ra hai bên theo cung tròn đến khi ngực căng nhẹ.",
+      "Giữ nguyên góc khuỷu tay trong lúc di chuyển.",
+      "Khép hai tay trước ngực và siết cơ ngực, sau đó mở lại chậm rãi."
+    ],
+    "breathingGuide": "Hít vào khi mở tay, thở ra khi khép tay.",
+    "rangeOfMotion": "Không đưa cánh tay ra sau quá thân mình.",
+    "commonMistakes": [
+      "Gập duỗi khuỷu tay liên tục.",
+      "Dùng tạ quá nặng làm vai chịu lực.",
+      "Giật tay ở cuối chuyển động."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với mức tạ nhẹ.",
+      "Dừng nếu đau vùng trước vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "parallel-bar-dip",
+    "name": "Chống đẩy xà kép",
+    "description": "Bài thân trên dùng trọng lượng cơ thể; nghiêng thân nhẹ về trước để ngực tham gia nhiều hơn.",
+    "category": "Ngực",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Ngực dưới"
+    ],
+    "secondaryMuscles": [
+      "Tay sau",
+      "Vai trước"
+    ],
+    "equipment": "Xà kép hoặc máy hỗ trợ",
+    "imageUrl": "asset://exercise-thumbnails/parallel-bar-dip.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/194/d039ec90-474d-47a9-a3ad-bf0b00828c82.MP4",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/parallel-bar-dip.jpg",
+    "videoDurationSeconds": 13,
+    "setupPosition": "Nắm chắc hai thanh song song, bước lên bục hỗ trợ và giữ người ổn định.",
+    "bodyPlacement": "Vai hạ xa tai, cổ tay thẳng; thân hơi nghiêng trước để nhấn vào ngực.",
+    "instructions": [
+      "Gập khuỷu tay để hạ người chậm xuống giữa hai thanh.",
+      "Dừng khi vai vẫn thoải mái, không cố hạ quá sâu.",
+      "Đẩy thanh xuống để nâng người về vị trí đầu."
+    ],
+    "breathingGuide": "Hít vào khi hạ người, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Chọn độ sâu không gây căng hoặc đau mặt trước vai.",
+    "commonMistakes": [
+      "Đung đưa người để lấy đà.",
+      "Hạ quá sâu.",
+      "Nhún vai lên tai."
+    ],
+    "safetyNotes": [
+      "Dùng máy hỗ trợ nếu chưa đủ sức nâng trọng lượng cơ thể.",
+      "Không tập qua cơn đau ở vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "6–12",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/194",
+    "videoSourceName": "Dips",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/194",
+    "imageSourceName": "Dips"
+  },
+  {
+    "id": "incline-push-up",
+    "name": "Hít đất tay kê cao",
+    "description": "Biến thể hít đất nhẹ hơn, giúp tập kỹ thuật đẩy trước khi chuyển xuống sàn.",
+    "category": "Ngực",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Ngực giữa"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Ghế hoặc bục chắc chắn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chống hai tay xuống sàn hoặc bục, siết bụng và mông để thân người thành một đường thẳng.",
+    "bodyPlacement": "Đặt tay rộng hơn vai một chút; cổ tay gần dưới vai và cổ giữ trung tính.",
+    "instructions": [
+      "Gập khuỷu tay để hạ ngực về phía sàn, khuỷu tay chếch nhẹ ra sau.",
+      "Dừng khi ngực gần sàn mà lưng vẫn thẳng.",
+      "Đẩy sàn ra xa để trở về tư thế đầu; có thể chống gối để giảm độ khó."
+    ],
+    "breathingGuide": "Hít vào khi hạ người, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến biên độ có thể giữ thân người thẳng và không đau vai.",
+    "commonMistakes": [
+      "Võng lưng hoặc nhô mông.",
+      "Chỉ hạ nửa biên độ.",
+      "Banh khuỷu tay sang ngang."
+    ],
+    "safetyNotes": [
+      "Khởi động cổ tay và vai.",
+      "Dùng bục cao hơn nếu cần biến thể nhẹ hơn."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "pull-up",
+    "name": "Hít xà đơn",
+    "description": "Bài kéo thân người phát triển cơ xô và sức mạnh tay nắm.",
+    "category": "Lưng",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Cơ xô"
+    ],
+    "secondaryMuscles": [
+      "Tay trước",
+      "Lưng giữa"
+    ],
+    "equipment": "Xà đơn",
+    "imageUrl": "asset://exercise-thumbnails/pull-up.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/475/83067ffe-ccb9-4e22-8507-5131b211ce74.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/pull-up.jpg",
+    "videoDurationSeconds": 19,
+    "setupPosition": "Ngồi chắc trên máy kéo xô, cố định đùi dưới đệm và giữ thân người thẳng.",
+    "bodyPlacement": "Nắm thanh rộng hơn vai vừa phải; cổ tay thẳng và vai hạ xa tai.",
+    "instructions": [
+      "Kéo khuỷu tay xuống hai bên thân, đưa thanh về trước ngực.",
+      "Giữ ngực mở và dừng ngắn khi bả vai khép lại.",
+      "Duỗi tay lên từ từ để tạ trở về mà vai không nhún lên."
+    ],
+    "breathingGuide": "Thở ra khi kéo xuống, hít vào khi duỗi tay lên.",
+    "rangeOfMotion": "Kéo thanh đến gần ngực trên; không kéo ra sau gáy.",
+    "commonMistakes": [
+      "Ngả người quá xa về sau.",
+      "Dùng giật người để kéo tạ.",
+      "Kéo thanh sau gáy."
+    ],
+    "safetyNotes": [
+      "Giữ đùi dưới đệm và giảm tạ nếu phải đung đưa.",
+      "Dừng nếu đau vai hoặc khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "5–10",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/475",
+    "videoSourceName": "Pull-ups",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/475",
+    "imageSourceName": "Pull-ups"
+  },
+  {
+    "id": "assisted-pull-up",
+    "name": "Hít xà với máy hỗ trợ",
+    "description": "Máy hỗ trợ giảm một phần trọng lượng cơ thể để người mới luyện động tác hít xà.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ xô"
+    ],
+    "secondaryMuscles": [
+      "Tay trước",
+      "Lưng giữa"
+    ],
+    "equipment": "Máy hỗ trợ hít xà",
+    "imageUrl": "asset://exercise-thumbnails/assisted-pull-up.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/477/2e23bb52-2782-40c8-bf88-fa2d2e2a9a0d.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/assisted-pull-up.jpg",
+    "videoDurationSeconds": 19,
+    "setupPosition": "Ngồi chắc trên máy kéo xô, cố định đùi dưới đệm và giữ thân người thẳng.",
+    "bodyPlacement": "Nắm thanh rộng hơn vai vừa phải; cổ tay thẳng và vai hạ xa tai.",
+    "instructions": [
+      "Kéo khuỷu tay xuống hai bên thân, đưa thanh về trước ngực.",
+      "Giữ ngực mở và dừng ngắn khi bả vai khép lại.",
+      "Duỗi tay lên từ từ để tạ trở về mà vai không nhún lên."
+    ],
+    "breathingGuide": "Thở ra khi kéo xuống, hít vào khi duỗi tay lên.",
+    "rangeOfMotion": "Kéo thanh đến gần ngực trên; không kéo ra sau gáy.",
+    "commonMistakes": [
+      "Ngả người quá xa về sau.",
+      "Dùng giật người để kéo tạ.",
+      "Kéo thanh sau gáy."
+    ],
+    "safetyNotes": [
+      "Giữ đùi dưới đệm và giảm tạ nếu phải đung đưa.",
+      "Dừng nếu đau vai hoặc khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/477",
+    "videoSourceName": "Pull Ups on Machine",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/477",
+    "imageSourceName": "Pull Ups on Machine"
+  },
+  {
+    "id": "chest-supported-row",
+    "name": "Kéo tạ tựa ngực",
+    "description": "Tựa ngực lên ghế giúp hạn chế dùng đà từ lưng dưới khi chèo tạ.",
+    "category": "Lưng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Lưng giữa"
+    ],
+    "secondaryMuscles": [
+      "Cơ xô",
+      "Vai sau",
+      "Tay trước"
+    ],
+    "equipment": "Máy chèo hoặc ghế dốc, tạ đơn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi hoặc chống ngực lên ghế, giữ cột sống trung tính và bàn chân vững.",
+    "bodyPlacement": "Nắm tay cầm chắc; bắt đầu với tay duỗi tự nhiên và vai không nhún.",
+    "instructions": [
+      "Kéo khuỷu tay về phía hông hoặc sườn, đồng thời khép nhẹ bả vai.",
+      "Giữ thân mình yên và ngực tựa chắc vào đệm nếu có.",
+      "Duỗi tay chậm về trước, không để vai bị kéo bật ra."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi đưa tay về.",
+    "rangeOfMotion": "Kéo đến khi khuỷu tay ngang thân mình; không xoay vặn lưng.",
+    "commonMistakes": [
+      "Giật thân người để kéo.",
+      "Rụt vai lên tai.",
+      "Cuộn lưng khi duỗi tay."
+    ],
+    "safetyNotes": [
+      "Dùng mức tạ cho phép kiểm soát cả chiều kéo lẫn chiều trả.",
+      "Giữ cổ tay thẳng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "straight-arm-pulldown",
+    "name": "Kéo cáp tay thẳng",
+    "description": "Bài cô lập cơ xô với khuỷu tay giữ cong nhẹ trong suốt chuyển động.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ xô"
+    ],
+    "secondaryMuscles": [
+      "Tay sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Máy kéo cáp cao",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng đối diện ròng rọc cao, hai chân mở bằng hông và thân hơi nghiêng trước.",
+    "bodyPlacement": "Nắm thanh hoặc dây, khuỷu tay cong nhẹ và giữ nguyên góc cong.",
+    "instructions": [
+      "Kéo tay theo cung vòng xuống phía đùi bằng cơ lưng.",
+      "Giữ thân người ổn định, không biến động tác thành cúi gập.",
+      "Đưa tay trở lên chậm đến khi xô được kéo giãn nhẹ."
+    ],
+    "breathingGuide": "Thở ra khi kéo xuống, hít vào khi đưa tay lên.",
+    "rangeOfMotion": "Dừng tay ở ngang đùi và không ưỡn lưng để kéo sâu hơn.",
+    "commonMistakes": [
+      "Gập duỗi khuỷu tay nhiều.",
+      "Đung đưa thân người.",
+      "Nhún vai lên tai."
+    ],
+    "safetyNotes": [
+      "Chọn tạ nhẹ vừa đủ cảm nhận cơ lưng.",
+      "Dừng nếu đau vai hoặc lưng dưới."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "back-extension",
+    "name": "Duỗi lưng trên ghế",
+    "description": "Tăng sức bền chuỗi cơ sau bằng chuyển động gập và duỗi ở khớp hông.",
+    "category": "Lưng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Lưng dưới"
+    ],
+    "secondaryMuscles": [
+      "Mông",
+      "Đùi sau"
+    ],
+    "equipment": "Ghế duỗi lưng",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chỉnh đệm máy ngang dưới nếp hông và đặt chân chắc vào giá đỡ.",
+    "bodyPlacement": "Giữ cột sống trung tính, hai tay khoanh trước ngực hoặc đặt nhẹ sau đầu.",
+    "instructions": [
+      "Gập hông để hạ thân trên xuống trong mức kiểm soát.",
+      "Siết mông và cơ lưng để nâng thân đến khi tạo thành đường thẳng.",
+      "Hạ xuống từ từ, không thả rơi thân người."
+    ],
+    "breathingGuide": "Hít vào khi hạ thân, thở ra khi nâng lên.",
+    "rangeOfMotion": "Kết thúc ở tư thế thân thẳng; không ngửa lưng quá mức.",
+    "commonMistakes": [
+      "Ưỡn quá cao ở đỉnh.",
+      "Gập cổ kéo cằm sát ngực.",
+      "Dùng đà bật lên."
+    ],
+    "safetyNotes": [
+      "Bắt đầu bằng trọng lượng cơ thể.",
+      "Không thực hiện nếu động tác gây đau lưng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "conventional-deadlift",
+    "name": "Deadlift tạ đòn",
+    "description": "Bài nâng tạ toàn thân tập trung vào động tác gập hông và sức mạnh chuỗi cơ sau.",
+    "category": "Chân",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Đùi sau",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Lưng dưới",
+      "Cơ bụng",
+      "Cẳng tay"
+    ],
+    "equipment": "Tạ đòn và bánh tạ",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đặt thanh tạ gần giữa bàn chân, đứng rộng bằng hông và gập hông để nắm thanh.",
+    "bodyPlacement": "Giữ lưng trung tính, vai hơi trước thanh và thanh sát chân.",
+    "instructions": [
+      "Siết bụng, tạo lực căng ở lưng và đùi trước khi nhấc.",
+      "Đạp sàn để đứng lên, giữ thanh lướt sát cẳng chân và đùi.",
+      "Đẩy hông ra sau để hạ thanh có kiểm soát về sàn."
+    ],
+    "breathingGuide": "Hít và siết bụng trước mỗi lần nâng; thở ra sau khi qua điểm khó.",
+    "rangeOfMotion": "Đứng thẳng ở đỉnh, không ngả lưng ra sau.",
+    "commonMistakes": [
+      "Cong lưng khi nhấc.",
+      "Để thanh đi xa khỏi chân.",
+      "Giật tạ khỏi sàn."
+    ],
+    "safetyNotes": [
+      "Tập với huấn luyện viên khi mới học kỹ thuật.",
+      "Tăng tải từ từ và dừng nếu đau lưng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "5–8",
+    "recommendedRestSeconds": 120,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "goblet-squat",
+    "name": "Squat ôm tạ đơn",
+    "description": "Biến thể squat dễ học với tạ được giữ trước ngực để hỗ trợ tư thế thân trên.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Cơ bụng",
+      "Đùi sau"
+    ],
+    "equipment": "Tạ đơn hoặc kettlebell",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng vững, hai bàn chân rộng bằng vai; chọn mức tạ nhẹ để tập đúng kỹ thuật.",
+    "bodyPlacement": "Mũi chân hơi mở, đầu gối hướng cùng chiều mũi chân và ngực giữ mở.",
+    "instructions": [
+      "Đẩy hông ra sau và gập gối để hạ người xuống có kiểm soát.",
+      "Giữ gót chân chạm sàn và đầu gối không đổ vào trong.",
+      "Đạp sàn để đứng lên, siết mông nhẹ ở cuối động tác."
+    ],
+    "breathingGuide": "Hít vào khi hạ người, thở ra khi đứng lên.",
+    "rangeOfMotion": "Chỉ hạ sâu đến mức giữ được gót chân và lưng ổn định.",
+    "commonMistakes": [
+      "Gối đổ vào trong.",
+      "Gót chân nhấc khỏi sàn.",
+      "Cong hoặc gù lưng."
+    ],
+    "safetyNotes": [
+      "Dùng giá đỡ và chốt an toàn khi tập với thanh tạ.",
+      "Dừng nếu đau gối hoặc lưng dưới."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "bulgarian-split-squat",
+    "name": "Squat chùng chân sau kê cao",
+    "description": "Bài tập đơn chân giúp rèn sức mạnh và thăng bằng giữa hai bên cơ thể.",
+    "category": "Chân",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Ghế thấp, tạ đơn tùy chọn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng so le hai chân, khoảng cách đủ để hạ gối sau xuống gần sàn.",
+    "bodyPlacement": "Giữ hông hướng về trước, thân thẳng và gối trước đi theo hướng mũi chân.",
+    "instructions": [
+      "Gập cả hai gối để hạ trọng tâm xuống theo phương thẳng đứng.",
+      "Giữ gót chân trước chạm sàn và thân mình ổn định.",
+      "Đạp bằng chân trước để đứng lên rồi hoàn tất số lần trước khi đổi bên."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến mức kiểm soát được thăng bằng và không đau gối.",
+    "commonMistakes": [
+      "Bước quá hẹp làm mất thăng bằng.",
+      "Gối trước đổ vào trong.",
+      "Dồn toàn bộ lực lên chân sau."
+    ],
+    "safetyNotes": [
+      "Tập không tạ hoặc vịn điểm tựa nếu mới bắt đầu.",
+      "Đổi chân đều hai bên."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–10 mỗi bên",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "leg-extension",
+    "name": "Duỗi đùi với máy",
+    "description": "Bài cô lập cơ đùi trước, có thể điều chỉnh tải nhỏ và kiểm soát từng lượt.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi trước"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy duỗi đùi",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chỉnh ghế để lưng tựa sát, trục máy ngang với khớp gối và đệm ở trên cổ chân.",
+    "bodyPlacement": "Nắm tay cầm hai bên ghế, giữ hông áp vào đệm.",
+    "instructions": [
+      "Duỗi gối để nâng đệm lên, không bật mạnh ở điểm cuối.",
+      "Siết cơ đùi trước ngắn ở vị trí cao.",
+      "Hạ đệm từ từ đến khi gối gập thoải mái."
+    ],
+    "breathingGuide": "Thở ra khi duỗi gối, hít vào khi hạ tạ.",
+    "rangeOfMotion": "Chọn biên độ không gây khó chịu cho khớp gối.",
+    "commonMistakes": [
+      "Đá chân lấy đà.",
+      "Nhấc hông khỏi ghế.",
+      "Để tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Dùng tải nhẹ nếu đang làm quen với máy.",
+      "Dừng nếu đau nhói ở đầu gối."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "lying-leg-curl",
+    "name": "Cuốn chân nằm với máy",
+    "description": "Bài cô lập cơ đùi sau bằng động tác gập gối có kiểm soát.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi sau"
+    ],
+    "secondaryMuscles": [
+      "Bắp chân"
+    ],
+    "equipment": "Máy cuốn chân nằm",
+    "imageUrl": "asset://exercise-thumbnails/lying-leg-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/365/becaf013-5044-40d0-bae9-7ed60c973737.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/lying-leg-curl.jpg",
+    "videoDurationSeconds": 15,
+    "setupPosition": "Chỉnh máy để trục gối trùng trục quay và đệm nằm ngay trên gót chân.",
+    "bodyPlacement": "Giữ hông áp vào ghế hoặc đệm, nắm tay cầm và giữ bụng nhẹ.",
+    "instructions": [
+      "Gập gối để kéo đệm về phía mông.",
+      "Dừng ngắn khi cơ đùi sau co lại, không nâng hông.",
+      "Duỗi gối chậm để trả đệm về vị trí ban đầu."
+    ],
+    "breathingGuide": "Thở ra khi gập gối, hít vào khi duỗi chân.",
+    "rangeOfMotion": "Di chuyển trong biên độ thoải mái, không khóa gối.",
+    "commonMistakes": [
+      "Nhấc hông khỏi đệm.",
+      "Giật tạ ở cuối lượt.",
+      "Duỗi chân thả rơi."
+    ],
+    "safetyNotes": [
+      "Chỉnh máy đúng chiều dài chân trước khi tập.",
+      "Dừng nếu đau hoặc co rút bất thường."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/365",
+    "videoSourceName": "Leg Curls (laying)",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/365",
+    "imageSourceName": "Leg Curls (laying)"
+  },
+  {
+    "id": "standing-calf-raise",
+    "name": "Nhón bắp chân đứng",
+    "description": "Bài tập bắp chân với biên độ nâng và hạ gót chân chậm rãi.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Bắp chân"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy nhón bắp chân hoặc bục",
+    "imageUrl": "asset://exercise-thumbnails/standing-calf-raise.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/622/35b7b625-77fd-4c09-8c57-3ad0f2f23175.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/standing-calf-raise.jpg",
+    "videoDurationSeconds": 17,
+    "setupPosition": "Đặt mũi bàn chân lên bệ chắc chắn, gót chân ở ngoài mép bệ.",
+    "bodyPlacement": "Giữ người thẳng, đầu gối mềm và tay vịn nhẹ để giữ thăng bằng.",
+    "instructions": [
+      "Hạ gót chân xuống có kiểm soát để bắp chân được kéo giãn.",
+      "Đẩy qua mũi chân để nâng gót lên cao.",
+      "Giữ ngắn ở đỉnh rồi hạ gót chậm về điểm đầu."
+    ],
+    "breathingGuide": "Thở ra khi nâng gót, hít vào khi hạ xuống.",
+    "rangeOfMotion": "Dùng biên độ thoải mái, tránh nảy mạnh ở đáy.",
+    "commonMistakes": [
+      "Nhún nảy liên tục.",
+      "Dồn trọng lượng vào mép ngoài bàn chân.",
+      "Khóa cứng đầu gối."
+    ],
+    "safetyNotes": [
+      "Đứng trên bệ chống trượt và vịn điểm tựa.",
+      "Không dùng tải làm mất thăng bằng."
+    ],
+    "recommendedSets": 4,
+    "recommendedReps": "12–20",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/622",
+    "videoSourceName": "Standing Calf Raises",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/622",
+    "imageSourceName": "Standing Calf Raises"
+  },
+  {
+    "id": "arnold-press",
+    "name": "Đẩy vai Arnold với tạ đơn",
+    "description": "Biến thể đẩy vai có xoay cẳng tay trong lúc nâng tạ.",
+    "category": "Vai",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Vai trước",
+      "Vai giữa"
+    ],
+    "secondaryMuscles": [
+      "Tay sau"
+    ],
+    "equipment": "Tạ đơn, ghế tựa",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi tựa lưng hoặc đứng vững, siết bụng và giữ cột sống trung tính.",
+    "bodyPlacement": "Đưa tạ ngang vai, cổ tay ở trên khuỷu tay; vai hạ xa tai.",
+    "instructions": [
+      "Đẩy tạ lên trên đầu theo đường tự nhiên.",
+      "Giữ xương sườn không bật lên và không ưỡn lưng.",
+      "Hạ tạ chậm về ngang vai trước lượt tiếp theo."
+    ],
+    "breathingGuide": "Thở ra khi đẩy lên, hít vào khi hạ tạ.",
+    "rangeOfMotion": "Dừng khi tay gần duỗi thẳng; không ép khớp vai vào vị trí đau.",
+    "commonMistakes": [
+      "Ưỡn lưng quá mức.",
+      "Nhún vai lên tai.",
+      "Để tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với tạ nhẹ và tăng tải từ từ.",
+      "Dừng nếu đau vai hoặc cổ."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "dumbbell-front-raise",
+    "name": "Nâng tạ đơn ra trước",
+    "description": "Bài cô lập vai trước; sử dụng tạ nhẹ và tránh vung thân người.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Vai trước"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Tạ đơn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng thẳng, hai chân rộng bằng hông và cầm tạ nhẹ ở hai bên.",
+    "bodyPlacement": "Khuỷu tay hơi cong; giữ cổ dài và vai hạ xa tai.",
+    "instructions": [
+      "Nâng tạ sang hai bên hoặc phía trước đến khoảng ngang vai.",
+      "Dẫn chuyển động bằng khuỷu tay, không vung thân để lấy đà.",
+      "Hạ tạ chậm về hai bên."
+    ],
+    "breathingGuide": "Thở ra khi nâng, hít vào khi hạ.",
+    "rangeOfMotion": "Không cần nâng cao quá vai; giảm biên độ nếu thấy khó chịu.",
+    "commonMistakes": [
+      "Dùng tạ quá nặng.",
+      "Đung đưa hông hoặc thân.",
+      "Nhún vai lên tai."
+    ],
+    "safetyNotes": [
+      "Chọn tạ nhẹ, chuyển động chậm và đều.",
+      "Dừng nếu đau vùng vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "reverse-dumbbell-fly",
+    "name": "Dang tạ đơn tập vai sau",
+    "description": "Bài tập vai sau trong tư thế gập hông hoặc tựa ngực lên ghế.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Vai sau"
+    ],
+    "secondaryMuscles": [
+      "Lưng giữa"
+    ],
+    "equipment": "Tạ đơn, ghế dốc tùy chọn",
+    "imageUrl": "asset://exercise-thumbnails/reverse-dumbbell-fly.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/82/28b53647-27e7-47cf-8852-2ee666c8b628.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/reverse-dumbbell-fly.jpg",
+    "videoDurationSeconds": 8,
+    "setupPosition": "Ngồi hoặc đứng gập hông với lưng trung tính; có thể tựa ngực lên ghế.",
+    "bodyPlacement": "Tạ ở dưới vai, khuỷu tay hơi cong và cổ giữ thẳng.",
+    "instructions": [
+      "Mở hai tay sang hai bên bằng cơ vai sau.",
+      "Dừng khi khuỷu tay gần ngang thân, không xoay cổ tay quá mức.",
+      "Hạ tạ chậm về điểm đầu."
+    ],
+    "breathingGuide": "Thở ra khi mở tay, hít vào khi hạ tạ.",
+    "rangeOfMotion": "Giữ chuyển động ở vai; không giật cánh tay ra sau.",
+    "commonMistakes": [
+      "Cong lưng để lấy đà.",
+      "Co vai lên tai.",
+      "Dùng tạ quá nặng."
+    ],
+    "safetyNotes": [
+      "Giảm tải nếu không giữ được thân ổn định.",
+      "Dừng nếu đau vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/82",
+    "videoSourceName": "Bent-over Lateral Raises",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/82",
+    "imageSourceName": "Bent-over Lateral Raises"
+  },
+  {
+    "id": "cable-lateral-raise",
+    "name": "Nâng cáp sang ngang",
+    "description": "Cáp giữ lực căng liên tục trong động tác nâng tay sang ngang.",
+    "category": "Vai",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Vai giữa"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy kéo cáp thấp",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng thẳng, hai chân rộng bằng hông và cầm tạ nhẹ ở hai bên.",
+    "bodyPlacement": "Khuỷu tay hơi cong; giữ cổ dài và vai hạ xa tai.",
+    "instructions": [
+      "Nâng tạ sang hai bên hoặc phía trước đến khoảng ngang vai.",
+      "Dẫn chuyển động bằng khuỷu tay, không vung thân để lấy đà.",
+      "Hạ tạ chậm về hai bên."
+    ],
+    "breathingGuide": "Thở ra khi nâng, hít vào khi hạ.",
+    "rangeOfMotion": "Không cần nâng cao quá vai; giảm biên độ nếu thấy khó chịu.",
+    "commonMistakes": [
+      "Dùng tạ quá nặng.",
+      "Đung đưa hông hoặc thân.",
+      "Nhún vai lên tai."
+    ],
+    "safetyNotes": [
+      "Chọn tạ nhẹ, chuyển động chậm và đều.",
+      "Dừng nếu đau vùng vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–15 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "hammer-curl",
+    "name": "Cuốn tạ búa",
+    "description": "Biến thể cuốn tay với lòng bàn tay hướng vào nhau, tác động bắp tay và cẳng tay.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay trước",
+      "Cẳng tay"
+    ],
+    "secondaryMuscles": [
+      "Cơ cánh tay"
+    ],
+    "equipment": "Tạ đơn",
+    "imageUrl": "asset://exercise-thumbnails/hammer-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/272/df069052-2173-4f24-855f-a0eebe729f24.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/hammer-curl.jpg",
+    "videoDurationSeconds": 10,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/272",
+    "videoSourceName": "Hammer Curls",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/272",
+    "imageSourceName": "Hammer Curls"
+  },
+  {
+    "id": "preacher-curl",
+    "name": "Cuốn tay trước trên ghế Scott",
+    "description": "Ghế đỡ cánh tay giúp hạn chế đung đưa thân khi tập bắp tay trước.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Ghế Scott, tạ đơn hoặc thanh EZ",
+    "imageUrl": "asset://exercise-thumbnails/preacher-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/465/b64ca95b-c677-4f3b-bb50-f75edc81aa74.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/preacher-curl.jpg",
+    "videoDurationSeconds": 26,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/465",
+    "videoSourceName": "Preacher Curls",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/465",
+    "imageSourceName": "Preacher Curls"
+  },
+  {
+    "id": "incline-dumbbell-curl",
+    "name": "Cuốn tay trước trên ghế dốc",
+    "description": "Tư thế ghế dốc đặt cánh tay hơi sau thân và cần kiểm soát tốt ở đáy động tác.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Tạ đơn, ghế dốc",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "overhead-triceps-extension",
+    "name": "Duỗi tay sau qua đầu",
+    "description": "Động tác duỗi khuỷu qua đầu để tập cơ tay sau trong tư thế kéo giãn.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [
+      "Vai"
+    ],
+    "equipment": "Tạ đơn hoặc dây cáp",
+    "imageUrl": "asset://exercise-thumbnails/overhead-triceps-extension.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/211/85f6eb25-a76c-409e-9af9-497794ac0dfb.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/overhead-triceps-extension.jpg",
+    "videoDurationSeconds": 32,
+    "setupPosition": "Đứng trước máy cáp hoặc nằm trên ghế chắc chắn, hai chân đặt vững.",
+    "bodyPlacement": "Giữ khuỷu tay hướng xuống hoặc cố định gần đầu; cổ tay thẳng.",
+    "instructions": [
+      "Duỗi khuỷu tay để đẩy tay cầm hoặc tạ theo cung ổn định.",
+      "Giữ cánh tay trên yên, siết tay sau ở cuối chuyển động.",
+      "Gập khuỷu tay chậm để trở lại vị trí đầu."
+    ],
+    "breathingGuide": "Thở ra khi duỗi tay, hít vào khi gập về.",
+    "rangeOfMotion": "Dừng trước khi khóa cứng khuỷu tay.",
+    "commonMistakes": [
+      "Xòe khuỷu tay quá rộng.",
+      "Đung đưa vai.",
+      "Dùng tải khiến lưng ưỡn."
+    ],
+    "safetyNotes": [
+      "Dùng tải vừa sức và giữ khuỷu tay thoải mái.",
+      "Dừng nếu đau khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/211",
+    "videoSourceName": "Dumbbell Triceps Extension",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/211",
+    "imageSourceName": "Dumbbell Triceps Extension"
+  },
+  {
+    "id": "ez-bar-skull-crusher",
+    "name": "Duỗi tay sau nằm với thanh EZ",
+    "description": "Bài tay sau nằm trên ghế; giữ cánh tay ổn định và chỉ gập duỗi khuỷu.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Thanh EZ, ghế phẳng",
+    "imageUrl": "asset://exercise-thumbnails/ez-bar-skull-crusher.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/246/75eb8c88-922e-45c5-8be3-ac073f62b63f.MP4",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/ez-bar-skull-crusher.jpg",
+    "videoDurationSeconds": 15,
+    "setupPosition": "Đứng trước máy cáp hoặc nằm trên ghế chắc chắn, hai chân đặt vững.",
+    "bodyPlacement": "Giữ khuỷu tay hướng xuống hoặc cố định gần đầu; cổ tay thẳng.",
+    "instructions": [
+      "Duỗi khuỷu tay để đẩy tay cầm hoặc tạ theo cung ổn định.",
+      "Giữ cánh tay trên yên, siết tay sau ở cuối chuyển động.",
+      "Gập khuỷu tay chậm để trở lại vị trí đầu."
+    ],
+    "breathingGuide": "Thở ra khi duỗi tay, hít vào khi gập về.",
+    "rangeOfMotion": "Dừng trước khi khóa cứng khuỷu tay.",
+    "commonMistakes": [
+      "Xòe khuỷu tay quá rộng.",
+      "Đung đưa vai.",
+      "Dùng tải khiến lưng ưỡn."
+    ],
+    "safetyNotes": [
+      "Dùng tải vừa sức và giữ khuỷu tay thoải mái.",
+      "Dừng nếu đau khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/246",
+    "videoSourceName": "Skullcrusher SZ-bar",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/246",
+    "imageSourceName": "Skullcrusher SZ-bar"
+  },
+  {
+    "id": "bicycle-crunch",
+    "name": "Gập bụng đạp xe",
+    "description": "Bài bụng kết hợp cuộn thân và đưa gối luân phiên, cần giữ nhịp chậm để tránh kéo cổ.",
+    "category": "Bụng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ bụng"
+    ],
+    "secondaryMuscles": [
+      "Cơ chéo bụng"
+    ],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi vững hoặc nằm ngửa, siết bụng nhẹ và giữ cột sống dài.",
+    "bodyPlacement": "Giữ tay trước ngực; xoay từ thân trên trong biên độ thoải mái.",
+    "instructions": [
+      "Xoay thân có kiểm soát sang một bên.",
+      "Trở về giữa rồi xoay sang bên còn lại.",
+      "Giữ hông ổn định, không giật hoặc vặn lưng dưới."
+    ],
+    "breathingGuide": "Thở đều; thở ra nhẹ khi xoay.",
+    "rangeOfMotion": "Xoay vừa đủ để giữ hông và lưng dưới ổn định.",
+    "commonMistakes": [
+      "Quăng tay tạo đà.",
+      "Vặn lưng quá sâu.",
+      "Gù lưng."
+    ],
+    "safetyNotes": [
+      "Không dùng tạ nếu chưa kiểm soát được chuyển động.",
+      "Dừng nếu đau lưng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "12–20 mỗi bên",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "russian-twist",
+    "name": "Vặn mình kiểu Nga",
+    "description": "Bài tập xoay thân cho cơ bụng chéo; ưu tiên kiểm soát thay vì xoay thật xa.",
+    "category": "Bụng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Cơ chéo bụng"
+    ],
+    "secondaryMuscles": [
+      "Cơ bụng"
+    ],
+    "equipment": "Thảm tập, tạ nhẹ tùy chọn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Ngồi vững hoặc nằm ngửa, siết bụng nhẹ và giữ cột sống dài.",
+    "bodyPlacement": "Giữ tay trước ngực; xoay từ thân trên trong biên độ thoải mái.",
+    "instructions": [
+      "Xoay thân có kiểm soát sang một bên.",
+      "Trở về giữa rồi xoay sang bên còn lại.",
+      "Giữ hông ổn định, không giật hoặc vặn lưng dưới."
+    ],
+    "breathingGuide": "Thở đều; thở ra nhẹ khi xoay.",
+    "rangeOfMotion": "Xoay vừa đủ để giữ hông và lưng dưới ổn định.",
+    "commonMistakes": [
+      "Quăng tay tạo đà.",
+      "Vặn lưng quá sâu.",
+      "Gù lưng."
+    ],
+    "safetyNotes": [
+      "Không dùng tạ nếu chưa kiểm soát được chuyển động.",
+      "Dừng nếu đau lưng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–16 mỗi bên",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "dead-bug",
+    "name": "Dead bug duỗi tay chân đối bên",
+    "description": "Bài ổn định thân giữa, phù hợp tập kiểm soát lưng dưới và phối hợp tay chân.",
+    "category": "Bụng",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ lõi"
+    ],
+    "secondaryMuscles": [
+      "Cơ bụng"
+    ],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm ngửa, nâng gối trên hông và đưa hai tay hướng lên trần.",
+    "bodyPlacement": "Ép nhẹ lưng dưới xuống thảm và siết bụng.",
+    "instructions": [
+      "Duỗi chậm một tay cùng chân đối diện ra xa thân.",
+      "Dừng trước khi lưng dưới rời khỏi thảm.",
+      "Thu tay chân về rồi đổi bên."
+    ],
+    "breathingGuide": "Thở ra khi duỗi tay chân, hít vào khi thu về.",
+    "rangeOfMotion": "Chỉ duỗi xa trong mức giữ được lưng dưới áp sàn.",
+    "commonMistakes": [
+      "Võng lưng.",
+      "Di chuyển quá nhanh.",
+      "Nín thở."
+    ],
+    "safetyNotes": [
+      "Rút ngắn biên độ nếu lưng dưới căng.",
+      "Dừng nếu bài tập gây đau."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12 mỗi bên",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "mountain-climber",
+    "name": "Leo núi tại chỗ",
+    "description": "Bài vận động liên tục kết hợp sức bền cơ lõi và nhịp tim.",
+    "category": "Bụng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Cơ bụng"
+    ],
+    "secondaryMuscles": [
+      "Vai",
+      "Đùi"
+    ],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Bắt đầu ở tư thế chống tay cao, bàn tay dưới vai và thân người thẳng.",
+    "bodyPlacement": "Siết bụng, giữ hông thấp và nhìn xuống thảm.",
+    "instructions": [
+      "Đưa một gối về phía ngực.",
+      "Đổi chân có kiểm soát; tăng tốc chỉ khi thân mình vẫn ổn định.",
+      "Giữ tay chống chắc và tiếp đất nhẹ."
+    ],
+    "breathingGuide": "Thở nhịp nhàng trong toàn bộ thời gian.",
+    "rangeOfMotion": "Đưa gối về trước trong biên độ không làm hông lắc mạnh.",
+    "commonMistakes": [
+      "Nhún hông lên xuống.",
+      "Để lưng võng.",
+      "Dậm chân quá mạnh."
+    ],
+    "safetyNotes": [
+      "Giảm tốc hoặc kê tay lên bục nếu cổ tay chưa quen.",
+      "Dừng khi mất kiểm soát tư thế."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "20–40 giây",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "cable-crunch",
+    "name": "Gập bụng với cáp",
+    "description": "Bài gập thân có tải, tập trung cuộn lồng ngực về phía xương chậu.",
+    "category": "Bụng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Cơ bụng"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy kéo cáp cao, dây thừng",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Nằm ngửa trên thảm, gập gối và đặt bàn chân xuống sàn.",
+    "bodyPlacement": "Đặt tay nhẹ sau đầu hoặc chéo trước ngực; giữ cổ thư giãn.",
+    "instructions": [
+      "Siết bụng để nâng vai và phần lưng trên khỏi sàn.",
+      "Dừng ngắn ở đỉnh mà không kéo cổ.",
+      "Hạ lưng trên xuống có kiểm soát."
+    ],
+    "breathingGuide": "Thở ra khi cuộn thân lên, hít vào khi hạ xuống.",
+    "rangeOfMotion": "Chỉ nâng bả vai khỏi sàn; không cần ngồi bật dậy.",
+    "commonMistakes": [
+      "Kéo đầu bằng tay.",
+      "Dùng đà.",
+      "Nín thở."
+    ],
+    "safetyNotes": [
+      "Giữ cổ thư giãn và dừng nếu đau cổ hoặc lưng.",
+      "Thực hiện chậm, không giật người."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "side-plank",
+    "name": "Plank nghiêng",
+    "description": "Bài giữ tĩnh rèn cơ chéo bụng và khả năng ổn định thân người sang bên.",
+    "category": "Bụng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Cơ chéo bụng"
+    ],
+    "secondaryMuscles": [
+      "Vai",
+      "Mông"
+    ],
+    "equipment": "Thảm tập",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chống khuỷu tay hoặc hai bàn tay xuống thảm, đặt chân vững.",
+    "bodyPlacement": "Giữ đầu, vai, hông và gót chân thành một đường; siết bụng và mông.",
+    "instructions": [
+      "Bắt đầu đồng hồ khi thân người ổn định.",
+      "Thở đều và giữ vai xa tai trong suốt thời gian.",
+      "Dừng hiệp trước khi lưng võng hoặc hông nâng cao."
+    ],
+    "breathingGuide": "Thở đều, liên tục; không nín thở.",
+    "rangeOfMotion": "Đây là bài giữ tĩnh; duy trì tư thế đúng thay vì cố giữ thật lâu.",
+    "commonMistakes": [
+      "Võng lưng.",
+      "Nhô mông cao.",
+      "Nín thở."
+    ],
+    "safetyNotes": [
+      "Có thể chống gối để giảm độ khó.",
+      "Dừng nếu đau lưng hoặc vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "20–45 giây mỗi bên",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "rowing-machine",
+    "name": "Chèo máy",
+    "description": "Bài cardio toàn thân; phối hợp đạp chân, ngả thân nhẹ rồi mới kéo tay.",
+    "category": "Cardio",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Lưng",
+      "Tay",
+      "Mông"
+    ],
+    "equipment": "Máy chèo thuyền",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Chỉnh dây buộc chân chắc vừa phải và ngồi thẳng trên máy chèo.",
+    "bodyPlacement": "Bắt đầu với gối gập, tay duỗi và thân hơi nghiêng trước.",
+    "instructions": [
+      "Đạp chân trước, sau đó ngả thân nhẹ và kéo tay cầm về bụng.",
+      "Trả tay ra trước, nghiêng thân rồi mới gập gối về.",
+      "Giữ nhịp kéo và trả mượt, không giật lưng."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi trượt về.",
+    "rangeOfMotion": "Không ngả thân quá sâu ở cuối cú kéo.",
+    "commonMistakes": [
+      "Kéo tay trước khi đạp chân.",
+      "Cong lưng.",
+      "Trượt về quá nhanh."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với lực cản thấp.",
+      "Dừng nếu đau lưng hoặc đầu gối."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "10–20 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "elliptical-trainer",
+    "name": "Tập máy elliptical",
+    "description": "Bài cardio ít va chạm, có thể điều chỉnh tốc độ và lực cản theo thể lực.",
+    "category": "Cardio",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Mông",
+      "Vai"
+    ],
+    "equipment": "Máy elliptical",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Điều chỉnh máy vừa tầm người, kiểm tra bàn đạp và tay cầm trước khi bắt đầu.",
+    "bodyPlacement": "Giữ thân thẳng, vai thả lỏng và bước hoặc đạp theo nhịp tự nhiên.",
+    "instructions": [
+      "Khởi động ở cường độ nhẹ trong vài phút.",
+      "Tăng dần tốc độ hoặc lực cản đến mức vẫn kiểm soát được nhịp thở.",
+      "Giảm cường độ từ từ ở cuối buổi để hồi phục."
+    ],
+    "breathingGuide": "Thở đều; giảm tốc độ nếu không thể nói thành câu ngắn.",
+    "rangeOfMotion": "Duy trì nhịp chuyển động đều, không khóa cứng khớp.",
+    "commonMistakes": [
+      "Tăng cường độ quá nhanh.",
+      "Gù lưng hoặc bám chặt tay cầm.",
+      "Bỏ qua khởi động và thả lỏng."
+    ],
+    "safetyNotes": [
+      "Dùng khóa an toàn nếu máy có trang bị.",
+      "Dừng nếu chóng mặt, đau ngực hoặc khó thở bất thường."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "15–30 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "stair-climber",
+    "name": "Leo cầu thang với máy",
+    "description": "Bài cardio tập trung thân dưới; bước đều và hạn chế tì toàn bộ trọng lượng lên tay vịn.",
+    "category": "Cardio",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Mông",
+      "Bắp chân"
+    ],
+    "equipment": "Máy leo cầu thang",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Điều chỉnh máy vừa tầm người, kiểm tra bàn đạp và tay cầm trước khi bắt đầu.",
+    "bodyPlacement": "Giữ thân thẳng, vai thả lỏng và bước hoặc đạp theo nhịp tự nhiên.",
+    "instructions": [
+      "Khởi động ở cường độ nhẹ trong vài phút.",
+      "Tăng dần tốc độ hoặc lực cản đến mức vẫn kiểm soát được nhịp thở.",
+      "Giảm cường độ từ từ ở cuối buổi để hồi phục."
+    ],
+    "breathingGuide": "Thở đều; giảm tốc độ nếu không thể nói thành câu ngắn.",
+    "rangeOfMotion": "Duy trì nhịp chuyển động đều, không khóa cứng khớp.",
+    "commonMistakes": [
+      "Tăng cường độ quá nhanh.",
+      "Gù lưng hoặc bám chặt tay cầm.",
+      "Bỏ qua khởi động và thả lỏng."
+    ],
+    "safetyNotes": [
+      "Dùng khóa an toàn nếu máy có trang bị.",
+      "Dừng nếu chóng mặt, đau ngực hoặc khó thở bất thường."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "10–20 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "burpee",
+    "name": "Burpee",
+    "description": "Bài toàn thân cường độ cao; có thể bước chân thay vì bật để giảm va chạm.",
+    "category": "Cardio",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Tim mạch",
+      "Toàn thân"
+    ],
+    "secondaryMuscles": [
+      "Ngực",
+      "Đùi",
+      "Cơ bụng"
+    ],
+    "equipment": "Không cần dụng cụ",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng vững trên mặt phẳng không trơn, khoảng trống đủ để chống tay và bước chân.",
+    "bodyPlacement": "Giữ thân giữa chắc; có thể bỏ động tác chống đẩy hoặc bật nhảy để giảm độ khó.",
+    "instructions": [
+      "Gập hông và đặt hai tay xuống sàn trước mũi chân.",
+      "Bước hoặc bật chân về tư thế plank, giữ lưng thẳng.",
+      "Đưa chân về gần tay rồi đứng lên; chỉ bật nhảy nếu tiếp đất kiểm soát được."
+    ],
+    "breathingGuide": "Thở liên tục theo nhịp, không nín thở khi đổi tư thế.",
+    "rangeOfMotion": "Ưu tiên chuyển động chắc chắn; có thể bước từng chân thay vì bật.",
+    "commonMistakes": [
+      "Võng lưng ở tư thế plank.",
+      "Tiếp đất cứng.",
+      "Làm quá nhanh khi đã mệt."
+    ],
+    "safetyNotes": [
+      "Dùng biến thể bước chân để giảm va chạm.",
+      "Dừng nếu chóng mặt hoặc đau khớp."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "6–12",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "incline-treadmill-walk",
+    "name": "Đi bộ dốc trên máy",
+    "description": "Đi bộ với độ dốc vừa phải để tăng cường độ mà vẫn giữ nhịp vận động dễ kiểm soát.",
+    "category": "Cardio",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tim mạch",
+      "Đùi"
+    ],
+    "secondaryMuscles": [
+      "Mông",
+      "Bắp chân"
+    ],
+    "equipment": "Máy chạy bộ",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Điều chỉnh máy vừa tầm người, kiểm tra bàn đạp và tay cầm trước khi bắt đầu.",
+    "bodyPlacement": "Giữ thân thẳng, vai thả lỏng và bước hoặc đạp theo nhịp tự nhiên.",
+    "instructions": [
+      "Khởi động ở cường độ nhẹ trong vài phút.",
+      "Tăng dần tốc độ hoặc lực cản đến mức vẫn kiểm soát được nhịp thở.",
+      "Giảm cường độ từ từ ở cuối buổi để hồi phục."
+    ],
+    "breathingGuide": "Thở đều; giảm tốc độ nếu không thể nói thành câu ngắn.",
+    "rangeOfMotion": "Duy trì nhịp chuyển động đều, không khóa cứng khớp.",
+    "commonMistakes": [
+      "Tăng cường độ quá nhanh.",
+      "Gù lưng hoặc bám chặt tay cầm.",
+      "Bỏ qua khởi động và thả lỏng."
+    ],
+    "safetyNotes": [
+      "Dùng khóa an toàn nếu máy có trang bị.",
+      "Dừng nếu chóng mặt, đau ngực hoặc khó thở bất thường."
+    ],
+    "recommendedSets": 1,
+    "recommendedReps": "15–30 phút",
+    "recommendedRestSeconds": 0,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "barbell-curl",
+    "name": "Cuốn tay trước với thanh tạ",
+    "description": "Bài cuốn tay trước với thanh tạ; giữ khuỷu tay sát thân và hạ tạ chậm.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Thanh tạ",
+    "imageUrl": "asset://exercise-thumbnails/barbell-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/91/483f4bff-e108-41f1-8e7b-0caf24952552.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/barbell-curl.jpg",
+    "videoDurationSeconds": 12,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/91",
+    "videoSourceName": "Biceps Curls With Barbell",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/91",
+    "imageSourceName": "Biceps Curls With Barbell"
+  },
+  {
+    "id": "cable-curl",
+    "name": "Cuốn tay trước với cáp",
+    "description": "Cáp tạo lực căng liên tục khi cuốn và hạ tay.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Máy kéo cáp thấp",
+    "imageUrl": "asset://exercise-thumbnails/cable-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/95/ab770931-47d3-44fd-aef0-ac7a64c3b794.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/cable-curl.jpg",
+    "videoDurationSeconds": 10,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/95",
+    "videoSourceName": "Biceps Curl With Cable",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/95",
+    "imageSourceName": "Biceps Curl With Cable"
+  },
+  {
+    "id": "dumbbell-lunge",
+    "name": "Chùng chân tại chỗ với tạ đơn",
+    "description": "Bài đơn chân với tạ đơn; giữ thân thẳng và kiểm soát gối trước.",
+    "category": "Chân",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Tạ đơn tùy chọn",
+    "imageUrl": "asset://exercise-thumbnails/dumbbell-lunge.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/205/c167ac34-ddbc-4e1b-8edf-1192e9d00e22.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/dumbbell-lunge.jpg",
+    "videoDurationSeconds": 17,
+    "setupPosition": "Đứng so le hai chân, khoảng cách đủ để hạ gối sau xuống gần sàn.",
+    "bodyPlacement": "Giữ hông hướng về trước, thân thẳng và gối trước đi theo hướng mũi chân.",
+    "instructions": [
+      "Gập cả hai gối để hạ trọng tâm xuống theo phương thẳng đứng.",
+      "Giữ gót chân trước chạm sàn và thân mình ổn định.",
+      "Đạp bằng chân trước để đứng lên rồi hoàn tất số lần trước khi đổi bên."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến mức kiểm soát được thăng bằng và không đau gối.",
+    "commonMistakes": [
+      "Bước quá hẹp làm mất thăng bằng.",
+      "Gối trước đổ vào trong.",
+      "Dồn toàn bộ lực lên chân sau."
+    ],
+    "safetyNotes": [
+      "Tập không tạ hoặc vịn điểm tựa nếu mới bắt đầu.",
+      "Đổi chân đều hai bên."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–10 mỗi bên",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/205",
+    "videoSourceName": "Dumbbell Lunges Standing",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/205",
+    "imageSourceName": "Dumbbell Lunges Standing"
+  },
+  {
+    "id": "front-squat",
+    "name": "Front squat với tạ đòn",
+    "description": "Biến thể squat giữ thanh tạ trước vai, đòi hỏi thân trên thẳng và cổ tay linh hoạt.",
+    "category": "Chân",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Cơ bụng",
+      "Đùi sau"
+    ],
+    "equipment": "Tạ đòn, giá squat",
+    "imageUrl": "asset://exercise-thumbnails/front-squat.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/257/ad8ac7d9-b04d-415f-ae0e-837942ce2840.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/front-squat.jpg",
+    "videoDurationSeconds": 19,
+    "setupPosition": "Đứng vững, hai bàn chân rộng bằng vai; chọn mức tạ nhẹ để tập đúng kỹ thuật.",
+    "bodyPlacement": "Mũi chân hơi mở, đầu gối hướng cùng chiều mũi chân và ngực giữ mở.",
+    "instructions": [
+      "Đẩy hông ra sau và gập gối để hạ người xuống có kiểm soát.",
+      "Giữ gót chân chạm sàn và đầu gối không đổ vào trong.",
+      "Đạp sàn để đứng lên, siết mông nhẹ ở cuối động tác."
+    ],
+    "breathingGuide": "Hít vào khi hạ người, thở ra khi đứng lên.",
+    "rangeOfMotion": "Chỉ hạ sâu đến mức giữ được gót chân và lưng ổn định.",
+    "commonMistakes": [
+      "Gối đổ vào trong.",
+      "Gót chân nhấc khỏi sàn.",
+      "Cong hoặc gù lưng."
+    ],
+    "safetyNotes": [
+      "Dùng giá đỡ và chốt an toàn khi tập với thanh tạ.",
+      "Dừng nếu đau gối hoặc lưng dưới."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "6–10",
+    "recommendedRestSeconds": 120,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/257",
+    "videoSourceName": "Front Squats",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/257",
+    "imageSourceName": "Front Squats"
+  },
+  {
+    "id": "walking-lunge-barbell",
+    "name": "Chùng chân bước tới với tạ đòn",
+    "description": "Bài chùng chân bước tới với thanh tạ; cần giữ thăng bằng trước khi tăng tải.",
+    "category": "Chân",
+    "difficulty": "Nâng cao",
+    "targetMuscles": [
+      "Đùi trước",
+      "Mông"
+    ],
+    "secondaryMuscles": [
+      "Đùi sau",
+      "Cơ bụng"
+    ],
+    "equipment": "Tạ đòn, giá squat",
+    "imageUrl": "asset://exercise-thumbnails/walking-lunge-barbell.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/802/85d1d7f8-c3c5-47e8-9b26-56896919e6e7.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/walking-lunge-barbell.jpg",
+    "videoDurationSeconds": 13,
+    "setupPosition": "Đứng so le hai chân, khoảng cách đủ để hạ gối sau xuống gần sàn.",
+    "bodyPlacement": "Giữ hông hướng về trước, thân thẳng và gối trước đi theo hướng mũi chân.",
+    "instructions": [
+      "Gập cả hai gối để hạ trọng tâm xuống theo phương thẳng đứng.",
+      "Giữ gót chân trước chạm sàn và thân mình ổn định.",
+      "Đạp bằng chân trước để đứng lên rồi hoàn tất số lần trước khi đổi bên."
+    ],
+    "breathingGuide": "Hít vào khi hạ, thở ra khi đẩy lên.",
+    "rangeOfMotion": "Hạ đến mức kiểm soát được thăng bằng và không đau gối.",
+    "commonMistakes": [
+      "Bước quá hẹp làm mất thăng bằng.",
+      "Gối trước đổ vào trong.",
+      "Dồn toàn bộ lực lên chân sau."
+    ],
+    "safetyNotes": [
+      "Tập không tạ hoặc vịn điểm tựa nếu mới bắt đầu.",
+      "Đổi chân đều hai bên."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "8–10 mỗi bên",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/802",
+    "videoSourceName": "Barbell Lunges Walking",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/802",
+    "imageSourceName": "Barbell Lunges Walking"
+  },
+  {
+    "id": "one-arm-cable-row",
+    "name": "Kéo cáp một tay",
+    "description": "Bài chèo một tay giúp tập trung kiểm soát bả vai và cân bằng hai bên lưng.",
+    "category": "Lưng",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Lưng giữa",
+      "Cơ xô"
+    ],
+    "secondaryMuscles": [
+      "Tay trước",
+      "Vai sau"
+    ],
+    "equipment": "Máy kéo cáp thấp",
+    "imageUrl": "asset://exercise-thumbnails/one-arm-cable-row.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/349/9896d82e-d8b6-48af-bdd5-b8545dc523e9.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/one-arm-cable-row.jpg",
+    "videoDurationSeconds": 13,
+    "setupPosition": "Ngồi hoặc chống ngực lên ghế, giữ cột sống trung tính và bàn chân vững.",
+    "bodyPlacement": "Nắm tay cầm chắc; bắt đầu với tay duỗi tự nhiên và vai không nhún.",
+    "instructions": [
+      "Kéo khuỷu tay về phía hông hoặc sườn, đồng thời khép nhẹ bả vai.",
+      "Giữ thân mình yên và ngực tựa chắc vào đệm nếu có.",
+      "Duỗi tay chậm về trước, không để vai bị kéo bật ra."
+    ],
+    "breathingGuide": "Thở ra khi kéo, hít vào khi đưa tay về.",
+    "rangeOfMotion": "Kéo đến khi khuỷu tay ngang thân mình; không xoay vặn lưng.",
+    "commonMistakes": [
+      "Giật thân người để kéo.",
+      "Rụt vai lên tai.",
+      "Cuộn lưng khi duỗi tay."
+    ],
+    "safetyNotes": [
+      "Dùng mức tạ cho phép kiểm soát cả chiều kéo lẫn chiều trả.",
+      "Giữ cổ tay thẳng."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/349",
+    "videoSourceName": "Lateral Rows on Cable, One Armed",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/349",
+    "imageSourceName": "Lateral Rows on Cable, One Armed"
+  },
+  {
+    "id": "seated-leg-curl",
+    "name": "Cuốn đùi sau với máy ngồi",
+    "description": "Bài cô lập đùi sau bằng máy ngồi; chỉnh đệm vừa khớp gối và cẳng chân.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi sau"
+    ],
+    "secondaryMuscles": [
+      "Bắp chân"
+    ],
+    "equipment": "Máy cuốn đùi sau ngồi",
+    "imageUrl": "asset://exercise-thumbnails/seated-leg-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/366/43df4b79-d4c3-4fbf-bcb5-e0d825b84120.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/seated-leg-curl.jpg",
+    "videoDurationSeconds": 25,
+    "setupPosition": "Chỉnh máy để trục gối trùng trục quay và đệm nằm ngay trên gót chân.",
+    "bodyPlacement": "Giữ hông áp vào ghế hoặc đệm, nắm tay cầm và giữ bụng nhẹ.",
+    "instructions": [
+      "Gập gối để kéo đệm về phía mông.",
+      "Dừng ngắn khi cơ đùi sau co lại, không nâng hông.",
+      "Duỗi gối chậm để trả đệm về vị trí ban đầu."
+    ],
+    "breathingGuide": "Thở ra khi gập gối, hít vào khi duỗi chân.",
+    "rangeOfMotion": "Di chuyển trong biên độ thoải mái, không khóa gối.",
+    "commonMistakes": [
+      "Nhấc hông khỏi đệm.",
+      "Giật tạ ở cuối lượt.",
+      "Duỗi chân thả rơi."
+    ],
+    "safetyNotes": [
+      "Chỉnh máy đúng chiều dài chân trước khi tập.",
+      "Dừng nếu đau hoặc co rút bất thường."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/366",
+    "videoSourceName": "Leg Curls (sitting)",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/366",
+    "imageSourceName": "Leg Curls (sitting)"
+  },
+  {
+    "id": "standing-leg-curl",
+    "name": "Cuốn chân đứng với máy",
+    "description": "Bài tập từng chân giúp co cơ đùi sau mà thân người vẫn ổn định.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Đùi sau"
+    ],
+    "secondaryMuscles": [
+      "Bắp chân"
+    ],
+    "equipment": "Máy cuốn chân đứng",
+    "imageUrl": "asset://exercise-thumbnails/standing-leg-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/367/6c24960c-20ab-4ef9-90f8-cf53e630ccec.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/standing-leg-curl.jpg",
+    "videoDurationSeconds": 20,
+    "setupPosition": "Chỉnh máy để trục gối trùng trục quay và đệm nằm ngay trên gót chân.",
+    "bodyPlacement": "Giữ hông áp vào ghế hoặc đệm, nắm tay cầm và giữ bụng nhẹ.",
+    "instructions": [
+      "Gập gối để kéo đệm về phía mông.",
+      "Dừng ngắn khi cơ đùi sau co lại, không nâng hông.",
+      "Duỗi gối chậm để trả đệm về vị trí ban đầu."
+    ],
+    "breathingGuide": "Thở ra khi gập gối, hít vào khi duỗi chân.",
+    "rangeOfMotion": "Di chuyển trong biên độ thoải mái, không khóa gối.",
+    "commonMistakes": [
+      "Nhấc hông khỏi đệm.",
+      "Giật tạ ở cuối lượt.",
+      "Duỗi chân thả rơi."
+    ],
+    "safetyNotes": [
+      "Chỉnh máy đúng chiều dài chân trước khi tập.",
+      "Dừng nếu đau hoặc co rút bất thường."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/367",
+    "videoSourceName": "Leg Curls (standing)",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/367",
+    "imageSourceName": "Leg Curls (standing)"
+  },
+  {
+    "id": "wide-leg-press",
+    "name": "Đạp đùi rộng chân",
+    "description": "Biến thể đạp đùi với chân rộng hơn vai; giữ gối đi cùng hướng mũi chân.",
+    "category": "Chân",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Đùi trước",
+      "Đùi trong"
+    ],
+    "secondaryMuscles": [
+      "Mông"
+    ],
+    "equipment": "Máy đạp đùi",
+    "imageUrl": "asset://exercise-thumbnails/wide-leg-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/374/5336822a-7803-45b3-a880-f2bbf37a28f2.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/wide-leg-press.jpg",
+    "videoDurationSeconds": 22,
+    "setupPosition": "Ngồi tựa lưng và chỉnh ghế để đầu gối gập thoải mái; đặt chân vững trên bàn đạp.",
+    "bodyPlacement": "Bàn chân rộng bằng vai, mũi chân hơi mở; đầu gối hướng theo mũi chân.",
+    "instructions": [
+      "Mở khóa an toàn và hạ bàn đạp đến khi đùi gần vuông góc với thân.",
+      "Đạp bàn đạp lên bằng cả bàn chân, không khóa cứng đầu gối.",
+      "Hạ xuống chậm, giữ lưng và hông áp vào đệm."
+    ],
+    "breathingGuide": "Hít vào khi hạ bàn đạp, thở ra khi đạp lên.",
+    "rangeOfMotion": "Không hạ sâu đến mức hông cuộn khỏi tựa lưng.",
+    "commonMistakes": [
+      "Khóa cứng đầu gối.",
+      "Để gối đổ vào trong.",
+      "Nhấc hông khỏi ghế ở đáy."
+    ],
+    "safetyNotes": [
+      "Luôn kiểm tra chốt an toàn trước khi tập.",
+      "Dừng nếu đau đầu gối hoặc hông."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 75,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/374",
+    "videoSourceName": "Leg Presses (wide)",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/374",
+    "imageSourceName": "Leg Presses (wide)"
+  },
+  {
+    "id": "machine-shoulder-press",
+    "name": "Đẩy vai với máy",
+    "description": "Máy hỗ trợ đường đẩy ổn định khi tập vai; chỉnh ghế để tay cầm ngang vai.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Vai trước",
+      "Vai giữa"
+    ],
+    "secondaryMuscles": [
+      "Tay sau"
+    ],
+    "equipment": "Máy đẩy vai",
+    "imageUrl": "asset://exercise-thumbnails/machine-shoulder-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/543/dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/machine-shoulder-press.jpg",
+    "videoDurationSeconds": 12,
+    "setupPosition": "Ngồi tựa lưng hoặc đứng vững, siết bụng và giữ cột sống trung tính.",
+    "bodyPlacement": "Đưa tạ ngang vai, cổ tay ở trên khuỷu tay; vai hạ xa tai.",
+    "instructions": [
+      "Đẩy tạ lên trên đầu theo đường tự nhiên.",
+      "Giữ xương sườn không bật lên và không ưỡn lưng.",
+      "Hạ tạ chậm về ngang vai trước lượt tiếp theo."
+    ],
+    "breathingGuide": "Thở ra khi đẩy lên, hít vào khi hạ tạ.",
+    "rangeOfMotion": "Dừng khi tay gần duỗi thẳng; không ép khớp vai vào vị trí đau.",
+    "commonMistakes": [
+      "Ưỡn lưng quá mức.",
+      "Nhún vai lên tai.",
+      "Để tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với tạ nhẹ và tăng tải từ từ.",
+      "Dừng nếu đau vai hoặc cổ."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/543",
+    "videoSourceName": "Shoulder Press, on Machine",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/543",
+    "imageSourceName": "Shoulder Press, on Machine"
+  },
+  {
+    "id": "incline-barbell-press",
+    "name": "Đẩy ngực dốc lên với tạ đòn",
+    "description": "Bài đẩy ngực trên với thanh tạ trên ghế dốc; cần chốt an toàn hoặc người hỗ trợ.",
+    "category": "Ngực",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Ngực trên"
+    ],
+    "secondaryMuscles": [
+      "Vai trước",
+      "Tay sau"
+    ],
+    "equipment": "Tạ đòn, ghế dốc",
+    "imageUrl": "asset://exercise-thumbnails/incline-barbell-press.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/538/4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/incline-barbell-press.jpg",
+    "videoDurationSeconds": 20,
+    "setupPosition": "Chỉnh ghế dốc khoảng 30–45 độ, tựa lưng chắc và đặt chân vững trên sàn.",
+    "bodyPlacement": "Giữ tạ ngang ngực trên, cổ tay thẳng và bả vai ổn định.",
+    "instructions": [
+      "Đẩy tạ lên phía trên ngực đến khi tay gần duỗi thẳng.",
+      "Hạ tạ chậm về hai bên ngực trên, khuỷu tay chếch nhẹ xuống.",
+      "Giữ lưng áp vào ghế và lặp lại trong nhịp đều."
+    ],
+    "breathingGuide": "Thở ra khi đẩy, hít vào khi hạ tạ.",
+    "rangeOfMotion": "Hạ đến mức vai thoải mái; không nảy tạ ở đáy.",
+    "commonMistakes": [
+      "Dựng ghế quá dốc khiến vai làm việc quá nhiều.",
+      "Ưỡn lưng quá mức.",
+      "Để hai tạ va vào nhau."
+    ],
+    "safetyNotes": [
+      "Bắt đầu với tải nhẹ và nhờ hỗ trợ khi nâng tạ nặng.",
+      "Dừng nếu đau vai."
+    ],
+    "recommendedSets": 4,
+    "recommendedReps": "6–10",
+    "recommendedRestSeconds": 90,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/538",
+    "videoSourceName": "Incline Bench Press - Barbell",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/538",
+    "imageSourceName": "Incline Bench Press - Barbell"
+  },
+  {
+    "id": "dumbbell-skullcrusher",
+    "name": "Duỗi tay sau nằm với tạ đơn",
+    "description": "Bài tay sau nằm; giữ cánh tay trên ổn định và chỉ gập duỗi khuỷu.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Tạ đơn, ghế phẳng",
+    "imageUrl": "asset://exercise-thumbnails/dumbbell-skullcrusher.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/245/c253303e-9160-4f1f-b4fe-daf1e6c8661d.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/dumbbell-skullcrusher.jpg",
+    "videoDurationSeconds": 19,
+    "setupPosition": "Đứng trước máy cáp hoặc nằm trên ghế chắc chắn, hai chân đặt vững.",
+    "bodyPlacement": "Giữ khuỷu tay hướng xuống hoặc cố định gần đầu; cổ tay thẳng.",
+    "instructions": [
+      "Duỗi khuỷu tay để đẩy tay cầm hoặc tạ theo cung ổn định.",
+      "Giữ cánh tay trên yên, siết tay sau ở cuối chuyển động.",
+      "Gập khuỷu tay chậm để trở lại vị trí đầu."
+    ],
+    "breathingGuide": "Thở ra khi duỗi tay, hít vào khi gập về.",
+    "rangeOfMotion": "Dừng trước khi khóa cứng khuỷu tay.",
+    "commonMistakes": [
+      "Xòe khuỷu tay quá rộng.",
+      "Đung đưa vai.",
+      "Dùng tải khiến lưng ưỡn."
+    ],
+    "safetyNotes": [
+      "Dùng tải vừa sức và giữ khuỷu tay thoải mái.",
+      "Dừng nếu đau khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/245",
+    "videoSourceName": "Skullcrusher Dumbbells",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/245",
+    "imageSourceName": "Skullcrusher Dumbbells"
+  },
+  {
+    "id": "seated-calf-raise",
+    "name": "Nhón bắp chân khi ngồi",
+    "description": "Bài tập bắp chân khi ngồi, dùng biên độ nâng và hạ gót chân chậm.",
+    "category": "Chân",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Bắp chân"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Máy nhón bắp chân ngồi",
+    "imageUrl": "asset://exercise-thumbnails/seated-calf-raise.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/590/a325ae2e-686b-4a1f-aff2-ba37fa3fa157.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/seated-calf-raise.jpg",
+    "videoDurationSeconds": 21,
+    "setupPosition": "Đặt mũi bàn chân lên bệ chắc chắn, gót chân ở ngoài mép bệ.",
+    "bodyPlacement": "Giữ người thẳng, đầu gối mềm và tay vịn nhẹ để giữ thăng bằng.",
+    "instructions": [
+      "Hạ gót chân xuống có kiểm soát để bắp chân được kéo giãn.",
+      "Đẩy qua mũi chân để nâng gót lên cao.",
+      "Giữ ngắn ở đỉnh rồi hạ gót chậm về điểm đầu."
+    ],
+    "breathingGuide": "Thở ra khi nâng gót, hít vào khi hạ xuống.",
+    "rangeOfMotion": "Dùng biên độ thoải mái, tránh nảy mạnh ở đáy.",
+    "commonMistakes": [
+      "Nhún nảy liên tục.",
+      "Dồn trọng lượng vào mép ngoài bàn chân.",
+      "Khóa cứng đầu gối."
+    ],
+    "safetyNotes": [
+      "Đứng trên bệ chống trượt và vịn điểm tựa.",
+      "Không dùng tải làm mất thăng bằng."
+    ],
+    "recommendedSets": 4,
+    "recommendedReps": "12–20",
+    "recommendedRestSeconds": 45,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/590",
+    "videoSourceName": "Sitting Calf Raises",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/590",
+    "imageSourceName": "Sitting Calf Raises"
+  },
+  {
+    "id": "triceps-kickback",
+    "name": "Đá tạ đơn tập tay sau",
+    "description": "Bài cô lập tay sau trong tư thế gập hông; giữ khuỷu tay cao và ổn định.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay sau"
+    ],
+    "secondaryMuscles": [],
+    "equipment": "Tạ đơn, ghế tựa tùy chọn",
+    "imageUrl": "asset://exercise-thumbnails/triceps-kickback.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/655/69e8c1e5-55b2-4da6-8166-092c24b16735.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/triceps-kickback.jpg",
+    "videoDurationSeconds": 12,
+    "setupPosition": "Đứng trước máy cáp hoặc nằm trên ghế chắc chắn, hai chân đặt vững.",
+    "bodyPlacement": "Giữ khuỷu tay hướng xuống hoặc cố định gần đầu; cổ tay thẳng.",
+    "instructions": [
+      "Duỗi khuỷu tay để đẩy tay cầm hoặc tạ theo cung ổn định.",
+      "Giữ cánh tay trên yên, siết tay sau ở cuối chuyển động.",
+      "Gập khuỷu tay chậm để trở lại vị trí đầu."
+    ],
+    "breathingGuide": "Thở ra khi duỗi tay, hít vào khi gập về.",
+    "rangeOfMotion": "Dừng trước khi khóa cứng khuỷu tay.",
+    "commonMistakes": [
+      "Xòe khuỷu tay quá rộng.",
+      "Đung đưa vai.",
+      "Dùng tải khiến lưng ưỡn."
+    ],
+    "safetyNotes": [
+      "Dùng tải vừa sức và giữ khuỷu tay thoải mái.",
+      "Dừng nếu đau khuỷu tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/655",
+    "videoSourceName": "Tricep Dumbbell Kickback",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/655",
+    "imageSourceName": "Tricep Dumbbell Kickback"
+  },
+  {
+    "id": "cable-hammer-curl",
+    "name": "Cuốn tay búa với dây cáp",
+    "description": "Biến thể cuốn tay búa với dây cáp tạo lực căng đều suốt chuyển động.",
+    "category": "Tay",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Tay trước",
+      "Cẳng tay"
+    ],
+    "secondaryMuscles": [
+      "Cơ cánh tay"
+    ],
+    "equipment": "Máy kéo cáp, dây thừng",
+    "imageUrl": "asset://exercise-thumbnails/cable-hammer-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/275/af1fff93-eb58-4ba7-97a4-b38ee67853b4.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/cable-hammer-curl.jpg",
+    "videoDurationSeconds": 12,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/275",
+    "videoSourceName": "Hammercurls on Cable",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/275",
+    "imageSourceName": "Hammercurls on Cable"
+  },
+  {
+    "id": "barbell-shrug",
+    "name": "Nhún vai với tạ đòn",
+    "description": "Bài tập cầu vai bằng cách nâng vai thẳng lên, không xoay khớp vai.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ cầu vai"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Tạ đòn",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng chắc, hai tay cầm tạ hoặc nắm thanh trước đùi.",
+    "bodyPlacement": "Giữ tay duỗi tự nhiên, ngực mở và cổ thẳng.",
+    "instructions": [
+      "Nâng vai thẳng lên phía tai bằng cơ cầu vai.",
+      "Giữ ngắn ở vị trí cao mà không xoay vai.",
+      "Hạ vai từ từ về tư thế thư giãn."
+    ],
+    "breathingGuide": "Thở ra khi nâng vai, hít vào khi hạ.",
+    "rangeOfMotion": "Nâng vai theo phương thẳng đứng; không cuộn vai thành vòng tròn.",
+    "commonMistakes": [
+      "Xoay vai khi đang cầm tải.",
+      "Giật người để nâng.",
+      "Rụt cổ hoặc cúi đầu."
+    ],
+    "safetyNotes": [
+      "Dùng tải cho phép giữ cổ và lưng ổn định.",
+      "Dừng nếu đau cổ hoặc vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "machine-shrug",
+    "name": "Nhún vai với máy",
+    "description": "Máy giúp cố định đường tải khi tập cơ cầu vai.",
+    "category": "Vai",
+    "difficulty": "Cơ bản",
+    "targetMuscles": [
+      "Cơ cầu vai"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Máy nhún vai",
+    "imageUrl": "",
+    "videoUrl": "",
+    "videoType": "",
+    "videoThumbnailUrl": "",
+    "videoDurationSeconds": 0,
+    "setupPosition": "Đứng chắc, hai tay cầm tạ hoặc nắm thanh trước đùi.",
+    "bodyPlacement": "Giữ tay duỗi tự nhiên, ngực mở và cổ thẳng.",
+    "instructions": [
+      "Nâng vai thẳng lên phía tai bằng cơ cầu vai.",
+      "Giữ ngắn ở vị trí cao mà không xoay vai.",
+      "Hạ vai từ từ về tư thế thư giãn."
+    ],
+    "breathingGuide": "Thở ra khi nâng vai, hít vào khi hạ.",
+    "rangeOfMotion": "Nâng vai theo phương thẳng đứng; không cuộn vai thành vòng tròn.",
+    "commonMistakes": [
+      "Xoay vai khi đang cầm tải.",
+      "Giật người để nâng.",
+      "Rụt cổ hoặc cúi đầu."
+    ],
+    "safetyNotes": [
+      "Dùng tải cho phép giữ cổ và lưng ổn định.",
+      "Dừng nếu đau cổ hoặc vai."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–15",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true
+  },
+  {
+    "id": "single-arm-preacher-curl",
+    "name": "Cuốn tay trước một bên trên ghế Scott",
+    "description": "Tập từng tay trên ghế Scott để kiểm soát biên độ và cân bằng hai bên.",
+    "category": "Tay",
+    "difficulty": "Trung bình",
+    "targetMuscles": [
+      "Tay trước"
+    ],
+    "secondaryMuscles": [
+      "Cẳng tay"
+    ],
+    "equipment": "Ghế Scott, tạ đơn",
+    "imageUrl": "asset://exercise-thumbnails/single-arm-preacher-curl.jpg",
+    "videoUrl": "https://wger.de/media/exercise-video/584/109e8d5d-62a4-40ad-8813-2ccef5bc751f.MOV",
+    "videoType": "mp4",
+    "videoThumbnailUrl": "asset://exercise-thumbnails/single-arm-preacher-curl.jpg",
+    "videoDurationSeconds": 13,
+    "setupPosition": "Đứng thẳng hoặc ngồi chắc, hai tay cầm tạ và khuỷu tay sát thân.",
+    "bodyPlacement": "Cổ tay thẳng, vai thả lỏng; không đưa khuỷu tay ra trước.",
+    "instructions": [
+      "Gập khuỷu tay để cuốn tạ về phía vai.",
+      "Siết bắp tay ngắn ở trên mà không nhún vai.",
+      "Hạ tạ chậm đến khi tay gần duỗi thẳng."
+    ],
+    "breathingGuide": "Thở ra khi cuốn tạ, hít vào khi hạ.",
+    "rangeOfMotion": "Giữ khuỷu tay ổn định và chỉ di chuyển cẳng tay.",
+    "commonMistakes": [
+      "Đung đưa thân lấy đà.",
+      "Gập cổ tay.",
+      "Thả tạ rơi nhanh."
+    ],
+    "safetyNotes": [
+      "Chọn tải cho phép hạ tạ có kiểm soát.",
+      "Dừng nếu đau khuỷu tay hoặc cổ tay."
+    ],
+    "recommendedSets": 3,
+    "recommendedReps": "10–12 mỗi bên",
+    "recommendedRestSeconds": 60,
+    "isActive": true,
+    "isSampleData": true,
+    "videoAttribution": "Goulart",
+    "videoLicense": "CC BY-SA 4.0",
+    "videoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "videoSourceUrl": "https://wger.de/en/exercise/view/584",
+    "videoSourceName": "Single-arm Preacher Curl",
+    "imageAttribution": "Goulart",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "imageSourceUrl": "https://wger.de/en/exercise/view/584",
+    "imageSourceName": "Single-arm Preacher Curl"
+  }
+]

@@ -1,6 +1,5 @@
 'use strict';
-// Thư viện bài tập mẫu (nội dung hướng dẫn bằng chữ do dự án biên soạn, mang tính tham khảo).
-// Không gắn video/ảnh: videoUrl và imageUrl để rỗng trừ khi bạn cung cấp seed/media.json với URL đã kiểm tra.
+// Danh mục bài tập mẫu và hướng dẫn chữ do dự án biên soạn; video/ảnh có nguồn được gộp từ exercise-media.json.
 // Trường: [id, name, category, difficulty, target, secondary, equipment, sets, reps, rest, description,
 //          setup, placement, instructions[], breathing, range, mistakes[], safety[]]
 
@@ -327,7 +326,7 @@ const rows = [
     ['Uống đủ nước.', 'Dừng nếu chóng mặt.']],
 ];
 
-module.exports = rows.map((r) => {
+const baseExercises = rows.map((r) => {
   const [id, name, category, difficulty, target, secondary, equipment, sets, reps, rest, description,
     setupPosition, bodyPlacement, instructions, breathingGuide, rangeOfMotion, commonMistakes, safetyNotes] = r;
   return {
@@ -342,3 +341,12 @@ module.exports = rows.map((r) => {
     },
   };
 });
+
+const exercises = baseExercises.concat(require('./exercise-library.js'));
+const exerciseMedia = require('./exercise-media.json');
+for (const exercise of exercises) {
+  const media = exerciseMedia[exercise.id];
+  if (media) Object.assign(exercise.data, media);
+}
+
+module.exports = exercises;

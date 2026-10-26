@@ -1,5 +1,7 @@
 package com.example.gymmanagement.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -34,9 +36,9 @@ public class ExerciseViewModel extends BaseViewModel {
         return null;
     }
 
-    public void load() {
+    public void load(Context context) {
         list.setValue(Resource.<List<Exercise>>loading());
-        Repos.exercises().listActive(new Callback<List<Exercise>>() {
+        Repos.exercises().listActive(context, new Callback<List<Exercise>>() {
             @Override
             public void onSuccess(List<Exercise> data) {
                 all = data;

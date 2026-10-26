@@ -1,5 +1,6 @@
 package com.example.gymmanagement.util;
 
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -10,6 +11,12 @@ public final class ImageLoader {
     }
 
     public static void load(ImageView view, String url, int placeholderRes) {
+        if (url != null && url.startsWith("asset://")) {
+            String assetPath = url.substring("asset://".length());
+            Glide.with(view).load(Uri.parse("file:///android_asset/" + assetPath))
+                    .placeholder(placeholderRes).error(placeholderRes).centerCrop().into(view);
+            return;
+        }
         if (url == null || !url.startsWith("https://")) {
             Glide.with(view).clear(view);
             view.setImageResource(placeholderRes);

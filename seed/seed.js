@@ -5,7 +5,7 @@
  *
  *  - Idempotent: chạy lại nhiều lần không tạo trùng (ID cố định; dữ liệu giao dịch chỉ tạo nếu chưa có).
  *  - Mọi bản ghi mẫu có isSampleData = true (trừ tài khoản Auth/người dùng, nhận biết bằng email seed.*@example.com).
- *  - KHÔNG tạo video/ảnh giả: videoUrl/imageUrl để rỗng trừ khi bạn cung cấp seed/media.json (URL https đã tự kiểm tra).
+ *  - Media được gộp sẵn trong data/exercises.js; seed/media.json tùy chọn để ghi đè URL video/ảnh cho Firestore.
  *  - Mật khẩu tài khoản mẫu lấy từ biến môi trường SEED_PASSWORD (không có giá trị mặc định, không lưu trong repo).
  *
  * Cách dùng:  node seed.js [--dry-run] [--delete-samples]

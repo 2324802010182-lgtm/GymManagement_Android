@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
 import com.example.gymmanagement.R;
+import com.example.gymmanagement.util.ImageLoader;
 
 /**
  * Trình phát video hướng dẫn (AndroidX Media3 ExoPlayer): Play/Pause, tua, thời lượng, fullscreen,
@@ -31,6 +33,8 @@ public class VideoPlayerView extends FrameLayout {
     private ProgressBar loading;
     private View errorBox;
     private TextView errorText;
+    private ImageView poster;
+    private View playButton;
     private ExoPlayer player;
     private String url = "";
     private String type = "";
@@ -54,7 +58,11 @@ public class VideoPlayerView extends FrameLayout {
         loading = findViewById(R.id.video_loading);
         errorBox = findViewById(R.id.video_error);
         errorText = findViewById(R.id.video_error_text);
+        poster = findViewById(R.id.video_poster);
+        playButton = findViewById(R.id.video_play);
         findViewById(R.id.video_retry).setOnClickListener(v -> retry());
+        poster.setOnClickListener(v -> playVideo());
+        playButton.setOnClickListener(v -> playVideo());
         playerView.setFullscreenButtonClickListener(isFullScreen -> toggleFullscreen());
     }
 
@@ -64,14 +72,26 @@ public class VideoPlayerView extends FrameLayout {
         super.onMeasure(widthSpec, MeasureSpec.makeMeasureSpec(w * 9 / 16, MeasureSpec.EXACTLY));
     }
 
-    public void setSource(String videoUrl, String videoType) {
+    public void setSource(String videoUrl, String videoType, String posterUrl) {
         url = videoUrl == null ? "" : videoUrl;
         type = videoType == null ? "" : videoType;
         resumePosition = 0;
+        boolean hasPoster = posterUrl != null
+                && (posterUrl.startsWith("https://") || posterUrl.startsWith("asset://"));
+        poster.setVisibility(hasPoster ? VISIBLE : GONE);
+        playButton.setVisibility(hasPoster ? VISIBLE : GONE);
+        if (hasPoster) ImageLoader.load(poster, posterUrl, R.drawable.bg_gym_placeholder);
         if (started) {
             release();
             create();
         }
+    }
+
+    private void playVideo() {
+        if (player == null && started) create();
+        poster.setVisibility(GONE);
+        playButton.setVisibility(GONE);
+        if (player != null) player.play();
     }
 
     /** Gọi trong onStart của Fragment/Activity. */
@@ -94,6 +114,8 @@ public class VideoPlayerView extends FrameLayout {
         MediaItem.Builder b = new MediaItem.Builder().setUri(url);
         if ("hls".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_M3U8);
         else if ("dash".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_MPD);
+        else if ("mp4".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_MP4);
+        else if ("webm".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_WEBM);
         player.setMediaItem(b.build());
         player.setPlayWhenReady(false); // không tự phát âm thanh
         player.seekTo(resumePosition);

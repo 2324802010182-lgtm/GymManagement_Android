@@ -32,6 +32,16 @@ public class ExerciseAdapter extends SimpleAdapter<Exercise, ItemExerciseBinding
             boolean video = e.hasVideo();
             b.exiVideoIcon.setVisibility(video ? View.VISIBLE : View.GONE);
             b.exiVideo.setText(video ? c.getString(R.string.ex_has_video) : "");
+            StringBuilder credit = new StringBuilder();
+            if (!e.imageAttribution.isEmpty() && !e.imageLicense.isEmpty()) {
+                credit.append(c.getString(R.string.ex_image_credit, e.imageAttribution, e.imageLicense));
+            }
+            if (!e.videoAttribution.isEmpty() && !e.videoLicense.isEmpty()) {
+                if (credit.length() > 0) credit.append('\n');
+                credit.append(c.getString(R.string.ex_video_credit, e.videoAttribution, e.videoLicense));
+            }
+            b.exiMediaCredit.setText(credit);
+            b.exiMediaCredit.setVisibility(credit.length() > 0 ? View.VISIBLE : View.GONE);
             Motion.press(b.getRoot());
             b.getRoot().setOnClickListener(v -> onClick.accept(e));
         });

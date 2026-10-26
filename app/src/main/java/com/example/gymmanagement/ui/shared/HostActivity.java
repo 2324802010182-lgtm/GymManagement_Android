@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.gymmanagement.R;
 import com.example.gymmanagement.databinding.ActivityHostBinding;
 import com.example.gymmanagement.ui.member.ExerciseDetailFragment;
+import com.example.gymmanagement.ui.member.ExerciseListFragment;
 import com.example.gymmanagement.ui.member.GymDetailFragment;
 import com.example.gymmanagement.ui.member.MeasurementsFragment;
 import com.example.gymmanagement.ui.member.MyGymsFragment;
@@ -26,6 +27,7 @@ import com.example.gymmanagement.util.UiUtil;
 public class HostActivity extends BaseActivity {
     public static final String GYM_DETAIL = "gym_detail";
     public static final String EXERCISE_DETAIL = "exercise_detail";
+    public static final String EXERCISE_LIBRARY = "exercise_library";
     public static final String NOTIFICATIONS = "notifications";
     public static final String MEASUREMENTS = "measurements";
     public static final String MY_GYMS = "my_gyms";
@@ -91,6 +93,9 @@ public class HostActivity extends BaseActivity {
                 break;
             case EXERCISE_DETAIL:
                 f = new ExerciseDetailFragment();
+                break;
+            case EXERCISE_LIBRARY:
+                f = new ExerciseListFragment();
                 break;
             case NOTIFICATIONS:
                 f = new NotificationsFragment();

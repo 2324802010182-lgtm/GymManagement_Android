@@ -13,6 +13,25 @@
         app:show_buffering="when_playing"
         app:use_controller="true" />
 
+    <ImageView
+        android:id="@+id/video_poster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/ex_image_desc"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/video_play"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle_primary"
+        android:contentDescription="@string/video_play"
+        android:padding="16dp"
+        android:src="@drawable/ic_play"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/video_loading"
         style="?android:attr/progressBarStyleLarge"

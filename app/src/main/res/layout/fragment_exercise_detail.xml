@@ -10,6 +10,21 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/exd_video_title"
+            style="@style/Text.Section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/ex_video_title"
+            android:visibility="gone" />
+
+        <com.example.gymmanagement.ui.components.VideoPlayerView
+            android:id="@+id/exd_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/exd_image"
             android:layout_width="match_parent"
@@ -18,6 +33,42 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_gym_placeholder"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Gym.Large" />
+
+        <LinearLayout
+            android:id="@+id/exd_no_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center"
+            android:minHeight="72dp"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_videocam"
+                app:tint="@color/text_hint" />
+
+            <TextView
+                style="@style/Text.Secondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="@string/ex_no_video" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/exd_media_credit"
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/exd_name"
@@ -140,46 +191,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp" />
-
-        <TextView
-            style="@style/Text.Section"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/ex_video_title" />
-
-        <com.example.gymmanagement.ui.components.VideoPlayerView
-            android:id="@+id/exd_video"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
-
-        <LinearLayout
-            android:id="@+id/exd_no_video"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_card"
-            android:gravity="center"
-            android:minHeight="120dp"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_videocam"
-                app:tint="@color/text_hint" />
-
-            <TextView
-                style="@style/Text.Secondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/ex_no_video" />
-        </LinearLayout>
 
         <TextView
             style="@style/Text.Section"
