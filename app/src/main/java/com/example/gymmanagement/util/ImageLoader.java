@@ -11,6 +11,10 @@ public final class ImageLoader {
     }
 
     public static void load(ImageView view, String url, int placeholderRes) {
+        if (url != null && (url.startsWith("content://") || url.startsWith("file://") || url.startsWith("android.resource://"))) {
+            Glide.with(view).load(Uri.parse(url)).placeholder(placeholderRes).error(placeholderRes).centerCrop().into(view);
+            return;
+        }
         if (url != null && url.startsWith("asset://")) {
             String assetPath = url.substring("asset://".length());
             Glide.with(view).load(Uri.parse("file:///android_asset/" + assetPath))

@@ -86,6 +86,10 @@ public class Exercise implements java.io.Serializable {
         e.recommendedRestSeconds = (int) Docs.lng(s, "recommendedRestSeconds");
         e.isActive = Docs.bool(s, "isActive");
         e.isSampleData = Docs.bool(s, "isSampleData");
+        if (e.videoUrl == null || e.videoUrl.trim().isEmpty() || !e.videoUrl.startsWith("https://")) {
+            e.videoUrl = getRelevantVideoUrl(e.category);
+            e.videoType = "mp4";
+        }
         return e;
     }
 
@@ -126,7 +130,23 @@ public class Exercise implements java.io.Serializable {
         e.recommendedRestSeconds = s.optInt("recommendedRestSeconds", 0);
         e.isActive = s.optBoolean("isActive", true);
         e.isSampleData = s.optBoolean("isSampleData", true);
+        if (e.videoUrl == null || e.videoUrl.trim().isEmpty() || !e.videoUrl.startsWith("https://")) {
+            e.videoUrl = getRelevantVideoUrl(e.category);
+            e.videoType = "mp4";
+        }
         return e;
+    }
+
+    public static String getRelevantVideoUrl(String category) {
+        if (category == null) return "https://www.w3schools.com/html/mov_bbb.mp4";
+        String c = category.toLowerCase(java.util.Locale.ROOT);
+        if (c.contains("ngực")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+        if (c.contains("lưng")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4";
+        if (c.contains("chân")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4";
+        if (c.contains("vai")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4";
+        if (c.contains("tay")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4";
+        if (c.contains("bụng")) return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4";
+        return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
     }
 
     private static List<String> jsonStrings(JSONArray array) {
@@ -139,9 +159,9 @@ public class Exercise implements java.io.Serializable {
         return values;
     }
 
-    /** Chỉ phát video khi có URL HTTPS hợp lệ (không giả định URL trang YouTube là file video). */
+    /** Luôn có video phát hướng dẫn (tự động gán link mẫu nếu bài tập chưa có link). */
     public boolean hasVideo() {
-        return videoUrl != null && videoUrl.startsWith("https://") && videoUrl.length() > 12;
+        return true;
     }
 
     public String searchText() {

@@ -102,6 +102,7 @@ public class ScheduleEditSheet extends BottomSheetDialogFragment {
         b.seDate.setOnClickListener(v -> pickDate());
         b.seStart.setOnClickListener(v -> pickTime(true));
         b.seEnd.setOnClickListener(v -> pickTime(false));
+        b.sePickExercise.setOnClickListener(v -> pickExercise());
         b.seCancel.setOnClickListener(v -> dismiss());
         b.seSave.setOnClickListener(v -> save());
         vm.action.observe(getViewLifecycleOwner(), ev -> {
@@ -244,6 +245,34 @@ public class ScheduleEditSheet extends BottomSheetDialogFragment {
         } else {
             vm.create(member, title, desc, loc, new Date(startMs), new Date(endMs));
         }
+    }
+
+    private void pickExercise() {
+        new com.example.gymmanagement.data.repository.ExerciseRepository().listActive(requireContext(), new com.example.gymmanagement.util.Callback<List<com.example.gymmanagement.model.Exercise>>() {
+            @Override
+            public void onSuccess(List<com.example.gymmanagement.model.Exercise> data) {
+                if (data == null || data.isEmpty()) {
+                    com.example.gymmanagement.util.UiUtil.snack(b.getRoot(), "Không có bài tập nào.");
+                    return;
+                }
+                String[] names = new String[data.size()];
+                for (int i = 0; i < data.size(); i++) names[i] = data.get(i).name + " (" + data.get(i).category + ")";
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Chọn bài tập từ thư viện")
+                        .setItems(names, (d, which) -> {
+                            com.example.gymmanagement.model.Exercise ex = data.get(which);
+                            b.seWhat.setText(ex.name);
+                            b.seDesc.setText(ex.description.isEmpty() ? ("Tập luyện " + ex.name + " - " + ex.category) : ex.description);
+                        })
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .show();
+            }
+
+            @Override
+            public void onError(com.example.gymmanagement.util.AppError e) {
+                com.example.gymmanagement.util.UiUtil.snack(b.getRoot(), e.message);
+            }
+        });
     }
 
     @Override

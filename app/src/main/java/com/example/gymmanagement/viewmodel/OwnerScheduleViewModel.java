@@ -16,6 +16,8 @@ import java.util.List;
 public class OwnerScheduleViewModel extends BaseViewModel {
     private final MutableLiveData<Resource<List<Schedule>>> list = new MutableLiveData<>();
     private final MutableLiveData<Resource<List<MemberSummary>>> members = new MutableLiveData<>();
+    private List<Schedule> all = new java.util.ArrayList<>();
+    private String query = "";
 
     public LiveData<Resource<List<Schedule>>> list() {
         return list;
@@ -32,8 +34,34 @@ public class OwnerScheduleViewModel extends BaseViewModel {
             return;
         }
         list.setValue(Resource.<List<Schedule>>loading());
-        Repos.schedules().listForGym(gid, intoList(list));
+        Repos.schedules().listForGym(gid, new com.example.gymmanagement.util.Callback<List<Schedule>>() {
+            @Override
+            public void onSuccess(List<Schedule> data) {
+                all = data;
+                publish();
+            }
+
+            @Override
+            public void onError(com.example.gymmanagement.util.AppError e) {
+                list.setValue(Resource.error(e));
+            }
+        });
         Repos.memberships().listMembers(gid, intoList(members));
+    }
+
+    public void search(String q) {
+        query = q == null ? "" : q.trim().toLowerCase(java.util.Locale.ROOT);
+        publish();
+    }
+
+    private void publish() {
+        List<Schedule> out = new java.util.ArrayList<>();
+        for (Schedule s : all) {
+            String hay = (s.title + " " + s.memberName + " " + s.location).toLowerCase(java.util.Locale.ROOT);
+            if (!query.isEmpty() && !hay.contains(query)) continue;
+            out.add(s);
+        }
+        list.setValue(Resource.ofList(out));
     }
 
     public void create(MemberSummary m, String title, String desc, String loc, Date start, Date end) {

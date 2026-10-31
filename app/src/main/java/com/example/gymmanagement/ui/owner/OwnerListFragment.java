@@ -147,11 +147,14 @@ public abstract class OwnerListFragment<T> extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (b != null && Session.gymId() != null && b.lsCta.getVisibility() == View.VISIBLE) {
-            // Vừa tạo thương hiệu xong → nạp dữ liệu
-            b.lsCta.setVisibility(View.GONE);
-            b.lsFab.setVisibility(hasFab() ? View.VISIBLE : View.GONE);
-            reload();
+        if (b != null) {
+            if (hasAccess()) {
+                b.lsCta.setVisibility(View.GONE);
+                b.lsFab.setVisibility(hasFab() ? View.VISIBLE : View.GONE);
+                reload();
+            } else {
+                showNoBrandIfNeeded();
+            }
         }
     }
 

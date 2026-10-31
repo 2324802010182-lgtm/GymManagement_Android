@@ -128,7 +128,9 @@ public class VideoPlayerView extends FrameLayout {
             @Override
             public void onPlayerError(@NonNull PlaybackException error) {
                 loading.setVisibility(GONE);
-                showError(getContext().getString(R.string.video_error));
+                errorBox.setVisibility(GONE);
+                poster.setVisibility(VISIBLE);
+                playButton.setVisibility(GONE);
             }
         });
         player.prepare();

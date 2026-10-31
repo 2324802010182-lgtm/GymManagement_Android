@@ -47,49 +47,78 @@ public class MembershipRepository {
         if (!Repo.limit(cb, note, 300, "Lời nhắn")) return;
         FirebaseFirestore db = Fb.db();
         DocumentReference gref = gymRef(gym.id);
-        DocumentReference marker = gref.collection("pendingRequests").document(member.uid);
-        marker.get().addOnSuccessListener(md -> {
-            if (md.exists()) {
-                cb.onError(new AppError(AppError.Kind.CONFLICT,
-                        "Bạn đã có một yêu cầu đang chờ duyệt tại Gym này. Hãy chờ Chủ Gym xử lý hoặc hủy yêu cầu cũ."));
-                return;
-            }
-            DocumentReference rref = gref.collection("membershipRequests").document();
-            Map<String, Object> r = new HashMap<>();
-            r.put("gymId", gym.id);
-            r.put("gymName", gym.name);
-            r.put("memberUid", member.uid);
-            r.put("memberName", member.fullName);
-            r.put("memberEmail", member.email);
-            r.put("memberPhone", member.phone);
-            r.put("packageId", pkg.id);
-            r.put("packageName", pkg.name);
-            r.put("packagePrice", pkg.price);
-            r.put("packageDurationDays", (long) pkg.durationDays);
-            r.put("note", note == null ? "" : note.trim());
-            r.put("status", MembershipRequest.PENDING);
-            r.put("createdAt", FieldValue.serverTimestamp());
-            r.put("updatedAt", FieldValue.serverTimestamp());
+        gref.collection("memberships").whereEqualTo("memberUid", member.uid)
+                .whereEqualTo("packageId", pkg.id)
+                .get()
+                .addOnSuccessListener(msQs -> {
+                    boolean hasActive = false;
+                    for (com.google.firebase.firestore.DocumentSnapshot doc : msQs.getDocuments()) {
+                        Membership m = Membership.from(doc);
+                        if (m.isValidNow()) {
+                            hasActive = true;
+                            break;
+                        }
+                    }
+                    if (hasActive) {
+                        cb.onError(new AppError(AppError.Kind.CONFLICT, "Bạn đang sử dụng gói này trong thời hạn hiệu lực."));
+                        return;
+                    }
+                    DocumentReference marker = gref.collection("pendingRequests").document(member.uid);
+                    marker.get().addOnSuccessListener(md -> {
+                        if (md.exists()) {
+                            cb.onError(new AppError(AppError.Kind.CONFLICT,
+                                    "Bạn đã có một yêu cầu đang chờ duyệt tại Gym này. Hãy chờ Chủ Gym xử lý hoặc hủy yêu cầu cũ."));
+                            return;
+                        }
+                        DocumentReference rref = gref.collection("membershipRequests").document();
+                        Map<String, Object> r = new HashMap<>();
+                        r.put("gymId", gym.id);
+                        r.put("gymName", gym.name);
+                        r.put("memberUid", member.uid);
+                        r.put("memberName", member.fullName);
+                        r.put("memberEmail", member.email);
+                        r.put("memberPhone", member.phone);
+                        r.put("packageId", pkg.id);
+                        r.put("packageName", pkg.name);
+                        r.put("packagePrice", pkg.price);
+                        r.put("packageDurationDays", (long) pkg.durationDays);
+                        r.put("note", note == null ? "" : note.trim());
+                        r.put("status", MembershipRequest.PENDING);
+                        r.put("createdAt", FieldValue.serverTimestamp());
+                        r.put("updatedAt", FieldValue.serverTimestamp());
 
-            Map<String, Object> mk = new HashMap<>();
-            mk.put("requestId", rref.getId());
-            mk.put("memberUid", member.uid);
-            mk.put("createdAt", FieldValue.serverTimestamp());
+                        Map<String, Object> mk = new HashMap<>();
+                        mk.put("requestId", rref.getId());
+                        mk.put("memberUid", member.uid);
+                        mk.put("createdAt", FieldValue.serverTimestamp());
 
-            DocumentReference nref = db.collection("users").document(gym.ownerUid)
-                    .collection("notifications").document();
-            WriteBatch b = db.batch();
-            b.set(rref, r);
-            b.set(marker, mk);
-            b.set(nref, Repo.notification(gym.ownerUid, gym.id, gym.name, "Yêu cầu đăng ký gói mới",
-                    member.fullName + " muốn đăng ký gói \"" + pkg.name + "\" (" + Fmt.money(pkg.price) + ").",
-                    "membership_request", rref.getId(), member.uid));
-            b.commit()
-                    .addOnSuccessListener(v -> rref.get()
-                            .addOnSuccessListener(d -> cb.onSuccess(MembershipRequest.from(d)))
-                            .addOnFailureListener(e -> cb.onError(ErrorMapper.from(e))))
-                    .addOnFailureListener(e -> cb.onError(ErrorMapper.from(e)));
-        }).addOnFailureListener(e -> cb.onError(ErrorMapper.from(e)));
+                        DocumentReference nref = db.collection("users").document(gym.ownerUid)
+                                .collection("notifications").document();
+                        DocumentReference memberRef = gref.collection("members").document(member.uid);
+                        Map<String, Object> mc = new HashMap<>();
+                        mc.put("memberUid", member.uid);
+                        mc.put("gymId", gym.id);
+                        mc.put("fullName", member.fullName);
+                        mc.put("email", member.email);
+                        mc.put("phone", member.phone);
+                        mc.put("latestPackageName", pkg.name);
+                        mc.put("joinedAt", FieldValue.serverTimestamp());
+                        mc.put("updatedAt", FieldValue.serverTimestamp());
+
+                        WriteBatch b = db.batch();
+                        b.set(rref, r);
+                        b.set(marker, mk);
+                        b.set(memberRef, mc, com.google.firebase.firestore.SetOptions.merge());
+                        b.set(nref, Repo.notification(gym.ownerUid, gym.id, gym.name, "Yêu cầu đăng ký gói mới",
+                                member.fullName + " muốn đăng ký gói \"" + pkg.name + "\" (" + Fmt.money(pkg.price) + ").",
+                                "membership_request", rref.getId(), member.uid));
+                        b.commit()
+                                .addOnSuccessListener(v -> rref.get()
+                                        .addOnSuccessListener(d -> cb.onSuccess(MembershipRequest.from(d)))
+                                        .addOnFailureListener(e -> cb.onError(ErrorMapper.from(e))))
+                                .addOnFailureListener(e -> cb.onError(ErrorMapper.from(e)));
+                    }).addOnFailureListener(e -> cb.onError(ErrorMapper.from(e)));
+                }).addOnFailureListener(e -> cb.onError(ErrorMapper.from(e)));
     }
 
     public void listMyRequests(Callback<List<MembershipRequest>> cb) {

@@ -73,6 +73,15 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/se_pick_exercise"
+            style="@style/Widget.Gym.Button.Small.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Chọn bài tập từ thư viện"
+            app:icon="@drawable/ic_fitness" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/se_date"
             style="@style/Widget.Gym.Button.Small.Outlined"
             android:layout_width="match_parent"

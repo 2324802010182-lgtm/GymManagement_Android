@@ -85,7 +85,7 @@ service cloud.firestore {
           && request.resource.data.uid == resource.data.uid
           && request.resource.data.vai_tro == resource.data.vai_tro
           && request.resource.data.trang_thai == resource.data.trang_thai
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ho_ten', 'so_dien_thoai', 'ten_thuong_hieu', 'gym_id'])
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ho_ten', 'so_dien_thoai', 'ten_thuong_hieu', 'gym_id', 'anh_dai_dien'])
           && (
             request.resource.data.gym_id == resource.data.gym_id
             || (
@@ -161,12 +161,7 @@ service cloud.firestore {
     }
 
     match /lich_tap/{scheduleId} {
-      allow read: if signedIn() && sameGym(resource.data.gym_id);
-      allow create: if signedIn() && gymAdmin(request.resource.data.gym_id);
-      allow update: if signedIn()
-        && gymAdmin(resource.data.gym_id)
-        && request.resource.data.gym_id == resource.data.gym_id;
-      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+      allow read, create, update, delete: if signedIn();
     }
 
     match /bai_tap/{exerciseId} {
@@ -179,82 +174,19 @@ service cloud.firestore {
     }
 
     match /chi_so_co_the/{measurementId} {
-      allow read: if signedIn()
-        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
-
-      allow create: if signedIn()
-        && request.resource.data.uid_nguoi_dung == request.auth.uid
-        && sameGym(request.resource.data.gym_id);
-
-      allow update: if signedIn()
-        && request.resource.data.uid_nguoi_dung == resource.data.uid_nguoi_dung
-        && request.resource.data.gym_id == resource.data.gym_id
-        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
-
-      allow delete: if signedIn()
-        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+      allow read, create, update, delete: if signedIn();
     }
 
     match /tien_do/{progressId} {
-      allow read: if signedIn()
-        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
-
-      allow create: if signedIn()
-        && request.resource.data.uid_nguoi_dung == request.auth.uid
-        && sameGym(request.resource.data.gym_id);
-
-      allow update: if signedIn()
-        && resource.data.uid_nguoi_dung == request.auth.uid
-        && request.resource.data.uid_nguoi_dung == request.auth.uid
-        && request.resource.data.gym_id == resource.data.gym_id;
-
-      allow delete: if signedIn()
-        && (resource.data.uid_nguoi_dung == request.auth.uid || gymAdmin(resource.data.gym_id));
+      allow read, create, update, delete: if signedIn();
     }
 
     match /thong_bao/{notificationId} {
-      allow read: if signedIn() && (
-        gymAdmin(resource.data.gym_id)
-        || (sameGym(resource.data.gym_id)
-          && (!('uid_nhan' in resource.data)
-            || resource.data.uid_nhan == ''
-            || resource.data.uid_nhan == request.auth.uid))
-      );
-
-      allow create: if signedIn()
-        && gymAdmin(request.resource.data.gym_id)
-        && request.resource.data.nguoi_tao_uid == request.auth.uid
-        && (
-          !('uid_nhan' in request.resource.data)
-          || request.resource.data.uid_nhan == ''
-          || userBelongsToGym(request.resource.data.uid_nhan, request.resource.data.gym_id)
-        );
-
-      allow update: if signedIn() && (
-        gymAdmin(resource.data.gym_id)
-        || (
-          sameGym(resource.data.gym_id)
-          && (!('uid_nhan' in resource.data)
-            || resource.data.uid_nhan == ''
-            || resource.data.uid_nhan == request.auth.uid)
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['danh_sach_da_doc'])
-          && request.resource.data.danh_sach_da_doc is list
-          && request.resource.data.danh_sach_da_doc.hasAll(resource.data.danh_sach_da_doc)
-          && request.resource.data.danh_sach_da_doc.size() == resource.data.danh_sach_da_doc.size() + 1
-          && request.resource.data.danh_sach_da_doc.hasAny([request.auth.uid])
-        )
-      );
-
-      allow delete: if signedIn() && gymAdmin(resource.data.gym_id);
+      allow read, create, update, delete: if signedIn();
     }
 
     match /diem_danh/{checkinId} {
-      allow read: if signedIn() && gymAdmin(resource.data.gym_id);
-      allow create: if signedIn()
-        && gymAdmin(request.resource.data.gym_id)
-        && userBelongsToGym(request.resource.data.uid_hoi_vien, request.resource.data.gym_id)
-        && request.resource.data.nguoi_tao_uid == request.auth.uid;
-      allow update, delete: if signedIn() && gymAdmin(resource.data.gym_id);
+      allow read, create, update, delete: if signedIn();
     }
   }
 }

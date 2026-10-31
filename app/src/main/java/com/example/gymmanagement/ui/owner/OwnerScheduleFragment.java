@@ -80,6 +80,13 @@ public class OwnerScheduleFragment extends OwnerListFragment<Schedule> {
 
     @Override
     protected void onSetup() {
+        b.lsSearchLayout.setVisibility(View.VISIBLE);
+        b.lsSearchLayout.setHint("Tìm kiếm lịch tập...");
+        b.lsSearch.addTextChangedListener(new android.text.TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void onTextChanged(CharSequence s, int st, int bf, int c) {}
+            public void afterTextChanged(android.text.Editable e) { vm.search(e.toString()); }
+        });
         b.lsFab.setText(R.string.sched_add);
         b.lsFab.setOnClickListener(v -> ScheduleEditSheet.newInstance(null).show(getChildFragmentManager(), "sched"));
     }
