@@ -1332,8 +1332,7 @@ public class MainActivity extends AppCompatActivity {
                     if (all != null) {
                         for (Map<String, Object> item : all) {
                             String assignedUid = KhoDuLieu.chuoi(item.get("uid_hoi_vien"));
-                            String itemGym = KhoDuLieu.chuoi(item.get("gym_id"));
-                            if (assignedUid.equals(uid) || (assignedUid.isEmpty() && (!gymId().isEmpty() && gymId().equals(itemGym)))) {
+                            if (assignedUid.equals(uid)) {
                                 memberSchedules.add(item);
                             }
                         }
@@ -1425,30 +1424,85 @@ public class MainActivity extends AppCompatActivity {
         taoTrang("TẠO LỊCH TẬP & DINH DƯỠNG", tenGymHienTai, this::hienLichTap, false);
         EditText name = truong("Tên buổi tập", "Ví dụ: Cardio & Đẩy ngực", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
         EditText date = truong("Ngày (YYYY-MM-DD)", ngayHomNay(), InputType.TYPE_CLASS_TEXT, ngayHomNay());
-        EditText time = truong("Giờ bắt đầu", "18:30", InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME, "18:30");
+
+        // Thay trường nhập giờ thô bằng nút chọn ca tập có sẵn hoặc nhập tự do
+        final String[] caTapOptions = {
+                "🌅 Ca sáng: 6h - 7h (06:00)",
+                "🌅 Ca sáng: 7h - 8h (07:00)",
+                "🌅 Ca sáng: 8h - 9h (08:00)",
+                "☀️ Ca chiều: 2h - 3h (14:00)",
+                "☀️ Ca chiều: 3h - 4h (15:00)",
+                "☀️ Ca chiều: 4h - 5h (16:00)",
+                "✏️ Nhập giờ tự do khác..."
+        };
+
+        final String[] timeValues = {"06:00", "07:00", "08:00", "14:00", "15:00", "16:00", ""};
+        
+        Button btnTime = taoNut("⏰ Chọn ca tập: 06:00 (Ca sáng: 6h - 7h)", false, null);
+        final String[] selectedTimeHolder = {"06:00"};
+
+        btnTime.setOnClickListener(v -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Chọn khung giờ / ca tập")
+                    .setItems(caTapOptions, (dialog, which) -> {
+                        if (which == 6) {
+                            // Nhập giờ tự do
+                            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                            alert.setTitle("Nhập giờ tự do");
+                            final EditText input = new EditText(MainActivity.this);
+                            input.setHint("Ví dụ: 06:00 - 07:00");
+                            input.setTextColor(0xFF000000);
+                            input.setHintTextColor(0xFF888888);
+                            // Dùng TYPE_CLASS_TEXT để cho phép gõ dấu gạch ngang "-"
+                            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            alert.setView(input);
+                            alert.setPositiveButton("Xác nhận", (d, w) -> {
+                                String customTime = input.getText().toString().trim();
+                                if (!customTime.isEmpty()) {
+                                    selectedTimeHolder[0] = customTime;
+                                    btnTime.setText("⏰ Giờ tập: " + selectedTimeHolder[0] + " (Tự do)");
+                                }
+                            });
+                            alert.setNegativeButton("Hủy", null);
+                            alert.show();
+                        } else {
+                            selectedTimeHolder[0] = timeValues[which];
+                            btnTime.setText("⏰ Ca tập: " + caTapOptions[which]);
+                        }
+                    })
+                    .show();
+        });
+        thanTrang.addView(btnTime);
 
         selectedMemberUid = "";
-        selectedMemberName = "Tất cả hội viên (Công khai)";
-        Button btnMember = taoNut("👤 Hội viên được phân: " + selectedMemberName, false, null);
+        selectedMemberName = "";
+        Button btnMember = taoNut("👤 Chọn hội viên nhận lịch tập...", false, null);
         btnMember.setOnClickListener(v -> {
-            kho.layTheoTruong("nguoi_dung", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
+            kho.layTatCa("nguoi_dung", new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
                 @Override public void thanhCong(List<Map<String, Object>> members) {
                     List<String> names = new ArrayList<>();
                     List<String> uids = new ArrayList<>();
-                    names.add("Tất cả hội viên (Công khai)");
-                    uids.add("");
-                    for (Map<String, Object> m : members) {
-                        if ("hoi_vien".equals(KhoDuLieu.chuoi(m.get("vai_tro")))) {
-                            names.add(KhoDuLieu.chuoi(m.get("ho_ten")) + " (" + KhoDuLieu.chuoi(m.get("email")) + ")");
-                            uids.add(KhoDuLieu.chuoi(m.get("id")));
+                    if (members != null) {
+                        for (Map<String, Object> m : members) {
+                            if ("hoi_vien".equals(KhoDuLieu.chuoi(m.get("vai_tro")))) {
+                                String mGym = KhoDuLieu.chuoi(m.get("gym_id"));
+                                if (mGym.isEmpty() || mGym.equals(gymId())) {
+                                    names.add(KhoDuLieu.chuoi(m.get("ho_ten")) + " (" + KhoDuLieu.chuoi(m.get("email")) + ")");
+                                    uids.add(KhoDuLieu.chuoi(m.get("id")));
+                                }
+                            }
                         }
+                    }
+                    if (names.isEmpty()) {
+                        baoLoi("Không tìm thấy hội viên nào trong hệ thống.");
+                        return;
                     }
                     new AlertDialog.Builder(MainActivity.this)
                             .setTitle("Chọn hội viên nhận lịch tập")
                             .setItems(names.toArray(new String[0]), (d, which) -> {
                                 selectedMemberUid = uids.get(which);
                                 selectedMemberName = names.get(which);
-                                btnMember.setText("👤 Hội viên được phân: " + selectedMemberName);
+                                btnMember.setText("👤 Hội viên: " + selectedMemberName);
                             })
                             .show();
                 }
@@ -1494,10 +1548,14 @@ public class MainActivity extends AppCompatActivity {
         nut("LƯU LỊCH TẬP & DINH DƯỠNG", true, () -> {
             String n = name.getText().toString().trim();
             String d = date.getText().toString().trim();
-            String t = time.getText().toString().trim();
+            String t = selectedTimeHolder[0];
             if (n.isEmpty()) { name.setError("Nhập tên buổi tập"); return; }
             if (!d.matches("\\d{4}-\\d{2}-\\d{2}")) { date.setError("Dùng định dạng YYYY-MM-DD"); return; }
-            if (t.isEmpty()) { time.setError("Nhập giờ bắt đầu"); return; }
+            if (t.isEmpty()) { baoLoi("Vui lòng chọn hoặc nhập giờ bắt đầu."); return; }
+            if (selectedMemberUid.isEmpty()) {
+                baoLoi("Vui lòng chọn hội viên để phân lịch tập cá nhân!");
+                return;
+            }
             Map<String, Object> data = new HashMap<>();
             data.put("gym_id", gymId());
             data.put("ten_lich", n);
@@ -1555,16 +1613,9 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
             thongBao("🎉 Bạn đã hoàn thành hết lịch hôm nay!");
 
-            String scheduleId = KhoDuLieu.chuoi(safeItem.get("id"));
-            if (!scheduleId.isEmpty()) {
-                Map<String, Object> patch = new HashMap<>();
-                patch.put("da_hoan_thanh", true);
-                kho.capNhat("lich_tap", scheduleId, patch, null);
-            }
-
             final long finalActiveSecs = totalActiveWorkoutSeconds;
             new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                hienManHinhTongKet(safeItem, finalActiveSecs);
+                showCompletionDialog(safeItem, finalActiveSecs);
             }, 300);
             return;
         }
@@ -1695,42 +1746,115 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void hienManHinhTongKet(Map<String, Object> item, long activeSecs) {
-        taoTrang("CHÚC MỪNG HOÀN THÀNH!", KhoDuLieu.chuoi(item.get("ten_lich")), this::hienLichTap, false);
+    private void showCompletionDialog(Map<String, Object> item, long activeSecs) {
+        if (isFinishing() || isDestroyed()) return;
 
+        String scheduleId = KhoDuLieu.chuoi(item.get("id"));
+        String tenLich = KhoDuLieu.chuoi(item.get("ten_lich"));
+        String dietGuide = KhoDuLieu.chuoi(item.get("huong_dan_an_uong"));
         long minutes = Math.max(1, activeSecs / 60);
-        LinearLayout card = the("🎉 BẠN ĐÃ HOÀN THÀNH XUẤT SẮC BUỔI TẬP!",
-                "⏱️ Thời gian tập luyện thực tế: " + minutes + " phút (" + activeSecs + " giây)\n\n"
-                + "🥗 LỜI KHUYÊN DINH DƯỠNG HÔM NAY:\n" + (KhoDuLieu.chuoi(item.get("huong_dan_an_uong")).isEmpty() ? "Bổ sung đủ nước, ăn nhiều protein và nghỉ ngơi điều độ." : KhoDuLieu.chuoi(item.get("huong_dan_an_uong"))));
 
-        nut("HOÀN THÀNH & LƯU ĐIỂM DANH", true, () -> {
-            String scheduleId = KhoDuLieu.chuoi(item.get("id"));
-            String tenLich = KhoDuLieu.chuoi(item.get("ten_lich"));
-
+        if (!scheduleId.isEmpty()) {
             Map<String, Object> patch = new HashMap<>();
             patch.put("da_hoan_thanh", true);
-            if (!scheduleId.isEmpty()) {
-                kho.capNhat("lich_tap", scheduleId, patch, null);
-            }
+            kho.capNhat("lich_tap", scheduleId, patch, null);
+        }
 
-            Map<String, Object> checkin = new HashMap<>();
-            checkin.put("gym_id", gymId());
-            checkin.put("uid_nguoi_dung", uid);
-            checkin.put("ten_nguoi_dung", tenNguoiDung());
-            checkin.put("ngay", ngayHomNay());
-            checkin.put("noi_dung", "Hoàn thành lịch: " + tenLich);
-            checkin.put("ngay_tao", System.currentTimeMillis());
-            kho.them("diem_danh", checkin, new KhoDuLieu.KetQua<String>() {
-                @Override public void thanhCong(String s) {
-                    thongBao("✅ Đã lưu điểm danh và hoàn thành lịch tập!");
-                    hienLichTap();
-                }
-                @Override public void thatBai(String error) {
-                    thongBao("Đã hoàn thành, nhưng không ghi nhận được điểm danh: " + error);
-                    hienLichTap();
-                }
-            });
-        });
+        ScrollView scroll = new ScrollView(this);
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        int pad = dp(16);
+        content.setPadding(pad, pad, pad, pad);
+
+        TextView tvSummary = new TextView(this);
+        tvSummary.setText("🏋️ Lịch tập: " + (tenLich.isEmpty() ? "Lịch tập cá nhân" : tenLich) + "\n⏱️ Thời gian tập thực tế: " + minutes + " phút (" + activeSecs + " giây)");
+        tvSummary.setTextSize(14);
+        tvSummary.setTextColor(0xFF333333);
+        tvSummary.setPadding(dp(12), dp(12), dp(12), dp(12));
+        tvSummary.setBackgroundResource(R.drawable.bg_card);
+        LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(-1, -2);
+        p1.bottomMargin = dp(12);
+        content.addView(tvSummary, p1);
+
+        TextView tvDietTitle = new TextView(this);
+        tvDietTitle.setText("🥗 CHẾ ĐỘ DINH DƯỠNG DO GYM PHÂN CÔNG:");
+        tvDietTitle.setTextSize(13);
+        tvDietTitle.setTypeface(null, Typeface.BOLD);
+        tvDietTitle.setTextColor(0xFF2E7D32);
+        tvDietTitle.setPadding(0, 0, 0, dp(4));
+        content.addView(tvDietTitle);
+
+        TextView tvDiet = new TextView(this);
+        tvDiet.setText(dietGuide.isEmpty() ? "Bổ sung đủ nước (2-3 lit/ngày), tăng cường protein (thịt, cá, trứng, whey) và nghỉ ngơi điều độ." : dietGuide);
+        tvDiet.setTextSize(14);
+        tvDiet.setTextColor(0xFF333333);
+        tvDiet.setPadding(dp(12), dp(12), dp(12), dp(12));
+        tvDiet.setBackgroundResource(R.drawable.bg_card);
+        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(-1, -2);
+        p2.bottomMargin = dp(12);
+        content.addView(tvDiet, p2);
+
+        TextView tvFeedbackTitle = new TextView(this);
+        tvFeedbackTitle.setText("💬 CẢM NGHĨ / GHI CHÚ BUỔI TẬP (TÙY CHỌN):");
+        tvFeedbackTitle.setTextSize(13);
+        tvFeedbackTitle.setTypeface(null, Typeface.BOLD);
+        tvFeedbackTitle.setTextColor(0xFFE65100);
+        tvFeedbackTitle.setPadding(0, 0, 0, dp(4));
+        content.addView(tvFeedbackTitle);
+
+        EditText etFeedback = new EditText(this);
+        etFeedback.setHint("Nhập cảm nghĩ về độ mệt, động lực hoặc nhận xét bài tập hôm nay...");
+        etFeedback.setTextSize(14);
+        etFeedback.setSingleLine(false);
+        etFeedback.setMinHeight(dp(90));
+        etFeedback.setPadding(dp(12), dp(12), dp(12), dp(12));
+        etFeedback.setBackgroundResource(R.drawable.bg_search);
+        LinearLayout.LayoutParams p3 = new LinearLayout.LayoutParams(-1, -2);
+        p3.bottomMargin = dp(8);
+        content.addView(etFeedback, p3);
+
+        scroll.addView(content);
+
+        new AlertDialog.Builder(this)
+                .setTitle("🎉 CHÚC MỪNG HOÀN THÀNH!")
+                .setView(scroll)
+                .setCancelable(false)
+                .setPositiveButton("HOÀN THÀNH & LƯU TIẾN ĐỘ", (dialogInterface, which) -> {
+                    String noteText = etFeedback.getText().toString().trim();
+
+                    Map<String, Object> checkin = new HashMap<>();
+                    checkin.put("gym_id", gymId());
+                    checkin.put("uid_nguoi_dung", uid);
+                    checkin.put("ten_nguoi_dung", tenNguoiDung());
+                    checkin.put("ngay", ngayHomNay());
+                    checkin.put("noi_dung", "Hoàn thành lịch: " + tenLich + (noteText.isEmpty() ? "" : " - " + noteText));
+                    checkin.put("ngay_tao", System.currentTimeMillis());
+                    kho.them("diem_danh", checkin, null);
+
+                    Map<String, Object> progress = new HashMap<>();
+                    progress.put("uid_nguoi_dung", uid);
+                    progress.put("gym_id", gymId());
+                    progress.put("ten_buoi_tap", tenLich.isEmpty() ? "Lịch tập cá nhân" : tenLich);
+                    progress.put("thoi_luong_phut", minutes);
+                    progress.put("ngay", ngayHomNay());
+                    progress.put("ghi_chu", noteText.isEmpty() ? "Đã hoàn thành lịch tập." : noteText);
+                    progress.put("ngay_tao", System.currentTimeMillis());
+
+                    kho.them("tien_do", progress, new KhoDuLieu.KetQua<String>() {
+                        @Override
+                        public void thanhCong(String id) {
+                            thongBao("🎉 Đã hoàn thành lịch tập và ghi nhận tiến độ!");
+                            hienLichTap();
+                        }
+
+                        @Override
+                        public void thatBai(String error) {
+                            thongBao("Đã hoàn thành lịch tập!");
+                            hienLichTap();
+                        }
+                    });
+                })
+                .show();
     }
 
     // ---------------------------------------------------------------------
@@ -2068,36 +2192,89 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void hienTienDo() {
-        taoTrang("TIẾN ĐỘ TẬP LUYỆN", "Thống kê dựa trên các bản ghi đã lưu", this::hienBangDieuKhien, true);
-        nut("+ GHI NHẬN BUỔI TẬP", true, this::hienFormTienDo);
-        kho.layTheoTruong("tien_do", "uid_nguoi_dung", uid, new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
-            @Override public void thanhCong(List<Map<String, Object>> sessions) {
-                long totalMinutes = 0;
-                for (Map<String, Object> s : sessions) totalMinutes += laySo(s, "thoi_luong_phut");
-                the("TỔNG QUAN", "Số buổi đã ghi nhận: " + sessions.size() + "\nTổng thời gian: " + totalMinutes + " phút (" + (totalMinutes / 60) + " giờ " + (totalMinutes % 60) + " phút)");
-                kho.layTheoTruong("chi_so_co_the", "uid_nguoi_dung", uid, new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
-                    @Override public void thanhCong(List<Map<String, Object>> metrics) {
-                        Collections.sort(metrics, (a, b) -> Long.compare(laySo(a, "ngay_tao"), laySo(b, "ngay_tao")));
-                        if (metrics.size() >= 2) {
-                            Map<String, Object> first = metrics.get(0), last = metrics.get(metrics.size() - 1);
-                            double delta = doubleValue(last.get("can_nang")) - doubleValue(first.get("can_nang"));
-                            the("THAY ĐỔI CÂN NẶNG", String.format(Locale.getDefault(), "Ban đầu: %.1f kg\nGần nhất: %.1f kg\nThay đổi: %+.1f kg", doubleValue(first.get("can_nang")), doubleValue(last.get("can_nang")), delta));
-                            themChu("LỊCH SỬ CÂN NẶNG", 14, XAM, true);
-                            for (Map<String, Object> m : metrics) the(KhoDuLieu.chuoi(m.get("ngay_do")), decimal(m.get("can_nang")) + " kg · BMI " + decimal(m.get("bmi")));
-                        } else if (metrics.size() == 1) {
-                            the("CHỈ SỐ HIỆN TẠI", "Cân nặng " + decimal(metrics.get(0).get("can_nang")) + " kg · BMI " + decimal(metrics.get(0).get("bmi")) + ". Hãy cập nhật thêm chỉ số theo thời gian để so sánh tiến độ.");
-                        } else {
-                            the("CHƯA CÓ CHỈ SỐ", "Bạn có thể ghi nhận chỉ số cơ thể để theo dõi thay đổi.");
+        taoTrang("LỊCH SỬ & TIẾN ĐỘ TẬP LUYỆN", "Theo dõi lịch sử tập luyện chi tiết theo ngày tháng", this::hienBangDieuKhien, true);
+        
+        kho.layTatCa("lich_tap", new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
+            @Override public void thanhCong(List<Map<String, Object>> all) {
+                List<Map<String, Object>> completedSessions = new ArrayList<>();
+                if (all != null) {
+                    for (Map<String, Object> item : all) {
+                        String assignedUid = KhoDuLieu.chuoi(item.get("uid_hoi_vien"));
+                        boolean isCompleted = KhoDuLieu.booleanValue(item.get("da_hoan_thanh"));
+                        // Lấy các lịch tập đã hoàn thành của đúng hội viên này (hoặc lịch công khai)
+                        if (isCompleted && (assignedUid.equals(uid) || assignedUid.isEmpty())) {
+                            completedSessions.add(item);
                         }
                     }
-                    @Override public void thatBai(String error) { baoLoi(error); }
+                }
+
+                int totalSessions = completedSessions.size();
+                the("📊 TỔNG QUAN HÀNH TRÌNH", "Tổng số buổi đã hoàn thành: " + totalSessions);
+
+                kho.layTheoTruong("chi_so_co_the", "uid_nguoi_dung", uid, new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
+                    @Override public void thanhCong(List<Map<String, Object>> metrics) {
+                        if (metrics != null && !metrics.isEmpty()) {
+                            Collections.sort(metrics, (a, b) -> Long.compare(laySo(a, "ngay_tao"), laySo(b, "ngay_tao")));
+                            if (metrics.size() >= 2) {
+                                Map<String, Object> first = metrics.get(0), last = metrics.get(metrics.size() - 1);
+                                double delta = doubleValue(last.get("can_nang")) - doubleValue(first.get("can_nang"));
+                                the("⚖️ BIẾN ĐỔI CÂN NẶNG", String.format(Locale.getDefault(), "Ban đầu: %.1f kg\nGần nhất: %.1f kg\nThay đổi: %+.1f kg", doubleValue(first.get("can_nang")), doubleValue(last.get("can_nang")), delta));
+                            } else if (metrics.size() == 1) {
+                                the("⚖️ CHỈ SỐ CƠ THỂ HIỆN TẠI", "Cân nặng " + decimal(metrics.get(0).get("can_nang")) + " kg · BMI " + decimal(metrics.get(0).get("bmi")));
+                            }
+                        }
+                    }
+                    @Override public void thatBai(String error) {}
                 });
-                themChu("LỊCH SỬ BUỔI TẬP", 14, XAM, true);
-                if (sessions.isEmpty()) the("Chưa có buổi tập", "Ghi nhận buổi tập sau khi hoàn thành để thống kê thời gian.");
-                Collections.sort(sessions, (a, b) -> Long.compare(laySo(b, "ngay_tao"), laySo(a, "ngay_tao")));
-                for (Map<String, Object> s : sessions) the(KhoDuLieu.chuoi(s.get("ten_buoi_tap")), "Ngày: " + KhoDuLieu.chuoi(s.get("ngay")) + "\nThời lượng: " + laySo(s, "thoi_luong_phut") + " phút\n" + KhoDuLieu.chuoi(s.get("ghi_chu")));
+
+                themChu("📅 NHẬT KÝ LỊCH TẬP THEO NGÀY THÁNG", 14, 0xFFE53935, true);
+                
+                if (completedSessions.isEmpty()) {
+                    the("Chưa có lịch sử tập luyện", "Hoàn thành các buổi tập từ phần 'Lịch tập' để hệ thống tự động ghi nhận vào đây.");
+                    return;
+                }
+
+                // Sắp xếp theo ngày giảm dần (mới nhất lên đầu)
+                Collections.sort(completedSessions, (a, b) -> {
+                    String dateA = KhoDuLieu.chuoi(a.get("ngay"));
+                    String dateB = KhoDuLieu.chuoi(b.get("ngay"));
+                    int comp = dateB.compareTo(dateA);
+                    if (comp != 0) return comp;
+                    return Long.compare(laySo(b, "ngay_tao"), laySo(a, "ngay_tao"));
+                });
+
+                String currentGroupDate = "";
+                for (Map<String, Object> s : completedSessions) {
+                    final String ngayTap = KhoDuLieu.chuoi(s.get("ngay"));
+                    String displayDate = ngayTap.isEmpty() ? "Chưa rõ ngày" : ngayTap;
+
+                    // Hiển thị tiêu đề Ngày / Tháng / Năm khi đổi ngày
+                    if (!displayDate.equals(currentGroupDate)) {
+                        currentGroupDate = displayDate;
+                        themChu("🗓️ NỘI DUNG NGÀY: " + currentGroupDate, 13, 0xFF1976D2, true);
+                    }
+
+                    final String tenBuoi = KhoDuLieu.chuoi(s.get("ten_lich"));
+                    String moTa = KhoDuLieu.chuoi(s.get("mo_ta"));
+                    String dinhDuong = KhoDuLieu.chuoi(s.get("huong_dan_an_uong"));
+
+                    String details = "⏰ Giờ: " + KhoDuLieu.chuoi(s.get("gio"))
+                            + "\n📝 Nội dung bài tập:\n" + (TextUtils.isEmpty(moTa) ? "Không có nội dung" : moTa)
+                            + (TextUtils.isEmpty(dinhDuong) ? "" : "\n🥗 Dinh dưỡng: " + dinhDuong);
+
+                    LinearLayout card = the("✅ " + tenBuoi, details);
+                    
+                    // Nút xem chi tiết đầy đủ buổi tập đã hoàn thành
+                    themNutVaoThe(card, "👁️ XEM CHI TIẾT BUỔI TẬP", false, () -> {
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Chi tiết: " + tenBuoi)
+                                .setMessage("📅 Ngày tập: " + displayDate + "\n⏰ Giờ: " + KhoDuLieu.chuoi(s.get("gio")) + "\n\n📝 Nội dung bài tập:\n" + (TextUtils.isEmpty(moTa) ? "Không có" : moTa) + (TextUtils.isEmpty(dinhDuong) ? "" : "\n\n🥗 Dinh dưỡng:\n" + dinhDuong))
+                                .setPositiveButton("Đóng", null)
+                                .show();
+                    });
+                }
             }
-            @Override public void thatBai(String error) { baoLoi(error); }
+            @Override public void thatBai(String error) { baoLoi("Không tải được lịch sử tập: " + error); }
         });
     }
 
@@ -2146,14 +2323,35 @@ public class MainActivity extends AppCompatActivity {
                 int count = 0;
                 for (Map<String, Object> item : all) {
                     String receiver = KhoDuLieu.chuoi(item.get("uid_nhan"));
-                    if (!receiver.isEmpty() && !receiver.equals(uid)) continue;
+                    if (!laQuanTri() && !receiver.isEmpty() && !receiver.equals(uid)) continue;
                     count++;
                     boolean read = daDoc(item);
-                    LinearLayout card = the(KhoDuLieu.chuoi(item.get("tieu_de")), KhoDuLieu.chuoi(item.get("noi_dung")) + "\n" + ngay(laySo(item, "ngay_tao")) + (read ? "\nĐã đọc" : "\n● Chưa đọc"));
-                    if (!read) themNutVaoThe(card, "ĐÁNH DẤU ĐÃ ĐỌC", true, () -> danhDauDaDoc(item));
-                    themNutVaoThe(card, "XEM CHI TIẾT", false, () -> hienChiTietThongBao(item));
+                    LinearLayout card = the(KhoDuLieu.chuoi(item.get("tieu_de")), 
+                            KhoDuLieu.chuoi(item.get("noi_dung")) + "\n" 
+                            + ngay(laySo(item, "ngay_tao")) 
+                            + (laQuanTri() ? "" : (read ? "\nĐã đọc" : "\n● Chưa đọc")));
+
+                    if (!laQuanTri()) {
+                        if (!read) themNutVaoThe(card, "ĐÁNH DẤU ĐÃ ĐỌC", true, () -> danhDauDaDoc(item));
+                        themNutVaoThe(card, "XEM CHI TIẾT", false, () -> hienChiTietThongBao(item));
+                    } else {
+                        // Chủ gym có quyền xem chi tiết, sửa hoặc xóa thông báo
+                        themNutVaoThe(card, "XEM CHI TIẾT", false, () -> hienChiTietThongBao(item));
+                        themNutVaoThe(card, "✏️ CẬP NHẬT THÔNG BÁO", true, () -> hienFormSuaThongBao(item));
+                        themNutVaoThe(card, "🗑️ XÓA THÔNG BÁO", false, () -> new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Xóa thông báo?")
+                                .setMessage("Bạn có chắc chắn muốn xóa thông báo này không?")
+                                .setNegativeButton("Hủy", null)
+                                .setPositiveButton("Xóa", (d, w) -> kho.xoa("thong_bao", KhoDuLieu.chuoi(item.get("id")), new KhoDuLieu.KetQua<Boolean>() {
+                                    @Override public void thanhCong(Boolean ok) {
+                                        thongBao("Đã xóa thông báo.");
+                                        hienThongBao();
+                                    }
+                                    @Override public void thatBai(String error) { baoLoi(error); }
+                                })).show());
+                    }
                 }
-                if (count == 0) the("Bạn chưa có thông báo", "Thông báo mới từ thương hiệu Gym sẽ hiển thị tại đây.");
+                if (count == 0) the(laQuanTri() ? "Chưa có thông báo nào được gửi" : "Bạn chưa có thông báo", laQuanTri() ? "Bấm '+ GỬI THÔNG BÁO ĐẾN HỘI VIÊN' ở trên để tạo thông báo mới." : "Thông báo mới từ thương hiệu Gym sẽ hiển thị tại đây.");
             }
             @Override public void thatBai(String error) { baoLoi("Không tải được thông báo: " + error); }
         });
@@ -2166,13 +2364,23 @@ public class MainActivity extends AppCompatActivity {
 
         taoTrang("CHI TIẾT THÔNG BÁO", tenGymHienTai, this::hienThongBao, false);
 
-        LinearLayout detailsCard = the(tieuDe, "🕒 Thời gian gửi: " + ngay(thoiGian) + "\n\n📋 NỘI DUNG CHI TIẾT:\n" + noiDung);
-        detailsCard.setPadding(dp(20), dp(20), dp(20), dp(20));
+        LinearLayout card = the("📌 " + tieuDe, 
+                "🏢 Thương hiệu: " + (TextUtils.isEmpty(tenGymHienTai) ? "Hệ thống GymManagement" : tenGymHienTai)
+                + "\n🕒 Thời gian gửi: " + ngay(thoiGian)
+                + "\n🏷️ Trạng thái: " + (daDoc(item) ? "Đã đọc" : "Chưa đọc")
+                + "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                + "📝 NỘI DUNG THÔNG BÁO CHI TIẾT:\n\n" + noiDung
+                + "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                + "💡 Lưu ý: Vui lòng tuân thủ các thông báo và quy định mới nhất từ Ban quản lý phòng tập.");
 
         if (!daDoc(item)) {
-            nut("ĐÁNH DẤU ĐÃ ĐỌC", true, () -> danhDauDaDoc(item));
+            nut("✨ ĐÁNH DẤU ĐÃ ĐỌC", true, () -> {
+                danhDauDaDoc(item);
+                thongBao("Đã đánh dấu thông báo là đã đọc.");
+                hienChiTietThongBao(item);
+            });
         }
-        nut("QUAY LẠI", false, this::hienThongBao);
+        nut("⬅ QUAY LẠI DANH SÁCH THÔNG BÁO", false, this::hienThongBao);
     }
 
     private boolean daDoc(Map<String, Object> item) {
@@ -2197,28 +2405,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void hienFormThongBao() {
-        taoTrang("GỬI THÔNG BÁO", "Thông báo sẽ chỉ gửi đến thành viên thuộc " + tenGymHienTai, this::hienThongBao, false);
-        EditText title = truong("Tiêu đề", "Ví dụ: Lịch nghỉ lễ", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
-        EditText content = truong("Nội dung", "Nhập nội dung thông báo", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE, "");
+        hienFormSuaThongBao(null);
+    }
+
+    private void hienFormSuaThongBao(Map<String, Object> itemToEdit) {
+        boolean isEdit = itemToEdit != null;
+        taoTrang(isEdit ? "CẬP NHẬT THÔNG BÁO" : "GỬI THÔNG BÁO", isEdit ? "Chỉnh sửa nội dung thông báo" : "Thông báo sẽ chỉ gửi đến thành viên thuộc " + tenGymHienTai, this::hienThongBao, false);
+        EditText title = truong("Tiêu đề", "Ví dụ: Lịch nghỉ lễ", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, isEdit ? KhoDuLieu.chuoi(itemToEdit.get("tieu_de")) : "");
+        EditText content = truong("Nội dung", "Nhập nội dung thông báo", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE, isEdit ? KhoDuLieu.chuoi(itemToEdit.get("noi_dung")) : "");
         content.setSingleLine(false);
         content.setMinHeight(dp(120));
-        nut("GỬI THÔNG BÁO", true, () -> {
+        
+        nut(isEdit ? "CẬP NHẬT THÔNG BÁO" : "GỬI THÔNG BÁO", true, () -> {
             String t = title.getText().toString().trim(), c = content.getText().toString().trim();
             if (t.isEmpty()) { title.setError("Nhập tiêu đề"); return; }
             if (c.isEmpty()) { content.setError("Nhập nội dung"); return; }
-            Map<String, Object> data = new HashMap<>();
-            data.put("gym_id", gymId());
-            data.put("uid_nhan", "");
-            data.put("tieu_de", t);
-            data.put("noi_dung", c);
-            data.put("nguoi_tao_uid", uid);
-            data.put("ngay_tao", System.currentTimeMillis());
-            data.put("danh_sach_da_doc", new ArrayList<String>());
-            kho.them("thong_bao", data, new KhoDuLieu.KetQua<String>() {
-                @Override public void thanhCong(String id) { thongBao("Đã gửi thông báo đến thương hiệu " + tenGymHienTai + "."); hienThongBao(); }
-                @Override public void thatBai(String error) { baoLoi(error); }
-            });
+            
+            if (isEdit) {
+                Map<String, Object> patch = new HashMap<>();
+                patch.put("tieu_de", t);
+                patch.put("noi_dung", c);
+                kho.capNhat("thong_bao", KhoDuLieu.chuoi(itemToEdit.get("id")), patch, new KhoDuLieu.KetQua<Boolean>() {
+                    @Override public void thanhCong(Boolean ok) {
+                        thongBao("Đã cập nhật thông báo thành công.");
+                        hienThongBao();
+                    }
+                    @Override public void thatBai(String error) { baoLoi(error); }
+                });
+            } else {
+                Map<String, Object> data = new HashMap<>();
+                data.put("gym_id", gymId());
+                data.put("uid_nhan", "");
+                data.put("tieu_de", t);
+                data.put("noi_dung", c);
+                data.put("nguoi_tao_uid", uid);
+                data.put("ngay_tao", System.currentTimeMillis());
+                data.put("danh_sach_da_doc", new ArrayList<String>());
+                kho.them("thong_bao", data, new KhoDuLieu.KetQua<String>() {
+                    @Override public void thanhCong(String id) { thongBao("Đã gửi thông báo đến thương hiệu " + tenGymHienTai + "."); hienThongBao(); }
+                    @Override public void thatBai(String error) { baoLoi(error); }
+                });
+            }
         });
+        nut("HỦY", false, this::hienThongBao);
     }
 
     // ---------------------------------------------------------------------

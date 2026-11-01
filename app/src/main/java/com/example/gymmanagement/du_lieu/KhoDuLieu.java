@@ -265,9 +265,10 @@ public class KhoDuLieu {
     public void layThongBaoHienThi(String gymId, String uid, boolean laQuanTri,
                                    KetQua<List<Map<String, Object>>> ketQua) {
         if (!kiemTraFirebase(ketQua)) return;
-        com.google.firebase.firestore.Query query = firestore.collection("thong_bao")
-                .whereEqualTo("gym_id", gymId);
-        if (!laQuanTri) query = query.whereIn("uid_nhan", Arrays.asList("", uid));
+        com.google.firebase.firestore.Query query = firestore.collection("thong_bao");
+        if (gymId != null && !gymId.trim().isEmpty()) {
+            query = query.whereEqualTo("gym_id", gymId);
+        }
         query.get()
                 .addOnSuccessListener(snapshot -> {
                     List<Map<String, Object>> result = new ArrayList<>();

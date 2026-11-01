@@ -103,38 +103,44 @@ public class VideoPlayerView extends FrameLayout {
     /** Gọi trong onStop: lưu vị trí, tạm dừng và giải phóng tài nguyên. */
     public void stop() {
         started = false;
-        release();
+        try {
+            release();
+        } catch (Exception ignored) {}
     }
 
     private void create() {
         if (!url.startsWith("https://")) return;
         showError(null);
-        player = new ExoPlayer.Builder(getContext()).build();
-        playerView.setPlayer(player);
-        MediaItem.Builder b = new MediaItem.Builder().setUri(url);
-        if ("hls".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_M3U8);
-        else if ("dash".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_MPD);
-        else if ("mp4".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_MP4);
-        else if ("webm".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_WEBM);
-        player.setMediaItem(b.build());
-        player.setPlayWhenReady(false); // không tự phát âm thanh
-        player.seekTo(resumePosition);
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onPlaybackStateChanged(int state) {
-                loading.setVisibility(state == Player.STATE_BUFFERING ? VISIBLE : GONE);
-            }
+        try {
+            player = new ExoPlayer.Builder(getContext()).build();
+            playerView.setPlayer(player);
+            MediaItem.Builder b = new MediaItem.Builder().setUri(url);
+            if ("hls".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_M3U8);
+            else if ("dash".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.APPLICATION_MPD);
+            else if ("mp4".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_MP4);
+            else if ("webm".equalsIgnoreCase(type)) b.setMimeType(MimeTypes.VIDEO_WEBM);
+            player.setMediaItem(b.build());
+            player.setPlayWhenReady(false); // không tự phát âm thanh
+            player.seekTo(resumePosition);
+            player.addListener(new Player.Listener() {
+                @Override
+                public void onPlaybackStateChanged(int state) {
+                    loading.setVisibility(state == Player.STATE_BUFFERING ? VISIBLE : GONE);
+                }
 
-            @Override
-            public void onPlayerError(@NonNull PlaybackException error) {
-                loading.setVisibility(GONE);
-                errorBox.setVisibility(GONE);
-                poster.setVisibility(VISIBLE);
-                playButton.setVisibility(GONE);
-            }
-        });
-        player.prepare();
-        loading.setVisibility(VISIBLE);
+                @Override
+                public void onPlayerError(@NonNull PlaybackException error) {
+                    loading.setVisibility(GONE);
+                    errorBox.setVisibility(GONE);
+                    poster.setVisibility(VISIBLE);
+                    playButton.setVisibility(GONE);
+                }
+            });
+            player.prepare();
+            loading.setVisibility(VISIBLE);
+        } catch (Exception e) {
+            showError("Không thể tải video bài tập.");
+        }
     }
 
     private void retry() {
@@ -152,13 +158,24 @@ public class VideoPlayerView extends FrameLayout {
     }
 
     private void release() {
-        closeFullscreen();
+        try {
+            closeFullscreen();
+        } catch (Exception ignored) {}
         if (player != null) {
-            resumePosition = Math.max(0, player.getCurrentPosition());
-            player.release();
+            try {
+                resumePosition = Math.max(0, player.getCurrentPosition());
+            } catch (Exception ignored) {}
+            try {
+                player.stop();
+                player.release();
+            } catch (Exception ignored) {}
             player = null;
         }
-        playerView.setPlayer(null);
+        if (playerView != null) {
+            try {
+                playerView.setPlayer(null);
+            } catch (Exception ignored) {}
+        }
     }
 
     private void toggleFullscreen() {
@@ -190,7 +207,9 @@ public class VideoPlayerView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        stop();
+        try {
+            stop();
+        } catch (Exception ignored) {}
         super.onDetachedFromWindow();
     }
 }
