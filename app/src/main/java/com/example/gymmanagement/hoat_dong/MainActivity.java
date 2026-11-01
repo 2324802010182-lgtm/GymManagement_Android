@@ -292,23 +292,29 @@ public class MainActivity extends AppCompatActivity {
         );
         nav.setBackground(navBg);
         nav.setPadding(dp(5), dp(7), dp(5), dp(7));
+        
+        // Đổi toàn bộ sang icon trực quan: Nhà (Trang chủ), Sách (Gói tập), Lịch / Nhóm (Lịch tập/Hội viên), Thẻ/Hồ sơ (Hồ sơ)
         String[] labels = laQuanTri()
-                ? new String[]{"Trang chủ", "Gói tập", "Hội viên", "Hồ sơ"}
-                : new String[]{"Trang chủ", "Gói tập", "Lịch tập", "Hồ sơ"};
+                ? new String[]{"🏠", "📖", "👥", "👤"}
+                : new String[]{"🏠", "📖", "📅", "👤"};
+        
         Runnable[] actions = laQuanTri()
                 ? new Runnable[]{this::hienBangDieuKhien, this::hienGoiTap, this::hienHoiVien, this::hienHoSo}
                 : new Runnable[]{this::hienBangDieuKhien, this::hienDanhSachGymDangKyGoi, this::hienLichTap, this::hienHoSo};
+        
         for (int i = 0; i < labels.length; i++) {
             final int index = i;
             Button b = new Button(this);
             b.setAllCaps(false);
             b.setText(labels[i]);
-            b.setTextSize(11);
+            b.setTextSize(18); // Kích thước icon nổi bật
             boolean isActiveTab = (index == 0 && ("Trang chủ".equals(manHinhHienTai) || manHinhHienTai.startsWith("Xin chào") || manHinhHienTai.equals(tenNguoiDung())))
-                    || labels[i].equalsIgnoreCase(manHinhHienTai);
+                    || (index == 1 && ("GÓI TẬP".equals(manHinhHienTai) || "CÁC GÓI TẬP".equals(manHinhHienTai)))
+                    || (index == 2 && ("HỘI VIÊN".equals(manHinhHienTai) || "LỊCH TẬP".equals(manHinhHienTai)))
+                    || (index == 3 && "HỒ SƠ CÁ NHÂN".equals(manHinhHienTai));
             b.setTextColor(isActiveTab ? 0xFFFF5252 : 0xFFCBD5E1);
             b.setMinHeight(dp(44));
-            b.setPadding(dp(2), 0, dp(2), 0);
+            b.setPadding(0, 0, 0, 0);
             b.setBackground(nenVien(isActiveTab ? 0xFF1E293B : 0xFF334155, 0xFF475569, 12));
             b.setOnClickListener(v -> actions[index].run());
             nav.addView(b, new LinearLayout.LayoutParams(0, dp(44), 1));
