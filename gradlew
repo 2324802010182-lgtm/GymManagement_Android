@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -eu
-GRADLE_VERSION=8.13
+GRADLE_VERSION=9.3.1
 BASE="${HOME}/.gradle/gymmanagement-bootstrap"
 DIST="$BASE/gradle-$GRADLE_VERSION"
 if [ -x "$DIST/bin/gradle" ]; then

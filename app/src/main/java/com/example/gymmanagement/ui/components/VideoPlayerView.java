@@ -131,7 +131,7 @@ public class VideoPlayerView extends FrameLayout {
                 @Override
                 public void onPlayerError(@NonNull PlaybackException error) {
                     loading.setVisibility(GONE);
-                    errorBox.setVisibility(GONE);
+                    showError("Video không tải được. Kiểm tra kết nối mạng hoặc nhấn Thử lại.");
                     poster.setVisibility(VISIBLE);
                     playButton.setVisibility(GONE);
                 }

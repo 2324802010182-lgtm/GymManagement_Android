@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set GRADLE_VERSION=8.13
+set GRADLE_VERSION=9.3.1
 set BASE=%USERPROFILE%\.gradle\gymmanagement-bootstrap
 set DIST=%BASE%\gradle-%GRADLE_VERSION%
 if exist "%DIST%\bin\gradle.bat" goto run_gradle

@@ -89,6 +89,9 @@ public class Exercise implements java.io.Serializable {
         if (e.videoUrl == null || e.videoUrl.trim().isEmpty() || !e.videoUrl.startsWith("https://")) {
             e.videoUrl = getRelevantVideoUrl(e.category);
             e.videoType = "mp4";
+        } else if (e.videoUrl.toLowerCase(java.util.Locale.ROOT).contains(".mov")) {
+            // Để Media3 tự nhận diện container QuickTime; ép MIME video/mp4 có thể làm MOV lỗi phát.
+            e.videoType = "";
         }
         return e;
     }
@@ -133,6 +136,8 @@ public class Exercise implements java.io.Serializable {
         if (e.videoUrl == null || e.videoUrl.trim().isEmpty() || !e.videoUrl.startsWith("https://")) {
             e.videoUrl = getRelevantVideoUrl(e.category);
             e.videoType = "mp4";
+        } else if (e.videoUrl.toLowerCase(java.util.Locale.ROOT).contains(".mov")) {
+            e.videoType = "";
         }
         return e;
     }
