@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout exerciseListHost;
     private TextView exerciseCount;
     private VideoPlayerView activeExerciseVideo;
+    private String boLocThongBao = "Tất cả";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1251,25 +1255,223 @@ public class MainActivity extends AppCompatActivity {
     private void hienDoanhThu() {
         taoTrang("DOANH THU", tenGymHienTai, this::hienBangDieuKhien, true);
         apDungNenTrangChuToi();
-        TextView currentValue = chu("Đang tải…", 30, TRANG, true);
-        TextView comparison = chu("", 11, 0xFFDDDDDD, true);
-        TextView previousValue = chu("Đang tải…", 24, TRANG, true);
-        thanTrang.addView(taoTheDoanhThu("DOANH THU THÁNG NÀY", currentValue, comparison));
+        final int[] period = {0}; // 0: tháng, 1: quý, 2: năm
+        final List<Map<String, Object>> cached = new ArrayList<>();
+
+        LinearLayout periodRow = new LinearLayout(this);
+        periodRow.setOrientation(LinearLayout.HORIZONTAL);
+        periodRow.setPadding(0, dp(8), 0, dp(12));
+        String[] periodNames = {"Tháng này", "Quý này", "Năm nay"};
+        TextView[] periodButtons = new TextView[3];
+        for (int i = 0; i < 3; i++) {
+            final int selected = i;
+            TextView tab = chu(periodNames[i], 13, TRANG, true);
+            tab.setGravity(Gravity.CENTER);
+            tab.setPadding(dp(7), dp(12), dp(7), dp(12));
+            LinearLayout.LayoutParams tp = new LinearLayout.LayoutParams(0, dp(44), 1);
+            tp.setMargins(dp(3), 0, dp(3), 0);
+            periodRow.addView(tab, tp);
+            periodButtons[i] = tab;
+            tab.setOnClickListener(v -> {
+                period[0] = selected;
+                capNhatTabDoanhThu(periodButtons, selected);
+                // The same selector drives both headline totals and chart granularity.
+                if (!cached.isEmpty()) capNhatNoiDungDoanhThu(cached, selected);
+            });
+        }
+        thanTrang.addView(periodRow);
+        capNhatTabDoanhThu(periodButtons, 0);
+
+        LinearLayout summaryRow = new LinearLayout(this);
+        summaryRow.setOrientation(LinearLayout.HORIZONTAL);
+        TextView currentValue = chu("Đang tải…", 27, TRANG, true);
+        TextView comparison = chu("Đang cập nhật dữ liệu", 10, 0xFFFFB6B6, true);
+        TextView previousValue = chu("Đang tải…", 21, TRANG, true);
+        LinearLayout currentCard = taoTheDoanhThu("DOANH THU THÁNG NÀY", currentValue, comparison);
         LinearLayout previousCard = taoTheDoanhThu("DOANH THU THÁNG TRƯỚC", previousValue, null);
-        LinearLayout.LayoutParams previousParams = new LinearLayout.LayoutParams(-1, -2);
-        previousParams.topMargin = dp(12);
-        thanTrang.addView(previousCard, previousParams);
-        themChu("Doanh thu tính theo giá gói đã được duyệt trong dữ liệu đăng ký.", 12, 0xFFAAA6AA, false);
+        LinearLayout.LayoutParams half = new LinearLayout.LayoutParams(0, dp(142), 1);
+        half.setMargins(dp(3), 0, dp(5), 0);
+        summaryRow.addView(currentCard, half);
+        LinearLayout.LayoutParams half2 = new LinearLayout.LayoutParams(0, dp(142), 1);
+        half2.setMargins(dp(5), 0, dp(3), 0);
+        summaryRow.addView(previousCard, half2);
+        thanTrang.addView(summaryRow);
+        themChu("ⓘ  Doanh thu tính theo giá gói đã được duyệt trong dữ liệu đăng ký.", 12, 0xFFB9B2B5, false);
+
+        LinearLayout chartCard = taoKhungDoanhThu();
+        LinearLayout chartHeader = new LinearLayout(this);
+        chartHeader.setGravity(Gravity.CENTER_VERTICAL);
+        chartHeader.addView(chu("▥  Biểu đồ doanh thu", 18, TRANG, true), new LinearLayout.LayoutParams(0, -2, 1));
+        TextView chartUnit = chu("VND", 11, 0xFFFF7777, true);
+        chartHeader.addView(chartUnit);
+        chartCard.addView(chartHeader);
+        TextView chartSubtitle = chu("Doanh thu theo tháng", 12, XAM, false);
+        LinearLayout.LayoutParams subP = new LinearLayout.LayoutParams(-1, -2);
+        subP.topMargin = dp(4);
+        chartCard.addView(chartSubtitle, subP);
+        View chart = taoBieuDoDoanhThu(new long[12], 0);
+        LinearLayout.LayoutParams chartP = new LinearLayout.LayoutParams(-1, dp(220));
+        chartP.topMargin = dp(10);
+        chartCard.addView(chart, chartP);
+        LinearLayout.LayoutParams chartCardP = new LinearLayout.LayoutParams(-1, -2);
+        chartCardP.topMargin = dp(16);
+        thanTrang.addView(chartCard, chartCardP);
+
+        LinearLayout stats = new LinearLayout(this);
+        stats.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams statsP = new LinearLayout.LayoutParams(-1, -2);
+        statsP.topMargin = dp(14);
+        thanTrang.addView(stats, statsP);
+        TextView membersStat = chu("Hội viên\n—", 13, TRANG, true);
+        TextView packagesStat = chu("Gói đã bán\n—", 13, TRANG, true);
+        TextView averageStat = chu("Giá trị TB\n—", 13, TRANG, true);
+        TextView[] statViews = {membersStat, packagesStat, averageStat};
+        for (TextView stat : statViews) {
+            stat.setGravity(Gravity.CENTER_VERTICAL);
+            stat.setPadding(dp(10), dp(12), dp(8), dp(12));
+            stat.setBackground(nenVien(0xFF211719, 0xFF713039, 16));
+            LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(0, dp(76), 1);
+            sp.setMargins(dp(3), 0, dp(3), 0);
+            stats.addView(stat, sp);
+        }
+
+        LinearLayout mixCard = taoKhungDoanhThu();
+        LinearLayout.LayoutParams mixP = new LinearLayout.LayoutParams(-1, -2);
+        mixP.topMargin = dp(14);
+        thanTrang.addView(mixCard, mixP);
+        mixCard.addView(chu("◕  Cơ cấu doanh thu", 17, TRANG, true));
+        TextView mixPremium = chu("◆  Gói Premium                         0 VND\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%", 13, 0xFFFFB5B5, true);
+        TextView mixStandard = chu("▰  Gói Standard                         0 VND\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%", 13, 0xFFFFB5B5, true);
+        TextView mixBasic = chu("◈  Gói Basic                              0 VND\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%", 13, 0xFFFFB5B5, true);
+        for (TextView item : new TextView[]{mixPremium, mixStandard, mixBasic}) {
+            LinearLayout.LayoutParams mp = new LinearLayout.LayoutParams(-1, -2);
+            mp.topMargin = dp(12);
+            mixCard.addView(item, mp);
+        }
         kho.layTheoTruong("dang_ky_goi", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
             @Override public void thanhCong(List<Map<String, Object>> registrations) {
-                long[] amounts = doanhThuTheoThang(registrations);
-                hienThiDoanhThu(amounts[0], amounts[1], currentValue, comparison);
-                previousValue.setText(tien(amounts[1]));
+                cached.clear();
+                if (registrations != null) cached.addAll(registrations);
+                capNhatNoiDungDoanhThu(cached, period[0]);
             }
             @Override public void thatBai(String error) {
                 currentValue.setText("—"); previousValue.setText("—"); comparison.setText("Không tải được dữ liệu doanh thu");
             }
         });
+
+        // Keep references on the root view so period changes can refresh every chart/card.
+        thanTrang.setTag(new Object[]{currentValue, comparison, previousValue, chartCard, chartSubtitle, stats, statViews, mixPremium, mixStandard, mixBasic});
+    }
+
+    private void capNhatTabDoanhThu(TextView[] tabs, int selected) {
+        for (int i = 0; i < tabs.length; i++) {
+            GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                    i == selected ? new int[]{0xFFFF343B, 0xFFB50920} : new int[]{0xFF19191C, 0xFF292326});
+            bg.setCornerRadius(dp(24));
+            bg.setStroke(dp(1), i == selected ? 0xFFFF555B : 0xFF393338);
+            tabs[i].setBackground(bg);
+            tabs[i].setTextColor(i == selected ? Color.WHITE : 0xFFBDB9BE);
+            tabs[i].setElevation(i == selected ? dp(5) : 0);
+        }
+    }
+
+    private LinearLayout taoKhungDoanhThu() {
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setPadding(dp(16), dp(16), dp(16), dp(16));
+        GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                new int[]{0xFF351014, 0xFF191416, 0xFF211719});
+        bg.setCornerRadius(dp(23));
+        bg.setStroke(dp(1), 0xFF96343D);
+        box.setBackground(bg);
+        return box;
+    }
+
+    private void capNhatNoiDungDoanhThu(List<Map<String, Object>> rows, int mode) {
+        Object tag = thanTrang.getTag();
+        if (!(tag instanceof Object[])) return;
+        Object[] refs = (Object[]) tag;
+        TextView current = (TextView) refs[0], comparison = (TextView) refs[1], previous = (TextView) refs[2];
+        LinearLayout chartCard = (LinearLayout) refs[3];
+        TextView subtitle = (TextView) refs[4];
+        LinearLayout stats = (LinearLayout) refs[5];
+        TextView[] statViews = (TextView[]) refs[6];
+        TextView premium = (TextView) refs[7], standard = (TextView) refs[8], basic = (TextView) refs[9];
+
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"), Locale.US);
+        int year = now.get(Calendar.YEAR), month = now.get(Calendar.MONTH);
+        long[] chartValues;
+        String[] labels;
+        long total = 0, before = 0;
+        int sold = 0;
+        Set<String> memberIds = new HashSet<>();
+        if (mode == 0) {
+            chartValues = new long[12]; labels = new String[12];
+            for (int i = 0; i < 12; i++) labels[i] = "T" + (i + 1);
+        } else if (mode == 1) {
+            chartValues = new long[4]; labels = new String[]{"Q1", "Q2", "Q3", "Q4"};
+        } else {
+            chartValues = new long[5]; labels = new String[5];
+            for (int i = 0; i < 5; i++) labels[i] = String.valueOf(year - 4 + i);
+        }
+        for (Map<String, Object> row : rows) {
+            if (!"dang_hoat_dong".equals(KhoDuLieu.chuoi(row.get("trang_thai")))) continue;
+            long ts = laySo(row, "ngay_duyet"); if (ts <= 0) ts = laySo(row, "ngay_dang_ky");
+            if (ts <= 0) continue;
+            Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"), Locale.US);
+            date.setTimeInMillis(ts);
+            int y = date.get(Calendar.YEAR), m = date.get(Calendar.MONTH);
+            int index = mode == 0 ? (y == year ? m : -1) : mode == 1 ? (y == year ? m / 3 : -1) : (y >= year - 4 && y <= year ? y - (year - 4) : -1);
+            if (index >= 0 && index < chartValues.length) chartValues[index] += laySo(row, "gia");
+            boolean inCurrent = mode == 0 ? y == year && m == month : mode == 1 ? y == year && m / 3 == now.get(Calendar.MONTH) / 3 : y == year;
+            Calendar prev = (Calendar) now.clone();
+            if (mode == 0) prev.add(Calendar.MONTH, -1); else if (mode == 1) prev.add(Calendar.MONTH, -3); else prev.add(Calendar.YEAR, -1);
+            boolean inPrevious = mode == 0 ? y == prev.get(Calendar.YEAR) && m == prev.get(Calendar.MONTH)
+                    : mode == 1 ? y == prev.get(Calendar.YEAR) && m / 3 == prev.get(Calendar.MONTH) / 3 : y == prev.get(Calendar.YEAR);
+            if (inCurrent) { total += laySo(row, "gia"); sold++; String member = KhoDuLieu.chuoi(row.get("uid_nguoi_dung")); if (!member.isEmpty()) memberIds.add(member); }
+            if (inPrevious) before += laySo(row, "gia");
+        }
+        current.setText(tien(total)); previous.setText(tien(before));
+        String unit = mode == 0 ? "tháng trước" : mode == 1 ? "quý trước" : "năm trước";
+        if (before <= 0) comparison.setText(total > 0 ? "↑ Có doanh thu trong kỳ" : "Chưa phát sinh doanh thu kỳ trước");
+        else { long pct = Math.round(Math.abs(total - before) * 100.0 / before); comparison.setText((total >= before ? "↑ " : "↓ ") + pct + "% so với " + unit); }
+        ((TextView) ((LinearLayout) chartCard.getChildAt(0)).getChildAt(0)).setText("▥  Biểu đồ doanh thu");
+        subtitle.setText(mode == 0 ? "Doanh thu theo tháng · VND" : mode == 1 ? "Doanh thu theo quý · VND" : "Doanh thu theo năm · VND");
+        View chart = chartCard.getChildAt(2);
+        chartCard.removeView(chart);
+        chartCard.addView(taoBieuDoDoanhThu(chartValues, mode), new LinearLayout.LayoutParams(-1, dp(220)));
+        statViews[0].setText("👥 Hội viên\n" + memberIds.size());
+        statViews[1].setText("▤ Gói đã bán\n" + sold);
+        statViews[2].setText("◉ Giá trị TB\n" + (sold == 0 ? "0 VND" : tien(total / sold)));
+        premium.setText("◆  Gói Premium                         " + tien(0) + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%");
+        standard.setText("▰  Gói Standard                         " + tien(0) + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%");
+        basic.setText("◈  Gói Basic                              " + tien(0) + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━  0%");
+    }
+
+    private View taoBieuDoDoanhThu(long[] values, int mode) {
+        return new View(this) {
+            final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            @Override protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                float left = dp(38), right = getWidth() - dp(8), top = dp(18), bottom = getHeight() - dp(30);
+                long max = 1; for (long v : values) max = Math.max(max, v);
+                max = Math.max(max, ((max + 4) / 5) * 5);
+                p.setColor(0x553F3A3D); p.setStrokeWidth(dp(1)); p.setStyle(Paint.Style.STROKE);
+                for (int i = 0; i <= 4; i++) { float y = bottom - (bottom - top) * i / 4f; canvas.drawLine(left, y, right, y, p); }
+                float slot = (right - left) / Math.max(1, values.length);
+                for (int i = 0; i < values.length; i++) {
+                    float h = (bottom - top) * values[i] / (float) max;
+                    float x = left + i * slot + slot * .18f;
+                    RectF bar = new RectF(x, bottom - h, x + slot * .64f, bottom);
+                    p.setStyle(Paint.Style.FILL);
+                    p.setShader(new android.graphics.LinearGradient(0, bar.top, 0, bottom, 0xFFFF555B, 0xFF8D101D, android.graphics.Shader.TileMode.CLAMP));
+                    canvas.drawRoundRect(bar, dp(5), dp(5), p); p.setShader(null);
+                    p.setColor(0xFFCAC4C8); p.setTextSize(dp(values.length > 6 ? 9 : 11)); p.setTextAlign(Paint.Align.CENTER);
+                    String label = mode == 0 ? "T" + (i + 1) : mode == 1 ? "Q" + (i + 1) : String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - 4 + i);
+                    canvas.drawText(label, x + slot * .32f, getHeight() - dp(8), p);
+                }
+            }
+        };
     }
 
     private LinearLayout taoTheDoanhThu(String title, TextView value, @Nullable TextView detail) {
@@ -2102,8 +2304,42 @@ public class MainActivity extends AppCompatActivity {
                             data.put("trang_thai", "cho_xac_nhan");
                             kho.them("dang_ky_goi", data, new KhoDuLieu.KetQua<String>() {
                                 @Override public void thanhCong(String id) {
-                                    thongBao("Đã gửi yêu cầu. Chủ Gym sẽ xác nhận đăng ký của bạn.");
-                                    hienDanhSachGymDangKyGoi();
+                                    // Gửi thông báo trực tiếp đến tài khoản chủ Gym sở hữu thương hiệu.
+                                    String selectedGymId = KhoDuLieu.chuoi(pack.get("gym_id"));
+                                    kho.layMot("phong_gym", selectedGymId, new KhoDuLieu.KetQua<Map<String, Object>>() {
+                                        @Override public void thanhCong(Map<String, Object> gym) {
+                                            String ownerUid = gym == null ? "" : KhoDuLieu.chuoi(gym.get("chu_gym_id"));
+                                            if (ownerUid.isEmpty()) {
+                                                thongBao("Đã gửi yêu cầu. Chủ Gym có thể xem trong mục Yêu cầu gói.");
+                                                hienDanhSachGymDangKyGoi();
+                                                return;
+                                            }
+                                            Map<String, Object> notice = new HashMap<>();
+                                            notice.put("gym_id", selectedGymId);
+                                            notice.put("uid_nhan", ownerUid);
+                                            notice.put("tieu_de", "Yêu cầu đăng ký gói mới");
+                                            notice.put("noi_dung", tenNguoiDung() + " vừa đăng ký gói '" + KhoDuLieu.chuoi(pack.get("ten_goi")) + "'. Vui lòng xem và xác nhận.");
+                                            notice.put("loai_thong_bao", "yeu_cau_goi");
+                                            notice.put("dang_ky_goi_id", id);
+                                            notice.put("nguoi_tao_uid", uid);
+                                            notice.put("ngay_tao", System.currentTimeMillis());
+                                            notice.put("danh_sach_da_doc", new ArrayList<String>());
+                                            kho.them("thong_bao", notice, new KhoDuLieu.KetQua<String>() {
+                                                @Override public void thanhCong(String noticeId) {
+                                                    thongBao("Đã gửi yêu cầu. Chủ Gym sẽ nhận được thông báo để xác nhận.");
+                                                    hienDanhSachGymDangKyGoi();
+                                                }
+                                                @Override public void thatBai(String error) {
+                                                    thongBao("Yêu cầu đã được lưu. Chủ Gym vẫn có thể duyệt trong mục Yêu cầu gói.");
+                                                    hienDanhSachGymDangKyGoi();
+                                                }
+                                            });
+                                        }
+                                        @Override public void thatBai(String error) {
+                                            thongBao("Yêu cầu đã được lưu. Chủ Gym có thể duyệt trong mục Yêu cầu gói.");
+                                            hienDanhSachGymDangKyGoi();
+                                        }
+                                    });
                                 }
                                 @Override public void thatBai(String error) { baoLoi(error); }
                             });
@@ -2154,6 +2390,21 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout.LayoutParams createP = new LinearLayout.LayoutParams(-1, -2);
             createP.bottomMargin = dp(14);
             thanTrang.addView(create, createP);
+        } else {
+            LinearLayout personalIntro = new LinearLayout(this);
+            personalIntro.setOrientation(LinearLayout.VERTICAL);
+            personalIntro.setPadding(dp(15), dp(13), dp(15), dp(13));
+            personalIntro.setBackground(taoNenGradient(new int[]{0xFF35191F, 0xFF211719}, 17, 0xFF8D3945));
+            personalIntro.addView(chu("✦  LỘ TRÌNH CỦA RIÊNG BẠN", 13, 0xFFFFA0A5, true));
+            TextView hint = chu("Chủ động chọn ngày, giờ và bài tập phù hợp với mục tiêu của bạn.", 11, 0xFFE1D5D8, false);
+            LinearLayout.LayoutParams hintP = new LinearLayout.LayoutParams(-1, -2); hintP.topMargin = dp(5);
+            personalIntro.addView(hint, hintP);
+            LinearLayout.LayoutParams introP = new LinearLayout.LayoutParams(-1, -2); introP.bottomMargin = dp(10);
+            thanTrang.addView(personalIntro, introP);
+            Button createPersonal = taoNutNho("＋  TỰ XẾP LỊCH TẬP", true, this::hienFormLichTapCaNhan);
+            createPersonal.setTextSize(13); createPersonal.setMinHeight(dp(48));
+            LinearLayout.LayoutParams personalP = new LinearLayout.LayoutParams(-1, -2); personalP.bottomMargin = dp(14);
+            thanTrang.addView(createPersonal, personalP);
         }
         LinearLayout list = new LinearLayout(this);
         list.setOrientation(LinearLayout.VERTICAL);
@@ -2230,7 +2481,7 @@ public class MainActivity extends AppCompatActivity {
             TextView icon = chu("✦", 30, 0xFFFF646B, true); icon.setGravity(Gravity.CENTER); empty.addView(icon);
             TextView title = chu("CHƯA CÓ LỊCH TẬP", 16, TRANG, true); title.setGravity(Gravity.CENTER);
             LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(-1, -2); titleP.topMargin = dp(8); empty.addView(title, titleP);
-            TextView message = chu(laQuanTri() ? "Tạo lịch đầu tiên và phân buổi tập cho hội viên." : "Huấn luyện viên chưa phân lịch cho bạn. Hãy quay lại sau nhé.", 12, XAM, false);
+            TextView message = chu(laQuanTri() ? "Tạo lịch đầu tiên và phân buổi tập cho hội viên." : "Bạn chưa có buổi tập nào. Nhấn TỰ XẾP LỊCH TẬP để tạo kế hoạch riêng nhé.", 12, XAM, false);
             message.setGravity(Gravity.CENTER);
             LinearLayout.LayoutParams messageP = new LinearLayout.LayoutParams(-1, -2); messageP.topMargin = dp(5); empty.addView(message, messageP);
             thanTrang.addView(empty);
@@ -2528,6 +2779,84 @@ public class MainActivity extends AppCompatActivity {
             });
         });
         nut("HỦY", false, this::hienLichTap);
+    }
+
+    /** Hội viên tự tạo lịch cá nhân, không cần chờ chủ Gym phân buổi tập. */
+    private void hienFormLichTapCaNhan() {
+        if (laQuanTri()) { hienFormLichTap(); return; }
+        taoTrang("TẠO LỊCH CÁ NHÂN", "Thiết kế buổi tập theo mục tiêu của bạn", this::hienLichTap, false);
+
+        LinearLayout intro = new LinearLayout(this);
+        intro.setOrientation(LinearLayout.VERTICAL); intro.setPadding(dp(15), dp(14), dp(15), dp(14));
+        intro.setBackground(taoNenGradient(new int[]{0xFF3B1B22, 0xFF211719}, 18, 0xFF9D3D49));
+        intro.addView(chu("YOUR WORKOUT · YOUR RULES", 10, 0xFFFFA0A5, true));
+        TextView introText = chu("Một kế hoạch nhỏ hôm nay sẽ tạo nên thay đổi lớn ngày mai.", 13, TRANG, true);
+        LinearLayout.LayoutParams itp = new LinearLayout.LayoutParams(-1, -2); itp.topMargin = dp(6); intro.addView(introText, itp);
+        LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(-1, -2); ip.bottomMargin = dp(15); thanTrang.addView(intro, ip);
+
+        themChu("01  ·  THÔNG TIN BUỔI TẬP", 13, 0xFFFF858D, true);
+        EditText name = truong("Tên buổi tập", "Ví dụ: Ngực + Tay sau, Cardio...", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
+        EditText date = truong("Ngày tập (YYYY-MM-DD)", "Chọn ngày tập", InputType.TYPE_CLASS_DATETIME, ngayHomNay());
+        final String[] timeValue = {"06:00"};
+        Button timeButton = taoNut("◷  GIỜ TẬP  ·  06:00", false, null);
+        timeButton.setOnClickListener(v -> {
+            String[] options = {"05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "Nhập giờ khác"};
+            new AlertDialog.Builder(this).setTitle("Chọn giờ bắt đầu").setItems(options, (d, which) -> {
+                if (which == options.length - 1) {
+                    EditText input = new EditText(this); input.setSingleLine(true); input.setHint("Ví dụ 18:30"); input.setInputType(InputType.TYPE_CLASS_DATETIME);
+                    new AlertDialog.Builder(this).setTitle("Giờ tập tùy chỉnh").setView(input)
+                            .setNegativeButton("Hủy", null).setPositiveButton("Chọn", (dd, ww) -> {
+                                String value = input.getText().toString().trim();
+                                if (value.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) { timeValue[0] = value; timeButton.setText("◷  GIỜ TẬP  ·  " + value); }
+                                else baoLoi("Giờ không hợp lệ. Ví dụ: 18:30");
+                            }).show();
+                } else { timeValue[0] = options[which]; timeButton.setText("◷  GIỜ TẬP  ·  " + timeValue[0]); }
+            }).show();
+        });
+        thanTrang.addView(timeButton);
+
+        themChu("02  ·  BÀI TẬP CỦA BẠN", 13, 0xFFFF858D, true);
+        EditText note = truong("Danh sách bài tập", "Mỗi bài tập viết trên một dòng. Ví dụ:\nBench Press – 3 hiệp x 12 lần\nPush Up – 3 hiệp x 15 lần", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE, "");
+        note.setSingleLine(false); note.setMinHeight(dp(112));
+        nut("＋  CHỌN TỪ THƯ VIỆN BÀI TẬP", false, () -> {
+            try {
+                List<Exercise> catalog = ExerciseCatalog.load(this);
+                String[] labels = new String[catalog.size()]; boolean[] checked = new boolean[catalog.size()];
+                for (int i = 0; i < catalog.size(); i++) labels[i] = catalog.get(i).name + "  ·  " + catalog.get(i).category;
+                new AlertDialog.Builder(this).setTitle("Thêm bài tập vào kế hoạch")
+                        .setMultiChoiceItems(labels, checked, (d, which, selected) -> checked[which] = selected)
+                        .setNegativeButton("Hủy", null).setPositiveButton("Thêm bài tập", (d, w) -> {
+                            StringBuilder value = new StringBuilder(note.getText().toString().trim());
+                            for (int i = 0; i < catalog.size(); i++) if (checked[i]) { if (value.length() > 0) value.append("\n"); value.append(catalog.get(i).name); }
+                            note.setText(value.toString());
+                        }).show();
+            } catch (Exception e) { baoLoi("Không tải được thư viện: " + e.getMessage()); }
+        });
+        EditText diet = truong("Dinh dưỡng / ghi chú", "Ví dụ: Bổ sung protein, uống đủ nước...", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE, "");
+        diet.setSingleLine(false); diet.setMinHeight(dp(76));
+
+        themChu("03  ·  HOÀN TẤT KẾ HOẠCH", 13, 0xFFFF858D, true);
+        nut("✓  LƯU LỊCH TẬP CỦA TÔI", true, () -> {
+            String workout = name.getText().toString().trim();
+            String day = date.getText().toString().trim();
+            if (workout.isEmpty()) { name.setError("Hãy đặt tên buổi tập"); return; }
+            if (!day.matches("\\d{4}-\\d{2}-\\d{2}")) { date.setError("Dùng định dạng YYYY-MM-DD"); return; }
+            try { new SimpleDateFormat("yyyy-MM-dd", Locale.US).setLenient(false); SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US); sdf.setLenient(false); sdf.parse(day); }
+            catch (Exception e) { date.setError("Ngày không hợp lệ"); return; }
+            if (day.compareTo(ngayHomNay()) < 0) { date.setError("Không thể xếp lịch vào ngày đã qua"); return; }
+            if (note.getText().toString().trim().isEmpty()) { note.setError("Thêm ít nhất một bài tập"); return; }
+            Map<String, Object> data = new HashMap<>();
+            data.put("gym_id", gymId()); data.put("ten_lich", workout); data.put("ngay", day); data.put("gio", timeValue[0]);
+            data.put("mo_ta", note.getText().toString().trim()); data.put("huong_dan_an_uong", diet.getText().toString().trim());
+            data.put("uid_hoi_vien", uid); data.put("ten_hoi_vien", tenNguoiDung()); data.put("nguoi_tao_uid", uid);
+            data.put("loai_lich", "hoi_vien_tu_tao"); data.put("da_hoan_thanh", false); data.put("trang_thai", "sap_dien_ra");
+            data.put("ngay_tao", System.currentTimeMillis());
+            kho.them("lich_tap", data, new KhoDuLieu.KetQua<String>() {
+                @Override public void thanhCong(String id) { thongBao("Đã lưu kế hoạch tập luyện của bạn!"); hienLichTap(); }
+                @Override public void thatBai(String error) { baoLoi("Không lưu được lịch tập: " + error); }
+            });
+        });
+        nut("QUAY LẠI", false, this::hienLichTap);
     }
 
     private long totalActiveWorkoutSeconds = 0;
@@ -3336,24 +3665,345 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void hienChiSoCoThe() {
-        taoTrang("CHỈ SỐ CƠ THỂ", "Theo dõi thay đổi qua từng lần đo", this::hienBangDieuKhien, true);
-        nut("+ CẬP NHẬT CHỈ SỐ", true, this::hienFormChiSo);
-        LinearLayout list = new LinearLayout(this);
-        list.setOrientation(LinearLayout.VERTICAL);
-        thanTrang.addView(list);
+        taoTrang("CHỈ SỐ CƠ THỂ", "Theo dõi sức khỏe và thể trạng", this::hienBangDieuKhien, true);
+        thanTrang.setPadding(dp(14), dp(12), dp(14), dp(24));
         kho.layTheoTruong("chi_so_co_the", "uid_nguoi_dung", uid, new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
             @Override public void thanhCong(List<Map<String, Object>> items) {
+                if (items == null) items = new ArrayList<>();
                 Collections.sort(items, (a, b) -> Long.compare(laySo(b, "ngay_tao"), laySo(a, "ngay_tao")));
-                if (items.isEmpty()) { the("Chưa có dữ liệu đo", "Nhập cân nặng, chiều cao và các chỉ số có sẵn để bắt đầu theo dõi."); return; }
-                Map<String, Object> latest = items.get(0);
-                the("CHỈ SỐ GẦN NHẤT", "Cân nặng: " + decimal(latest.get("can_nang")) + " kg\nChiều cao: " + decimal(latest.get("chieu_cao")) + " cm\nBMI: " + decimal(latest.get("bmi")) + "\nTỷ lệ mỡ: " + (KhoDuLieu.chuoi(latest.get("ti_le_mo")).isEmpty() ? "Chưa nhập" : decimal(latest.get("ti_le_mo")) + "%") + "\nNgày đo: " + KhoDuLieu.chuoi(latest.get("ngay_do")));
-                themChu("LỊCH SỬ ĐO", 14, XAM, true);
-                for (Map<String, Object> item : items) {
-                    the(KhoDuLieu.chuoi(item.get("ngay_do")), "Cân nặng " + decimal(item.get("can_nang")) + " kg · BMI " + decimal(item.get("bmi")) + (KhoDuLieu.chuoi(item.get("ti_le_mo")).isEmpty() ? "" : " · Mỡ " + decimal(item.get("ti_le_mo")) + "%"));
+                Map<String, Object> latest = items.isEmpty() ? null : items.get(0);
+                themBannerChiSoCoThe(bmiTuMap(latest));
+                LinearLayout section = new LinearLayout(MainActivity.this);
+                section.setGravity(Gravity.CENTER_VERTICAL);
+                TextView sectionTitle = chu("▣  Chỉ số gần nhất", 19, TRANG, true);
+                section.addView(sectionTitle, new LinearLayout.LayoutParams(0, -2, 1));
+                section.addView(chu(latest == null ? "Chưa có dữ liệu" : "▦  " + KhoDuLieu.chuoi(latest.get("ngay_do")), 11, XAM, false));
+                LinearLayout.LayoutParams sectionP = new LinearLayout.LayoutParams(-1, -2);
+                sectionP.topMargin = dp(14); sectionP.bottomMargin = dp(12);
+                thanTrang.addView(section, sectionP);
+
+                if (latest == null) {
+                    the("Chưa có dữ liệu đo", "Cập nhật cân nặng, chiều cao và tỷ lệ mỡ để bắt đầu theo dõi hành trình của bạn.");
+                    Button first = nut("＋  CẬP NHẬT CHỈ SỐ", true, MainActivity.this::hienFormChiSo);
+                    first.setMinHeight(dp(56));
+                    return;
                 }
+                double weight = doubleValue(latest.get("can_nang"));
+                double height = doubleValue(latest.get("chieu_cao"));
+                double bmi = doubleValue(latest.get("bmi"));
+                double fat = doubleValue(latest.get("ti_le_mo"));
+                String bmiLabel = nhanBMI(bmi);
+
+                LinearLayout metricRow = new LinearLayout(MainActivity.this);
+                metricRow.setOrientation(LinearLayout.HORIZONTAL);
+                metricRow.addView(theChiSoMini("⚖", "Cân nặng", decimal(weight), "kg", "−", 0xFFFF454D), new LinearLayout.LayoutParams(0, dp(150), 1));
+                metricRow.addView(theChiSoMini("↕", "Chiều cao", decimal(height), "cm", "", 0xFFB58BFF), taoMetricParams());
+                metricRow.addView(theChiSoMini("♡", "BMI", decimal(bmi), "", bmiLabel, 0xFF28D477), taoMetricParams());
+                metricRow.addView(theChiSoMini("％", "Tỷ lệ mỡ", fat > 0 ? decimal(fat) : "—", fat > 0 ? "%" : "", fat > 0 ? "Đã cập nhật" : "Chưa nhập", 0xFFFF9A35), taoMetricParams());
+                thanTrang.addView(metricRow);
+
+                Button update = nut("▧   Cập nhật chỉ số", true, MainActivity.this::hienFormChiSo);
+                update.setTextSize(16); update.setMinHeight(dp(58));
+                update.setBackground(taoNenGradient(new int[]{0xFFFF343A, 0xFFBD101C, 0xFFE92530}, 26, 0xFFFF676D));
+                LinearLayout.LayoutParams updateP = new LinearLayout.LayoutParams(-1, dp(58));
+                updateP.topMargin = dp(14); updateP.bottomMargin = dp(16);
+                update.setLayoutParams(updateP);
+
+                themTieuDeChiSo("▥  Đánh giá chỉ số BMI của bạn");
+                thanTrang.addView(taoThanhBMI(bmi));
+
+                LinearLayout chartCard = taoThe(thanTrang, "⌁  Lịch sử & tiến trình", "");
+                chartCard.setPadding(dp(14), dp(14), dp(14), dp(12));
+                LinearLayout legend = new LinearLayout(MainActivity.this);
+                legend.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                legend.addView(chu("●  Cân nặng (kg)    ", 10, 0xFFFF555B, true));
+                legend.addView(chu("●  Tỷ lệ mỡ (%)", 10, 0xFFBEB8BC, true));
+                chartCard.addView(legend);
+                if (items.size() >= 2) {
+                    List<Map<String, Object>> chartItems = new ArrayList<>(items.subList(0, Math.min(5, items.size())));
+                    Collections.reverse(chartItems);
+                    chartCard.addView(new BieuDoChiSoView(chartItems), new LinearLayout.LayoutParams(-1, dp(190)));
+                } else {
+                    TextView hint = chu("Cần ít nhất 2 lần đo để hiển thị biểu đồ tiến trình.", 12, XAM, false);
+                    chartCard.addView(hint);
+                }
+
+                LinearLayout historyCard = taoThe(thanTrang, "◷  Lịch sử đo", "");
+                historyCard.setPadding(dp(14), dp(14), dp(14), dp(12));
+                TextView all = chu("Xem tất cả  ›", 12, 0xFFFF555B, true);
+                all.setGravity(Gravity.RIGHT);
+                historyCard.addView(all);
+                int count = Math.min(3, items.size());
+                for (int i = 0; i < count; i++) historyCard.addView(taoDongLichSuChiSo(items.get(i)));
+                final List<Map<String, Object>> historyItems = new ArrayList<>(items);
+                all.setOnClickListener(v -> hienTatCaLichSuChiSo(historyItems));
             }
             @Override public void thatBai(String error) { baoLoi("Không tải được chỉ số: " + error); }
         });
+    }
+
+    private LinearLayout.LayoutParams taoMetricParams() {
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, dp(150), 1);
+        p.setMargins(dp(6), 0, 0, 0);
+        return p;
+    }
+
+    private double bmiTuMap(Map<String, Object> item) {
+        return item == null ? 0 : doubleValue(item.get("bmi"));
+    }
+
+    private boolean laNu() {
+        String gender = KhoDuLieu.chuoi(nguoiDung.get("gioi_tinh"));
+        if (gender.isEmpty()) gender = KhoDuLieu.chuoi(nguoiDung.get("gender"));
+        if (gender.isEmpty()) gender = KhoDuLieu.chuoi(nguoiDung.get("sex"));
+        gender = gender.trim().toLowerCase(new Locale("vi", "VN"));
+        return gender.equals("nữ") || gender.equals("nu") || gender.equals("female") || gender.equals("woman") || gender.equals("f");
+    }
+
+    private int mauTheoBMI(double bmi) {
+        if (bmi <= 0) return 0xFF9BCB26;
+        if (bmi < 18.5) return 0xFF45B9EE;
+        if (bmi < 25) return 0xFF55D65B;
+        if (bmi < 30) return 0xFFFFC52E;
+        if (bmi < 40) return 0xFFFF8A28;
+        return 0xFFF33F2D;
+    }
+
+    private void themBannerChiSoCoThe(double bmi) {
+        LinearLayout banner = new LinearLayout(this);
+        banner.setGravity(Gravity.CENTER_VERTICAL);
+        banner.setPadding(dp(12), dp(12), dp(10), dp(12));
+        banner.setBackground(taoNenGradient(new int[]{0xFF401014, 0xFF1B1014, 0xFF70151B}, 22, 0xFFB52D36));
+        LinearLayout copy = new LinearLayout(this);
+        copy.setOrientation(LinearLayout.VERTICAL);
+        TextView title = chu("THEO DÕI\nCHỈ SỐ CƠ THỂ", 18, TRANG, true);
+        title.setLineSpacing(dp(1), 1f);
+        TextView pulse = chu("⌁  ♥  ⌁", 22, mauTheoBMI(bmi), true);
+        TextView subtitle = chu("Đánh giá tình trạng sức khỏe,\nkiểm soát cân nặng và tỷ lệ mỡ\nđể đạt mục tiêu tập luyện hiệu quả.", 10, 0xFFE3DADD, false);
+        subtitle.setPadding(0, dp(5), 0, 0);
+        copy.addView(title); copy.addView(pulse); copy.addView(subtitle);
+        banner.addView(copy, new LinearLayout.LayoutParams(0, -2, 1.05f));
+
+        FrameLayout anatomy = new FrameLayout(this);
+        anatomy.addView(new BieuTuongCoTheView(bmi, laNu()), new FrameLayout.LayoutParams(-1, -1));
+        banner.addView(anatomy, new LinearLayout.LayoutParams(0, dp(188), 0.82f));
+
+        LinearLayout who = new LinearLayout(this);
+        who.setOrientation(LinearLayout.VERTICAL);
+        who.setGravity(Gravity.CENTER);
+        who.setPadding(dp(4), dp(7), dp(4), dp(7));
+        who.setBackground(nenVien(0x442A2024, 0xFF754047, 16));
+        TextView whoTitle = chu("PHÂN LOẠI BMI\n(WHO)", 11, TRANG, true);
+        whoTitle.setGravity(Gravity.CENTER);
+        who.addView(whoTitle);
+        String[] bmiText = {"<18.5\nThiếu cân", "18.5–24.9\nBình thường", "25–29.9\nThừa cân", "30–39.9\nBéo phì\nđộ 1–2", "≥40\nBéo phì\nnặng"};
+        int[] bmiColors = {0xFF45B9EE, 0xFF9BCB26, 0xFFFFC52E, 0xFFFF8A28, 0xFFF33F2D};
+        LinearLayout bmiLegend = new LinearLayout(this);
+        bmiLegend.setOrientation(LinearLayout.HORIZONTAL);
+        for (int i = 0; i < bmiText.length; i++) {
+            LinearLayout item = new LinearLayout(this);
+            item.setGravity(Gravity.CENTER);
+            item.setOrientation(LinearLayout.VERTICAL);
+            TextView person = chu("♟", 25, bmiColors[i], true);
+            person.setGravity(Gravity.CENTER);
+            TextView label = chu(bmiText[i], 8, 0xFFF6F0F0, false);
+            label.setGravity(Gravity.CENTER);
+            item.addView(person); item.addView(label);
+            bmiLegend.addView(item, new LinearLayout.LayoutParams(0, -2, 1));
+        }
+        who.addView(bmiLegend);
+        banner.addView(who, new LinearLayout.LayoutParams(0, dp(174), 1.12f));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, dp(212));
+        p.bottomMargin = dp(15);
+        thanTrang.addView(banner, p);
+    }
+
+    private class BieuTuongCoTheView extends View {
+        private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final double bmi;
+        private final boolean female;
+        BieuTuongCoTheView(double value, boolean isFemale) { super(MainActivity.this); bmi = value; female = isFemale; }
+        @Override protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            float w = getWidth(), h = getHeight();
+            float scale = Math.min(w / 112f, h / 190f);
+            canvas.save(); canvas.translate((w - 112f * scale) / 2f, (h - 190f * scale) / 2f); canvas.scale(scale, scale);
+            int color = mauTheoBMI(bmi);
+            p.setStyle(Paint.Style.STROKE); p.setStrokeWidth(1.2f); p.setColor((color & 0x00FFFFFF) | 0x66000000);
+            canvas.drawCircle(56, 96, 53, p);
+            p.setStyle(Paint.Style.FILL);
+            p.setShadowLayer(13, 0, 0, color);
+            p.setColor(color);
+            android.graphics.Path body = new android.graphics.Path();
+            // Silhouette toàn thân: dáng nam rộng vai hoặc dáng nữ eo/hông thon rõ hơn.
+            body.moveTo(49, 26); body.quadTo(56, 19, 63, 26); body.lineTo(65, 39);
+            if (female) {
+                body.quadTo(72, 42, 78, 47); body.quadTo(83, 55, 82, 67);
+                body.lineTo(76, 91); body.quadTo(72, 99, 69, 105);
+                body.quadTo(75, 118, 72, 132); body.lineTo(68, 174);
+                body.quadTo(67, 181, 62, 181); body.quadTo(57, 181, 58, 173);
+                body.lineTo(55, 137); body.lineTo(53, 137); body.lineTo(50, 173);
+                body.quadTo(51, 181, 46, 181); body.quadTo(41, 181, 40, 174);
+                body.lineTo(36, 132); body.quadTo(33, 118, 39, 105);
+                body.quadTo(36, 99, 32, 91); body.lineTo(26, 67);
+                body.quadTo(25, 55, 30, 47); body.quadTo(36, 42, 47, 39);
+            } else {
+                body.quadTo(39, 41, 29, 45); body.quadTo(22, 48, 21, 60);
+                body.lineTo(15, 91); body.quadTo(13, 98, 17, 100);
+                body.quadTo(21, 102, 23, 94); body.lineTo(32, 67);
+                body.lineTo(37, 65); body.lineTo(33, 100); body.quadTo(31, 111, 34, 120);
+                body.lineTo(39, 174); body.quadTo(40, 182, 46, 182);
+                body.quadTo(52, 182, 51, 174); body.lineTo(54, 132);
+                body.lineTo(58, 132); body.lineTo(61, 174); body.quadTo(60, 182, 66, 182);
+                body.quadTo(72, 182, 73, 174); body.lineTo(78, 120);
+                body.quadTo(81, 111, 79, 100); body.lineTo(75, 65);
+                body.lineTo(80, 67); body.lineTo(89, 94); body.quadTo(91, 102, 95, 100);
+                body.quadTo(99, 98, 97, 91); body.lineTo(91, 60);
+                body.quadTo(90, 48, 83, 45); body.quadTo(73, 41, 65, 39);
+            }
+            body.close(); canvas.drawPath(body, p);
+            p.clearShadowLayer();
+            // Đầu, cổ và bàn chân được nối liền thị giác như hình silhouette tham chiếu.
+            p.setColor(color); canvas.drawOval(46, 3, 66, 29, p);
+            canvas.drawRoundRect(49, 24, 63, 43, 5, 5, p);
+            canvas.drawOval(31, 177, 48, 185, p); canvas.drawOval(61, 177, 79, 185, p);
+            canvas.restore();
+        }
+    }
+
+    private LinearLayout theChiSoMini(String icon, String label, String value, String unit, String note, int accent) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER);
+        card.setPadding(dp(5), dp(10), dp(5), dp(8));
+        card.setBackground(taoNenGradient(new int[]{0xFF32191E, 0xFF19171B, 0xFF21191D}, 20, accent));
+        card.setElevation(dp(3));
+        TextView ico = chu(icon, 27, accent, true); ico.setGravity(Gravity.CENTER);
+        card.addView(ico);
+        TextView name = chu(label, 11, 0xFFE4E0E1, true); name.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams np = new LinearLayout.LayoutParams(-1, -2); np.topMargin = dp(5); card.addView(name, np);
+        LinearLayout valueRow = new LinearLayout(this); valueRow.setGravity(Gravity.CENTER);
+        TextView number = chu(value, 23, TRANG, true); valueRow.addView(number);
+        if (!unit.isEmpty()) { TextView u = chu(" " + unit, 12, accent, true); valueRow.addView(u); }
+        LinearLayout.LayoutParams vp = new LinearLayout.LayoutParams(-1, -2); vp.topMargin = dp(5); card.addView(valueRow, vp);
+        TextView status = chu(note, 9, note.equals("Bình thường") ? 0xFFFFFFFF : 0xFFD0C8CB, false);
+        status.setGravity(Gravity.CENTER); status.setMaxLines(1);
+        status.setPadding(dp(4), dp(4), dp(4), dp(4));
+        if (note.equals("Bình thường")) status.setBackground(taoNenGradient(new int[]{0xFF2BC34A, 0xFF168B3C}, 18, 0xFF5BEE77));
+        LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-1, -2); sp.topMargin = dp(4); card.addView(status, sp);
+        return card;
+    }
+
+    private void themTieuDeChiSo(String text) {
+        TextView title = chu(text, 17, TRANG, true);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2);
+        p.topMargin = dp(2); p.bottomMargin = dp(10);
+        thanTrang.addView(title, p);
+    }
+
+    private String nhanBMI(double bmi) {
+        if (bmi <= 0) return "Chưa đủ dữ liệu";
+        if (bmi < 18.5) return "Thiếu cân";
+        if (bmi < 25) return "Bình thường";
+        if (bmi < 30) return "Thừa cân";
+        if (bmi < 40) return "Béo phì độ 1–2";
+        return "Béo phì nặng";
+    }
+
+    private View taoThanhBMI(double bmi) {
+        LinearLayout wrap = new LinearLayout(this);
+        wrap.setOrientation(LinearLayout.HORIZONTAL);
+        String[] labels = {"< 18.5\nThiếu cân", "18.5 – 24.9\nBình thường", "25 – 29.9\nThừa cân", "30 – 39.9\nBéo phì độ 1–2", "≥ 40\nBéo phì nặng"};
+        int[] colors = {0xFF49A8D5, 0xFF24A64A, 0xFFFFC52E, 0xFFFF9632, 0xFFF3544D};
+        int active = bmi < 18.5 ? 0 : bmi < 25 ? 1 : bmi < 30 ? 2 : bmi < 40 ? 3 : 4;
+        for (int i = 0; i < labels.length; i++) {
+            TextView cell = chu(labels[i], 10, i == active ? Color.WHITE : Color.BLACK, true);
+            cell.setGravity(Gravity.CENTER);
+            cell.setPadding(dp(2), dp(11), dp(2), dp(11));
+            GradientDrawable bg = new GradientDrawable(); bg.setColor(colors[i]);
+            bg.setCornerRadii(i == 0 ? new float[]{dp(12),dp(12),0,0,0,0,dp(12),dp(12)} : i == 4 ? new float[]{0,0,dp(12),dp(12),dp(12),dp(12),0,0} : new float[8]);
+            if (i == active) bg.setStroke(dp(2), Color.WHITE);
+            cell.setBackground(bg);
+            wrap.addView(cell, new LinearLayout.LayoutParams(0, dp(66), 1));
+        }
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2); p.bottomMargin = dp(16);
+        return wrap;
+    }
+
+    private View taoDongLichSuChiSo(Map<String, Object> item) {
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(11), dp(11), dp(10), dp(11));
+        row.setBackground(taoNenGradient(new int[]{0xFF382326, 0xFF211A1D}, 17, 0xFF75434A));
+        row.setElevation(dp(2));
+        TextView icon = chu("▦", 23, 0xFFFF5A60, true);
+        row.addView(icon, new LinearLayout.LayoutParams(dp(38), -2));
+        LinearLayout info = new LinearLayout(this); info.setOrientation(LinearLayout.VERTICAL);
+        info.addView(chu(KhoDuLieu.chuoi(item.get("ngay_do")), 14, TRANG, true));
+        String detail = "Cân nặng: " + decimal(item.get("can_nang")) + " kg   ·   Chiều cao: " + decimal(item.get("chieu_cao")) + " cm\nBMI: " + decimal(item.get("bmi")) + "   ·   Tỷ lệ mỡ: " + (doubleValue(item.get("ti_le_mo")) > 0 ? decimal(item.get("ti_le_mo")) + "%" : "—");
+        TextView values = chu(detail, 10, 0xFFD4CDD0, false); values.setPadding(0, dp(4), 0, 0);
+        info.addView(values);
+        row.addView(info, new LinearLayout.LayoutParams(0, -2, 1));
+        row.addView(chu("›", 25, XAM, false));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2); p.bottomMargin = dp(8);
+        row.setLayoutParams(p);
+        return row;
+    }
+
+    private void hienTatCaLichSuChiSo(List<Map<String, Object>> items) {
+        taoTrang("LỊCH SỬ ĐO", "Các lần cập nhật chỉ số cơ thể", this::hienChiSoCoThe, false);
+        for (Map<String, Object> item : items) thanTrang.addView(taoDongLichSuChiSo(item));
+    }
+
+    private class BieuDoChiSoView extends View {
+        private final List<Map<String, Object>> data;
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        BieuDoChiSoView(List<Map<String, Object>> values) { super(MainActivity.this); data = values; }
+        @Override protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            float left = dp(26), right = getWidth() - dp(24), top = dp(12), bottom = getHeight() - dp(28);
+            paint.setStrokeWidth(dp(1)); paint.setColor(0x44FFFFFF);
+            for (int i = 0; i < 4; i++) { float y = top + (bottom-top)*i/3f; canvas.drawLine(left,y,right,y,paint); }
+            if (data.isEmpty()) return;
+            double minW = Double.MAX_VALUE, maxW = -Double.MAX_VALUE;
+            for (Map<String,Object> item : data) { double w = doubleValue(item.get("can_nang")); minW=Math.min(minW,w); maxW=Math.max(maxW,w); }
+            if (maxW-minW < 1) { minW -= 1; maxW += 1; } else { minW -= 1; maxW += 1; }
+            PathHolder weightPath = new PathHolder();
+            for (int i=0;i<data.size();i++) {
+                float x = left + (right-left)*(data.size()==1?0.5f:(float)i/(data.size()-1));
+                float y = bottom - (float)((doubleValue(data.get(i).get("can_nang"))-minW)/(maxW-minW))*(bottom-top);
+                if (i==0) weightPath.path.moveTo(x,y); else weightPath.path.lineTo(x,y);
+            }
+            paint.setStyle(Paint.Style.STROKE); paint.setStrokeWidth(dp(3)); paint.setColor(0xFFFF454D); paint.setStrokeCap(Paint.Cap.ROUND); canvas.drawPath(weightPath.path,paint);
+            android.graphics.Path fatPath = new android.graphics.Path();
+            boolean hasFat = false;
+            for (int i=0;i<data.size();i++) {
+                double fat = doubleValue(data.get(i).get("ti_le_mo"));
+                if (fat <= 0) continue;
+                float x = left + (right-left)*(data.size()==1?0.5f:(float)i/(data.size()-1));
+                float y = bottom - (float)((fat-5.0)/30.0)*(bottom-top);
+                if (!hasFat) { fatPath.moveTo(x,y); hasFat = true; } else fatPath.lineTo(x,y);
+            }
+            if (hasFat) {
+                paint.setStyle(Paint.Style.STROKE); paint.setStrokeWidth(dp(3)); paint.setColor(0xFFBEB8BC); canvas.drawPath(fatPath, paint);
+            }
+            for (int i=0;i<data.size();i++) {
+                float x=left+(right-left)*(data.size()==1?0.5f:(float)i/(data.size()-1));
+                float y=bottom-(float)((doubleValue(data.get(i).get("can_nang"))-minW)/(maxW-minW))*(bottom-top);
+                paint.setStyle(Paint.Style.FILL); paint.setColor(Color.WHITE); canvas.drawCircle(x,y,dp(4),paint);
+                paint.setColor(0xFFFF454D); canvas.drawCircle(x,y,dp(3),paint);
+                double fat = doubleValue(data.get(i).get("ti_le_mo"));
+                if (fat > 0) {
+                    float fy = bottom - (float)((fat-5.0)/30.0)*(bottom-top);
+                    paint.setColor(Color.WHITE); canvas.drawCircle(x,fy,dp(4),paint);
+                    paint.setColor(0xFFBEB8BC); canvas.drawCircle(x,fy,dp(3),paint);
+                }
+                paint.setColor(0xFFBDB6B9); paint.setTextSize(dp(9)); paint.setTextAlign(Paint.Align.CENTER);
+                String date=KhoDuLieu.chuoi(data.get(i).get("ngay_do")); if(date.length()>=7) date=date.substring(5,7)+"/"+date.substring(2,4);
+                canvas.drawText(date,x,bottom+dp(17),paint);
+            }
+        }
+        class PathHolder { android.graphics.Path path = new android.graphics.Path(); }
     }
 
     private void hienFormChiSo() {
@@ -3596,8 +4246,66 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------
 
     private void hienThongBao() {
-        taoTrang("THÔNG BÁO", tenGymHienTai, this::hienBangDieuKhien, true);
-        if (laQuanTri()) nut("+ GỬI THÔNG BÁO ĐẾN HỘI VIÊN", true, this::hienFormThongBao);
+        taoTrang("THÔNG BÁO", laQuanTri() ? "QUẢN LÝ PHÒNG TẬP" : tenGymHienTai, this::hienBangDieuKhien, true);
+        if (laQuanTri()) {
+            LinearLayout send = new LinearLayout(this);
+            send.setGravity(Gravity.CENTER);
+            send.setOrientation(LinearLayout.HORIZONTAL);
+            send.setPadding(dp(16), dp(17), dp(16), dp(17));
+            GradientDrawable sendBg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                    new int[]{0xFFFF171D, 0xFFCF0712, 0xFF9E0710});
+            sendBg.setCornerRadius(dp(34));
+            sendBg.setStroke(dp(2), 0xFFFF424B);
+            send.setBackground(sendBg);
+            send.setElevation(dp(8));
+            TextView sendText = chu("✉   + GỬI THÔNG BÁO ĐẾN HỘI VIÊN   ›", 16, TRANG, true);
+            sendText.setGravity(Gravity.CENTER);
+            send.addView(sendText);
+            LinearLayout.LayoutParams sendParams = new LinearLayout.LayoutParams(-1, dp(62));
+            sendParams.bottomMargin = dp(26);
+            thanTrang.addView(send, sendParams);
+            send.setOnClickListener(v -> hienFormThongBao());
+
+        }
+
+        // Bộ lọc dùng chung cho cả hội viên và chủ phòng tập.
+        {
+            LinearLayout filterLabel = new LinearLayout(this);
+            filterLabel.setGravity(Gravity.CENTER_VERTICAL);
+            TextView bookmark = chu("▱", 23, 0xFFFF2635, true);
+            filterLabel.addView(bookmark, new LinearLayout.LayoutParams(dp(42), -2));
+            filterLabel.addView(chu("Loại thông báo", 15, 0xFFD2D0D8, false));
+            LinearLayout.LayoutParams flp = new LinearLayout.LayoutParams(-1, -2);
+            flp.topMargin = dp(8);
+            flp.bottomMargin = dp(8);
+            thanTrang.addView(filterLabel, flp);
+
+            LinearLayout filters = new LinearLayout(this);
+            filters.setOrientation(LinearLayout.HORIZONTAL);
+            filters.setPadding(dp(4), dp(4), dp(4), dp(4));
+            filters.setBackground(nenVien(0xFF09090B, 0xFF343238, 28));
+            String[] names = {"Tất cả", "Ưu đãi", "Cập nhật", "Khác"};
+            String[] icons = {"▦", "♟", "▤", "●"};
+            for (int i = 0; i < names.length; i++) {
+                final String selected = names[i];
+                boolean active = boLocThongBao.equals(selected);
+                TextView chip = chu(icons[i] + "  " + names[i], 12, active ? TRANG : 0xFFB8B6C0, active);
+                chip.setGravity(Gravity.CENTER);
+                chip.setPadding(dp(5), dp(13), dp(5), dp(13));
+                chip.setBackground(nenVien(active ? 0xFFE50918 : 0xFF17171B,
+                        active ? 0xFFFF3643 : 0xFF29292F, 22));
+                LinearLayout.LayoutParams chipParams = new LinearLayout.LayoutParams(0, dp(48), 1);
+                chipParams.setMargins(dp(2), 0, dp(2), 0);
+                filters.addView(chip, chipParams);
+                chip.setOnClickListener(v -> {
+                    boLocThongBao = selected;
+                    hienThongBao();
+                });
+            }
+            LinearLayout.LayoutParams filtersParams = new LinearLayout.LayoutParams(-1, -2);
+            filtersParams.bottomMargin = dp(18);
+            thanTrang.addView(filters, filtersParams);
+        }
         kho.layThongBaoHienThi(gymId(), uid, laQuanTri(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
             @Override public void thanhCong(List<Map<String, Object>> all) {
                 if (all == null) all = new ArrayList<>();
@@ -3606,17 +4314,23 @@ public class MainActivity extends AppCompatActivity {
                 for (Map<String, Object> item : all) {
                     String receiver = KhoDuLieu.chuoi(item.get("uid_nhan"));
                     if (!laQuanTri() && !receiver.isEmpty() && !receiver.equals(uid)) continue;
+                    if (!phuHopBoLocThongBao(item)) continue;
                     count++;
                     boolean read = daDoc(item);
-                    LinearLayout card = the(KhoDuLieu.chuoi(item.get("tieu_de")), 
-                            KhoDuLieu.chuoi(item.get("noi_dung")) + "\n" 
-                            + ngay(laySo(item, "ngay_tao")) 
-                            + (laQuanTri() ? "" : (read ? "\nĐã đọc" : "\n● Chưa đọc")));
+                    LinearLayout card = the("🔔  " + KhoDuLieu.chuoi(item.get("tieu_de")),
+                            KhoDuLieu.chuoi(item.get("noi_dung")) + "\n\n" + ngay(laySo(item, "ngay_tao"))
+                            + (laQuanTri() ? "" : (read ? "\n✓ Đã đọc" : "\n● Chưa đọc")));
+                    card.setBackground(taoNenGradient(new int[]{0xFF25191D, 0xFF151417}, 18, read ? 0xFF49343A : 0xFF9E303A));
+                    card.setElevation(dp(3));
 
                     if (!laQuanTri()) {
                         if (!read) themNutVaoThe(card, "ĐÁNH DẤU ĐÃ ĐỌC", true, () -> danhDauDaDoc(item));
                         themNutVaoThe(card, "XEM CHI TIẾT", false, () -> hienChiTietThongBao(item));
                     } else {
+                        if ("yeu_cau_goi".equals(KhoDuLieu.chuoi(item.get("loai_thong_bao")))) {
+                            themNutVaoThe(card, "MỞ YÊU CẦU · XÁC NHẬN ĐĂNG KÝ  ›", true,
+                                    () -> moYeuCauGoiTuThongBao(item));
+                        }
                         // Chủ gym có quyền xem chi tiết, sửa hoặc xóa thông báo
                         themNutVaoThe(card, "XEM CHI TIẾT", false, () -> hienChiTietThongBao(item));
                         themNutVaoThe(card, "✏️ CẬP NHẬT THÔNG BÁO", true, () -> hienFormSuaThongBao(item));
@@ -3633,10 +4347,92 @@ public class MainActivity extends AppCompatActivity {
                                 })).show());
                     }
                 }
-                if (count == 0) the(laQuanTri() ? "Chưa có thông báo nào được gửi" : "Bạn chưa có thông báo", laQuanTri() ? "Bấm '+ GỬI THÔNG BÁO ĐẾN HỘI VIÊN' ở trên để tạo thông báo mới." : "Thông báo mới từ thương hiệu Gym sẽ hiển thị tại đây.");
+                if (count == 0) {
+                    if (laQuanTri()) {
+                        LinearLayout emptyHeading = new LinearLayout(MainActivity.this);
+                        emptyHeading.setGravity(Gravity.CENTER_VERTICAL);
+                        emptyHeading.addView(chu("▣", 26, 0xFFFF2635, true), new LinearLayout.LayoutParams(dp(42), -2));
+                        emptyHeading.addView(chu("Chưa có thông báo nào được gửi", 18, TRANG, true), new LinearLayout.LayoutParams(0, -2, 1));
+                        thanTrang.addView(emptyHeading, new LinearLayout.LayoutParams(-1, -2));
+                        View divider = new View(MainActivity.this);
+                        divider.setBackgroundColor(0xFF555055);
+                        LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(-1, dp(1));
+                        dividerParams.topMargin = dp(12);
+                        dividerParams.bottomMargin = dp(12);
+                        thanTrang.addView(divider, dividerParams);
+                        themChu("Bấm + GỬI THÔNG BÁO ĐẾN HỘI VIÊN ở trên để tạo thông báo mới.", 14, 0xFFB9B8C2, false);
+                        LinearLayout empty = new LinearLayout(MainActivity.this);
+                        empty.setOrientation(LinearLayout.VERTICAL);
+                        empty.setGravity(Gravity.CENTER);
+                        empty.setPadding(dp(12), dp(32), dp(12), dp(34));
+                        TextView bell = chu("♟", 64, 0xFFFF2635, true);
+                        bell.setGravity(Gravity.CENTER);
+                        GradientDrawable glow = new GradientDrawable();
+                        glow.setShape(GradientDrawable.OVAL);
+                        glow.setColor(0x221F1F25);
+                        bell.setBackground(glow);
+                        empty.addView(bell, new LinearLayout.LayoutParams(dp(142), dp(142)));
+                        TextView title = chu(boLocThongBao.equals("Tất cả") ? "Không có thông báo nào" : "Không tìm thấy thông báo", 19, TRANG, true);
+                        title.setGravity(Gravity.CENTER);
+                        LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(-1, -2);
+                        titleP.topMargin = dp(12);
+                        empty.addView(title, titleP);
+                        TextView desc = chu("Khi có thông báo mới, chúng sẽ xuất hiện ở đây để bạn theo dõi.", 15, 0xFFB9B8C2, false);
+                        desc.setGravity(Gravity.CENTER);
+                        desc.setLineSpacing(dp(4), 1f);
+                        LinearLayout.LayoutParams descP = new LinearLayout.LayoutParams(-1, -2);
+                        descP.topMargin = dp(10);
+                        descP.leftMargin = dp(18);
+                        descP.rightMargin = dp(18);
+                        empty.addView(desc, descP);
+                        thanTrang.addView(empty, new LinearLayout.LayoutParams(-1, -2));
+                    } else {
+                        LinearLayout empty = new LinearLayout(MainActivity.this);
+                        empty.setOrientation(LinearLayout.VERTICAL);
+                        empty.setGravity(Gravity.CENTER);
+                        empty.setPadding(dp(14), dp(42), dp(14), dp(50));
+                        FrameLayout illustration = new FrameLayout(MainActivity.this);
+                        GradientDrawable halo = new GradientDrawable();
+                        halo.setShape(GradientDrawable.OVAL);
+                        halo.setColor(0xFF171719);
+                        halo.setStroke(dp(1), 0xFF342126);
+                        illustration.setBackground(halo);
+                        TextView bell = chu("♟", 66, 0xFFFF2635, true);
+                        bell.setGravity(Gravity.CENTER);
+                        illustration.addView(bell, new FrameLayout.LayoutParams(-1, -1));
+                        empty.addView(illustration, new LinearLayout.LayoutParams(dp(142), dp(142)));
+                        TextView title = chu(boLocThongBao.equals("Tất cả") ? "Không có thông báo nào" : "Không tìm thấy thông báo", 19, TRANG, true);
+                        title.setGravity(Gravity.CENTER);
+                        LinearLayout.LayoutParams titleP = new LinearLayout.LayoutParams(-1, -2);
+                        titleP.topMargin = dp(15);
+                        empty.addView(title, titleP);
+                        TextView desc = chu("Khi có thông báo mới từ phòng tập, chúng sẽ xuất hiện ở đây để bạn tiện theo dõi.", 14, 0xFFB9B8C2, false);
+                        desc.setGravity(Gravity.CENTER);
+                        desc.setLineSpacing(dp(4), 1f);
+                        LinearLayout.LayoutParams descP = new LinearLayout.LayoutParams(-1, -2);
+                        descP.topMargin = dp(9);
+                        descP.leftMargin = dp(20); descP.rightMargin = dp(20);
+                        empty.addView(desc, descP);
+                        thanTrang.addView(empty, new LinearLayout.LayoutParams(-1, -2));
+                    }
+                }
             }
             @Override public void thatBai(String error) { baoLoi("Không tải được thông báo: " + error); }
         });
+    }
+
+    private boolean phuHopBoLocThongBao(Map<String, Object> item) {
+        if ("Tất cả".equals(boLocThongBao)) return true;
+        String type = (KhoDuLieu.chuoi(item.get("loai")) + " "
+                + KhoDuLieu.chuoi(item.get("phan_loai")) + " "
+                + KhoDuLieu.chuoi(item.get("category")) + " "
+                + KhoDuLieu.chuoi(item.get("tieu_de")) + " "
+                + KhoDuLieu.chuoi(item.get("noi_dung"))).toLowerCase(Locale.ROOT);
+        if ("Ưu đãi".equals(boLocThongBao)) return type.contains("ưu đãi") || type.contains("uu dai") || type.contains("khuyến mãi") || type.contains("giam giá") || type.contains("sale");
+        if ("Cập nhật".equals(boLocThongBao)) return type.contains("cập nhật") || type.contains("cap nhat") || type.contains("lịch") || type.contains("bảo trì");
+        return !(type.contains("ưu đãi") || type.contains("uu dai") || type.contains("khuyến mãi")
+                || type.contains("giam giá") || type.contains("sale") || type.contains("cập nhật")
+                || type.contains("cap nhat") || type.contains("lịch") || type.contains("bảo trì"));
     }
 
     private void hienChiTietThongBao(Map<String, Object> item) {
@@ -3739,14 +4535,157 @@ public class MainActivity extends AppCompatActivity {
     private void hienHoiVien() {
         if (!laQuanTri()) { baoLoi("Chức năng này dành cho quản trị Gym."); return; }
         taoTrang("QUẢN LÝ HỘI VIÊN", tenGymHienTai, this::hienBangDieuKhien, true);
-        nut("XEM YÊU CẦU ĐĂNG KÝ GÓI", true, this::hienYeuCauGoi);
-        nut("ĐIỂM DANH HỘI VIÊN", false, this::hienDiemDanh);
+
+        LinearLayout topActions = new LinearLayout(this);
+        topActions.setOrientation(LinearLayout.HORIZONTAL);
+        Button requestButton = taoNutNho("✉  YÊU CẦU GÓI", true, this::hienYeuCauGoi);
+        Button attendanceButton = taoNutNho("✓  ĐIỂM DANH", false, this::hienDiemDanh);
+        requestButton.setTextSize(11); attendanceButton.setTextSize(11);
+        LinearLayout.LayoutParams half = new LinearLayout.LayoutParams(0, dp(43), 1);
+        half.setMargins(0, 0, dp(6), 0); topActions.addView(requestButton, half);
+        LinearLayout.LayoutParams half2 = new LinearLayout.LayoutParams(0, dp(43), 1);
+        half2.setMargins(dp(6), 0, 0, 0); topActions.addView(attendanceButton, half2);
+        thanTrang.addView(topActions);
+
+        TextView totalLabel = chu("TỔNG SỐ: ĐANG TẢI HỘI VIÊN", 12, 0xFFE9E9E9, true);
+        totalLabel.setPadding(dp(10), dp(7), dp(10), dp(7));
+        totalLabel.setBackground(nenVien(0xFF292929, 0xFF484848, 9));
+        LinearLayout.LayoutParams totalP = new LinearLayout.LayoutParams(-2, -2);
+        totalP.topMargin = dp(8); totalP.bottomMargin = dp(13); thanTrang.addView(totalLabel, totalP);
+
+        EditText search = oNhap("⌕  Tìm tên hoặc email hội viên...",
+                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, "");
+        search.setSingleLine(true);
+
+        HorizontalScrollView filterScroll = new HorizontalScrollView(this);
+        filterScroll.setHorizontalScrollBarEnabled(false);
+        LinearLayout filters = new LinearLayout(this);
+        filters.setOrientation(LinearLayout.HORIZONTAL);
+        filterScroll.addView(filters);
+        thanTrang.addView(filterScroll);
+
+        LinearLayout listHost = new LinearLayout(this);
+        listHost.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams listP = new LinearLayout.LayoutParams(-1, -2);
+        listP.topMargin = dp(15); thanTrang.addView(listHost, listP);
+
+        final String[] selectedFilter = {"Tất cả"};
+        final List<Map<String, Object>> loadedMembers = new ArrayList<>();
+        Runnable renderList = () -> {
+            listHost.removeAllViews();
+            String query = search.getText().toString().trim().toLowerCase(new Locale("vi", "VN"));
+            int visible = 0;
+            long now = System.currentTimeMillis();
+            for (Map<String, Object> member : loadedMembers) {
+                String name = KhoDuLieu.chuoi(member.get("ho_ten"));
+                String email = KhoDuLieu.chuoi(member.get("email"));
+                String phone = KhoDuLieu.chuoi(member.get("so_dien_thoai"));
+                String packageName = KhoDuLieu.chuoi(member.get("_ten_goi"));
+                long expiry = laySo(member, "_ngay_het_han");
+                boolean locked = Boolean.FALSE.equals(member.get("trang_thai"));
+                boolean expired = expiry > 0 && expiry <= now;
+                boolean expiring = expiry > now && expiry - now <= 7L * 86400000L;
+                String category = locked ? "Đã khóa" : (expiry <= 0 ? "Chưa có gói" : (expired ? "Hết hạn" : (expiring ? "Sắp hết hạn" : "Đang hoạt động")));
+                boolean matchQuery = (name + " " + email + " " + phone).toLowerCase(new Locale("vi", "VN")).contains(query);
+                boolean matchFilter = "Tất cả".equals(selectedFilter[0])
+                        || ("Đang hoạt động".equals(selectedFilter[0]) && "Đang hoạt động".equals(category))
+                        || ("Sắp hết hạn".equals(selectedFilter[0]) && "Sắp hết hạn".equals(category))
+                        || ("Hết hạn".equals(selectedFilter[0]) && "Hết hạn".equals(category));
+                if (!matchQuery || !matchFilter) continue;
+                visible++;
+
+                LinearLayout card = new LinearLayout(MainActivity.this);
+                card.setOrientation(LinearLayout.HORIZONTAL);
+                card.setGravity(Gravity.CENTER_VERTICAL);
+                card.setPadding(dp(13), dp(13), dp(10), dp(13));
+                GradientDrawable cardBg = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{0xFF1E1E20, 0xFF151516, 0xFF191719});
+                cardBg.setCornerRadius(dp(16)); cardBg.setStroke(dp(1), 0xFF555052);
+                card.setBackground(cardBg);
+                LinearLayout.LayoutParams cardP = new LinearLayout.LayoutParams(-1, -2);
+                cardP.bottomMargin = dp(10); listHost.addView(card, cardP);
+
+                ImageView avatar = new ImageView(MainActivity.this);
+                avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                avatar.setBackground(nenVien(0xFF30343A, 0xFF777777, 50));
+                avatar.setClipToOutline(true);
+                String avatarUrl = KhoDuLieu.chuoi(member.get("anh_dai_dien"));
+                if (!TextUtils.isEmpty(avatarUrl)) ImageLoader.load(avatar, avatarUrl, R.drawable.bg_circle_surface);
+                else {
+                    TextView fallback = chu(layChuVietTat(name), 16, TRANG, true);
+                    fallback.setGravity(Gravity.CENTER);
+                    fallback.setBackground(nenVien(0xFF4A252B, 0xFF9A414B, 50));
+                    card.addView(fallback, new LinearLayout.LayoutParams(dp(48), dp(48)));
+                }
+                if (!TextUtils.isEmpty(avatarUrl)) card.addView(avatar, new LinearLayout.LayoutParams(dp(48), dp(48)));
+
+                LinearLayout info = new LinearLayout(MainActivity.this);
+                info.setOrientation(LinearLayout.VERTICAL);
+                info.setPadding(dp(11), 0, dp(4), 0);
+                TextView nameView = chu(name.isEmpty() ? "Hội viên" : name, 15, TRANG, true);
+                info.addView(nameView);
+                int statusColor = "Đang hoạt động".equals(category) ? 0xFF69D68D
+                        : ("Sắp hết hạn".equals(category) ? 0xFFFFC45C : 0xFFFF7777);
+                TextView statusView = chu("● " + category, 10, statusColor, true);
+                statusView.setPadding(dp(7), dp(3), dp(7), dp(3));
+                statusView.setBackground(nenVien(0x33222222, 0x33444444, 20));
+                LinearLayout.LayoutParams statusP = new LinearLayout.LayoutParams(-2, -2);
+                statusP.topMargin = dp(3); info.addView(statusView, statusP);
+                TextView contact = chu((phone.isEmpty() ? "Chưa có SĐT" : phone) + " · " + email, 11, 0xFFBDBDBD, false);
+                contact.setMaxLines(1); contact.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                LinearLayout.LayoutParams contactP = new LinearLayout.LayoutParams(-1, -2);
+                contactP.topMargin = dp(3); info.addView(contact, contactP);
+                TextView pack = chu(packageName.isEmpty() ? "Chưa đăng ký gói tập" : packageName, 11, 0xFFE8E8E8, false);
+                pack.setPadding(dp(7), dp(3), dp(7), dp(3));
+                pack.setBackground(nenVien(0xFF303033, 0xFF444448, 9));
+                LinearLayout.LayoutParams packP = new LinearLayout.LayoutParams(-2, -2);
+                packP.topMargin = dp(5); info.addView(pack, packP);
+                TextView expiryView = chu(expiry > 0 ? ((expired ? "Đã hết hạn: " : "Hết hạn: ") + ngay(expiry)) : "Chưa có ngày hết hạn", 11, 0xFFBDBDBD, false);
+                LinearLayout.LayoutParams expiryP = new LinearLayout.LayoutParams(-1, -2);
+                expiryP.topMargin = dp(3); info.addView(expiryView, expiryP);
+                card.addView(info, new LinearLayout.LayoutParams(0, -2, 1));
+                TextView arrow = chu("›", 29, 0xFFBDBDBD, false);
+                card.addView(arrow, new LinearLayout.LayoutParams(dp(20), -2));
+                card.setOnClickListener(v -> hienChiTietHoiVien(member, category, packageName, expiry));
+            }
+            if (visible == 0) {
+                TextView empty = chu(query.isEmpty() ? "Không có hội viên trong nhóm này." : "Không tìm thấy hội viên phù hợp.", 13, XAM, false);
+                empty.setGravity(Gravity.CENTER); empty.setPadding(dp(15), dp(30), dp(15), dp(30));
+                listHost.addView(empty);
+            }
+        };
+
+        String[] filterNames = {"Tất cả", "Đang hoạt động", "Sắp hết hạn", "Hết hạn"};
+        for (String filter : filterNames) {
+            Button chip = new Button(this);
+            chip.setText(filter); chip.setAllCaps(false); chip.setTextSize(12);
+            chip.setTextColor(TRANG); chip.setMinHeight(dp(38)); chip.setPadding(dp(13), 0, dp(13), 0);
+            chip.setBackground(nenVien("Tất cả".equals(filter) ? DO : 0xFF252528,
+                    "Tất cả".equals(filter) ? 0xFFFF5C61 : 0xFF505055, 22));
+            LinearLayout.LayoutParams chipP = new LinearLayout.LayoutParams(-2, dp(38));
+            chipP.setMargins(0, 0, dp(8), 0); filters.addView(chip, chipP);
+            chip.setOnClickListener(v -> {
+                selectedFilter[0] = filter;
+                for (int i = 0; i < filters.getChildCount(); i++) {
+                    Button b = (Button) filters.getChildAt(i);
+                    String label = b.getText().toString();
+                    b.setBackground(nenVien(label.equals(filter) ? DO : 0xFF252528,
+                            label.equals(filter) ? 0xFFFF5C61 : 0xFF505055, 22));
+                }
+                renderList.run();
+            });
+        }
+        search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { renderList.run(); }
+            @Override public void afterTextChanged(Editable s) {}
+        });
 
         kho.layTheoTruong("nguoi_dung", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
             @Override public void thanhCong(List<Map<String, Object>> gymUsers) {
                 kho.layTheoTruong("dang_ky_goi", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
                     @Override public void thanhCong(List<Map<String, Object>> registrations) {
-                        Map<String, String> memberPackageMap = new HashMap<>();
+                        Map<String, Map<String, Object>> memberPackageMap = new HashMap<>();
                         Set<String> memberUids = new HashSet<>();
                         if (gymUsers != null) {
                             for (Map<String, Object> u : gymUsers) {
@@ -3759,43 +4698,39 @@ public class MainActivity extends AppCompatActivity {
                             for (Map<String, Object> reg : registrations) {
                                 String mUid = KhoDuLieu.chuoi(reg.get("uid_nguoi_dung"));
                                 String st = KhoDuLieu.chuoi(reg.get("trang_thai"));
-                                if ("dang_hoat_dong".equals(st)) {
+                                if (!mUid.isEmpty() && ("dang_hoat_dong".equals(st) || "het_han".equals(st))) {
                                     memberUids.add(mUid);
-                                    memberPackageMap.put(mUid, KhoDuLieu.chuoi(reg.get("ten_goi")));
+                                    Map<String, Object> previous = memberPackageMap.get(mUid);
+                                    if (previous == null || laySo(reg, "ngay_ket_thuc") >= laySo(previous, "ngay_ket_thuc")) memberPackageMap.put(mUid, reg);
                                 }
                             }
                         }
 
-                        themChu("Tổng hội viên thuộc Gym: " + memberUids.size(), 14, XAM, true);
+                        totalLabel.setText("TỔNG SỐ: " + memberUids.size() + " HỘI VIÊN");
                         if (memberUids.isEmpty()) {
-                            the("Chưa có hội viên", "Khi hội viên đăng ký gói hoặc chọn phòng Gym này, danh sách sẽ xuất hiện ở đây.");
+                            renderList.run();
                             return;
                         }
 
+                        final int[] completed = {0};
                         for (String mId : memberUids) {
                             kho.layMot("nguoi_dung", mId, new KhoDuLieu.KetQua<Map<String, Object>>() {
                                 @Override public void thanhCong(Map<String, Object> member) {
-                                    if (member == null) return;
-                                    String status = Boolean.FALSE.equals(member.get("trang_thai")) ? "Đã khóa" : "Đang hoạt động";
-                                    String packageName = memberPackageMap.containsKey(mId) ? memberPackageMap.get(mId) : "Chưa có gói hoạt động";
-
-                                    LinearLayout card = the(KhoDuLieu.chuoi(member.get("ho_ten")),
-                                            "📧 Email: " + KhoDuLieu.chuoi(member.get("email"))
-                                                    + "\n📞 SĐT: " + KhoDuLieu.chuoi(member.get("so_dien_thoai"))
-                                                    + "\n💳 Gói tập: " + packageName
-                                                    + "\n🔒 Trạng thái: " + status);
-
-                                    themNutVaoThe(card, "📅 PHÂN LỊCH TẬP CHO HỘI VIÊN NÀY", true, () -> hienFormLichTapChoThanhVien(mId, KhoDuLieu.chuoi(member.get("ho_ten"))));
-                                    themNutVaoThe(card, Boolean.FALSE.equals(member.get("trang_thai")) ? "MỞ KHÓA TÀI KHOẢN" : "KHÓA TÀI KHOẢN", false, () -> {
-                                        Map<String, Object> patch = new HashMap<>();
-                                        patch.put("trang_thai", !Boolean.FALSE.equals(member.get("trang_thai")));
-                                        kho.capNhat("nguoi_dung", mId, patch, new KhoDuLieu.KetQua<Boolean>() {
-                                            @Override public void thanhCong(Boolean ok) { hienHoiVien(); }
-                                            @Override public void thatBai(String error) { baoLoi(error); }
-                                        });
-                                    });
+                                    if (member != null) {
+                                        Map<String, Object> item = new HashMap<>(member);
+                                        item.put("_uid", mId);
+                                        Map<String, Object> reg = memberPackageMap.get(mId);
+                                        item.put("_ten_goi", reg == null ? "" : KhoDuLieu.chuoi(reg.get("ten_goi")));
+                                        item.put("_ngay_het_han", reg == null ? 0L : laySo(reg, "ngay_ket_thuc"));
+                                        loadedMembers.add(item);
+                                    }
+                                    completed[0]++;
+                                    if (completed[0] == memberUids.size()) {
+                                        loadedMembers.sort((a, b) -> KhoDuLieu.chuoi(a.get("ho_ten")).compareToIgnoreCase(KhoDuLieu.chuoi(b.get("ho_ten"))));
+                                        renderList.run();
+                                    }
                                 }
-                                @Override public void thatBai(String error) {}
+                                @Override public void thatBai(String error) { completed[0]++; if (completed[0] == memberUids.size()) renderList.run(); }
                             });
                         }
                     }
@@ -3806,10 +4741,39 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void hienChiTietHoiVien(Map<String, Object> member, String category, String packageName, long expiry) {
+        String memberId = KhoDuLieu.chuoi(member.get("_uid"));
+        String name = KhoDuLieu.chuoi(member.get("ho_ten"));
+        new AlertDialog.Builder(this)
+                .setTitle(name.isEmpty() ? "Thông tin hội viên" : name)
+                .setMessage("Email: " + KhoDuLieu.chuoi(member.get("email"))
+                        + "\nSố điện thoại: " + KhoDuLieu.chuoi(member.get("so_dien_thoai"))
+                        + "\nGói tập: " + (packageName.isEmpty() ? "Chưa đăng ký" : packageName)
+                        + "\nTrạng thái: " + category
+                        + "\nHạn sử dụng: " + (expiry > 0 ? ngay(expiry) : "Chưa cập nhật"))
+                .setNeutralButton("Phân lịch tập", (d, w) -> hienFormLichTapChoThanhVien(memberId, name))
+                .setNegativeButton(Boolean.FALSE.equals(member.get("trang_thai")) ? "Mở khóa" : "Khóa tài khoản", (d, w) -> {
+                    Map<String, Object> patch = new HashMap<>();
+                    patch.put("trang_thai", Boolean.FALSE.equals(member.get("trang_thai")));
+                    kho.capNhat("nguoi_dung", memberId, patch, new KhoDuLieu.KetQua<Boolean>() {
+                        @Override public void thanhCong(Boolean ok) { thongBao("Đã cập nhật trạng thái tài khoản."); hienHoiVien(); }
+                        @Override public void thatBai(String error) { baoLoi(error); }
+                    });
+                })
+                .setPositiveButton("Đóng", null).show();
+    }
+
     private void hienFormLichTapChoThanhVien(String memberUid, String memberName) {
         selectedMemberUid = memberUid;
         selectedMemberName = memberName + " (Hội viên)";
         hienFormLichTap();
+    }
+
+    private String layChuVietTat(String name) {
+        if (TextUtils.isEmpty(name)) return "HV";
+        String[] parts = name.trim().split("\\s+");
+        if (parts.length == 1) return parts[0].substring(0, 1).toUpperCase(Locale.ROOT);
+        return (parts[0].substring(0, 1) + parts[parts.length - 1].substring(0, 1)).toUpperCase(Locale.ROOT);
     }
 
     private void hienYeuCauGoi() {
@@ -3830,6 +4794,39 @@ public class MainActivity extends AppCompatActivity {
                 if (pending == 0) the("Không có yêu cầu đang chờ", "Yêu cầu mới của hội viên sẽ xuất hiện ở đây.");
             }
             @Override public void thatBai(String error) { baoLoi(error); }
+        });
+    }
+
+    private void moYeuCauGoiTuThongBao(Map<String, Object> notice) {
+        if (!laQuanTri()) { baoLoi("Chỉ chủ Gym mới được xác nhận đăng ký."); return; }
+        String registrationId = KhoDuLieu.chuoi(notice.get("dang_ky_goi_id"));
+        if (registrationId.isEmpty()) { hienYeuCauGoi(); return; }
+        kho.layMot("dang_ky_goi", registrationId, new KhoDuLieu.KetQua<Map<String, Object>>() {
+            @Override public void thanhCong(Map<String, Object> registration) {
+                if (registration == null) { baoLoi("Không tìm thấy yêu cầu đăng ký này."); hienYeuCauGoi(); return; }
+                if (!gymId().equals(KhoDuLieu.chuoi(registration.get("gym_id")))) {
+                    baoLoi("Yêu cầu này không thuộc phòng Gym của bạn."); return;
+                }
+                if (!"cho_xac_nhan".equals(KhoDuLieu.chuoi(registration.get("trang_thai")))) {
+                    thongBao("Yêu cầu này đã được xử lý trước đó."); hienYeuCauGoi(); return;
+                }
+                taoTrang("XÁC NHẬN ĐĂNG KÝ", "Kiểm tra thông tin trước khi duyệt", () -> hienThongBao(), false);
+                LinearLayout detail = the("📩  YÊU CẦU TỪ HỘI VIÊN",
+                        "Hội viên: " + KhoDuLieu.chuoi(registration.get("ten_hoi_vien"))
+                                + "\nGói tập: " + KhoDuLieu.chuoi(registration.get("ten_goi"))
+                                + "\nGiá: " + tien(laySo(registration, "gia"))
+                                + "\nThời hạn: " + laySo(registration, "so_ngay") + " ngày"
+                                + "\nNgày gửi: " + ngay(laySo(registration, "ngay_dang_ky"))
+                                + "\n\nTrạng thái: ĐANG CHỜ XÁC NHẬN");
+                detail.setBackground(taoNenGradient(new int[]{0xFF32171D, 0xFF171518}, 22, 0xFF9E303A));
+                themNutVaoThe(detail, "✓  XÁC NHẬN ĐĂNG KÝ", true, () -> capNhatYeuCauGoi(registration, "dang_hoat_dong"));
+                themNutVaoThe(detail, "✕  TỪ CHỐI YÊU CẦU", false, () -> new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Từ chối đăng ký?")
+                        .setMessage("Hội viên sẽ nhận được thông báo từ chối yêu cầu này.")
+                        .setNegativeButton("Quay lại", null)
+                        .setPositiveButton("Từ chối", (d, w) -> capNhatYeuCauGoi(registration, "tu_choi")).show());
+            }
+            @Override public void thatBai(String error) { baoLoi("Không tải được yêu cầu: " + error); }
         });
     }
 
@@ -3860,18 +4857,121 @@ public class MainActivity extends AppCompatActivity {
 
     private void hienDiemDanh() {
         if (!laQuanTri()) { baoLoi("Chỉ quản trị Gym mới được xem điểm danh."); return; }
-        taoTrang("ĐIỂM DANH & CHUYÊN CẦN", tenGymHienTai, this::hienBangDieuKhien, true);
-        themChu("DANH SÁCH HỘI VIÊN VÀ CHỈ SỐ ĐIỂM DANH (1-30 NGÀY/THÁNG)", 13, 0xFFE53935, true);
+        taoTrang("QUẢN LÝ ĐIỂM DANH", tenGymHienTai, this::hienBangDieuKhien, true);
+
+        TextView dateTitle = chu(new SimpleDateFormat("EEEE, dd/MM/yyyy", new Locale("vi", "VN")).format(new Date()), 19, TRANG, true);
+        dateTitle.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams dateP = new LinearLayout.LayoutParams(-1, -2);
+        dateP.topMargin = dp(4); dateP.bottomMargin = dp(15); thanTrang.addView(dateTitle, dateP);
+
+        LinearLayout stats = new LinearLayout(this);
+        stats.setOrientation(LinearLayout.HORIZONTAL);
+        TextView totalStat = taoTheThongKeDiemDanh(stats, "LƯỢT ĐIỂM DANH", "—");
+        TextView memberStat = taoTheThongKeDiemDanh(stats, "HỘI VIÊN ĐÃ ĐẾN", "—");
+        TextView invalidStat = taoTheThongKeDiemDanh(stats, "KHÔNG HỢP LỆ", "0");
+        LinearLayout.LayoutParams statsP = new LinearLayout.LayoutParams(-1, -2);
+        statsP.bottomMargin = dp(14); thanTrang.addView(stats, statsP);
+
+        Button manualInfo = taoNutNho("＋  GHI NHẬN ĐIỂM DANH HỘI VIÊN", true, () ->
+                thongBao("Điểm danh hiện được ghi nhận từ luồng xác thực hội viên và hoàn thành buổi tập."));
+        manualInfo.setTextSize(13);
+        LinearLayout.LayoutParams actionP = new LinearLayout.LayoutParams(-1, dp(54));
+        actionP.bottomMargin = dp(14); thanTrang.addView(manualInfo, actionP);
+
+        EditText search = oNhap("⌕  Tìm tên, số điện thoại hoặc mã hội viên...", InputType.TYPE_CLASS_TEXT, "");
+        // oNhap() tự thêm trường vào thanTrang; không addView lần thứ hai.
+
+        HorizontalScrollView tabsScroll = new HorizontalScrollView(this);
+        tabsScroll.setHorizontalScrollBarEnabled(false);
+        LinearLayout tabs = new LinearLayout(this); tabs.setOrientation(LinearLayout.HORIZONTAL);
+        tabsScroll.addView(tabs); thanTrang.addView(tabsScroll);
 
         LinearLayout list = new LinearLayout(this);
         list.setOrientation(LinearLayout.VERTICAL);
-        thanTrang.addView(list);
+        LinearLayout.LayoutParams listP = new LinearLayout.LayoutParams(-1, -2);
+        listP.topMargin = dp(9); thanTrang.addView(list, listP);
+        final String[] selectedTab = {"Tất cả"};
+        final List<Map<String, Object>> allRows = new ArrayList<>();
+        Runnable renderRows = () -> {
+            list.removeAllViews();
+            String query = search.getText().toString().trim().toLowerCase(new Locale("vi", "VN"));
+            int shown = 0;
+            for (Map<String, Object> row : allRows) {
+                String name = KhoDuLieu.chuoi(row.get("_member_name"));
+                String phone = KhoDuLieu.chuoi(row.get("_phone"));
+                String email = KhoDuLieu.chuoi(row.get("_email"));
+                String content = KhoDuLieu.chuoi(row.get("noi_dung"));
+                String searchable = (name + " " + phone + " " + email + " " + KhoDuLieu.chuoi(row.get("uid_nguoi_dung"))).toLowerCase(new Locale("vi", "VN"));
+                if (!searchable.contains(query)) continue;
+                if ("Lỗi/Từ chối".equals(selectedTab[0])) continue; // Firestore hiện chưa lưu bản ghi từ chối.
+                shown++;
+                LinearLayout item = new LinearLayout(MainActivity.this);
+                item.setOrientation(LinearLayout.HORIZONTAL); item.setGravity(Gravity.CENTER_VERTICAL);
+                item.setPadding(dp(12), dp(13), dp(10), dp(13));
+                GradientDrawable itemBg = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{0xFF242326, 0xFF171719});
+                itemBg.setCornerRadius(dp(15)); itemBg.setStroke(dp(1), 0xFF454247); item.setBackground(itemBg);
+                LinearLayout.LayoutParams itemP = new LinearLayout.LayoutParams(-1, -2);
+                itemP.bottomMargin = dp(9); list.addView(item, itemP);
+
+                TextView avatar = chu(layChuVietTat(name), 15, TRANG, true);
+                avatar.setGravity(Gravity.CENTER);
+                avatar.setBackground(nenVien(0xFF3A292D, 0xFF8B424B, 40));
+                item.addView(avatar, new LinearLayout.LayoutParams(dp(46), dp(46)));
+
+                LinearLayout details = new LinearLayout(MainActivity.this);
+                details.setOrientation(LinearLayout.VERTICAL); details.setPadding(dp(11), 0, dp(4), 0);
+                details.addView(chu(name.isEmpty() ? "Hội viên" : name, 14, TRANG, true));
+                long time = laySo(row, "ngay_tao");
+                String clock = time > 0 ? new SimpleDateFormat("HH:mm", new Locale("vi", "VN")).format(new Date(time)) : "--:--";
+                details.addView(chu(clock + "   " + content, 11, 0xFFD0CDD0, false));
+                TextView status = chu("✓  ĐÃ GHI NHẬN", 10, 0xFF71D99A, true);
+                LinearLayout.LayoutParams statusP = new LinearLayout.LayoutParams(-2, -2);
+                statusP.topMargin = dp(4); details.addView(status, statusP);
+                item.addView(details, new LinearLayout.LayoutParams(0, -2, 1));
+                item.setOnClickListener(v -> hienChiTietDiemDanhHoiVien(name, Collections.singletonList(row)));
+            }
+            if (shown == 0) {
+                TextView empty = chu("Lỗi/từ chối chưa có dữ liệu ghi nhận.\nCác lượt điểm danh hợp lệ sẽ xuất hiện tại đây.", 12, XAM, false);
+                if (!"Lỗi/Từ chối".equals(selectedTab[0])) empty.setText("Không tìm thấy lượt điểm danh phù hợp.");
+                empty.setGravity(Gravity.CENTER); empty.setPadding(dp(14), dp(26), dp(14), dp(26)); list.addView(empty);
+            }
+        };
+        String[] tabNames = {"Tất cả", "Thành công", "Lỗi/Từ chối"};
+        for (String tabName : tabNames) {
+            TextView tab = chu(tabName, 12, "Tất cả".equals(tabName) ? 0xFFFF666B : 0xFFCBC8CC, true);
+            tab.setGravity(Gravity.CENTER); tab.setPadding(dp(14), dp(10), dp(14), dp(10));
+            tabs.addView(tab, new LinearLayout.LayoutParams(-2, dp(42)));
+            tab.setOnClickListener(v -> {
+                selectedTab[0] = tabName;
+                for (int i = 0; i < tabs.getChildCount(); i++) {
+                    TextView t = (TextView) tabs.getChildAt(i);
+                    boolean active = t.getText().toString().equals(tabName);
+                    t.setTextColor(active ? 0xFFFF666B : 0xFFCBC8CC);
+                    t.setBackground(active ? nenVien(0xFF32191D, 0xFFB33D46, 7) : null);
+                }
+                renderRows.run();
+            });
+        }
+        search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { renderRows.run(); }
+            @Override public void afterTextChanged(Editable s) {}
+        });
 
         kho.layTheoTruong("diem_danh", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
             @Override public void thanhCong(List<Map<String, Object>> allCheckins) {
                 Map<String, List<Map<String, Object>>> memberCheckinMap = new HashMap<>();
+                int todayCount = 0;
+                Set<String> todayMembers = new HashSet<>();
                 if (allCheckins != null) {
                     for (Map<String, Object> ci : allCheckins) {
+                        if (ngayHomNay().equals(KhoDuLieu.chuoi(ci.get("ngay")))) {
+                            todayCount++;
+                            String todayUid = KhoDuLieu.chuoi(ci.get("uid_nguoi_dung"));
+                            if (todayUid.isEmpty()) todayUid = KhoDuLieu.chuoi(ci.get("uid_hoi_vien"));
+                            if (!todayUid.isEmpty()) todayMembers.add(todayUid);
+                        }
                         String mUid = KhoDuLieu.chuoi(ci.get("uid_nguoi_dung"));
                         if (mUid.isEmpty()) mUid = KhoDuLieu.chuoi(ci.get("uid_hoi_vien"));
                         if (!mUid.isEmpty()) {
@@ -3880,6 +4980,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                totalStat.setText(String.valueOf(todayCount));
+                memberStat.setText(String.valueOf(todayMembers.size()));
 
                 kho.layTheoTruong("nguoi_dung", "gym_id", gymId(), new KhoDuLieu.KetQua<List<Map<String, Object>>>() {
                     @Override public void thanhCong(List<Map<String, Object>> gymUsers) {
@@ -3902,8 +5004,20 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
+                        if (allCheckins != null) {
+                            for (Map<String, Object> ci : allCheckins) {
+                                String id = KhoDuLieu.chuoi(ci.get("uid_nguoi_dung"));
+                                if (id.isEmpty()) id = KhoDuLieu.chuoi(ci.get("uid_hoi_vien"));
+                                Map<String, Object> row = new HashMap<>(ci);
+                                row.put("_member_name", memberNameMap.get(id) == null ? KhoDuLieu.chuoi(ci.get("ten_nguoi_dung")) : memberNameMap.get(id));
+                                row.put("_phone", ""); row.put("_email", "");
+                                allRows.add(row);
+                            }
+                        }
+                        allRows.sort((a, b) -> Long.compare(laySo(b, "ngay_tao"), laySo(a, "ngay_tao")));
+                        renderRows.run();
+
                         if (memberNameMap.isEmpty()) {
-                            the("Chưa có lượt điểm danh", "Chưa có lượt điểm danh nào từ hội viên.");
                             return;
                         }
 
@@ -3927,19 +5041,19 @@ public class MainActivity extends AppCompatActivity {
                             card.setPadding(dp(18), dp(16), dp(18), dp(16));
 
                             GradientDrawable bg = new GradientDrawable();
-                            bg.setColor(0xFFFFFFFF);
+                            bg.setColor(0xFF1B1A1D);
                             bg.setCornerRadius(dp(18));
-                            bg.setStroke(dp(1), 0xFFB2DFDB);
+                            bg.setStroke(dp(1), 0xFF51343A);
                             card.setBackground(bg);
 
                             LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-1, -2);
                             cp.bottomMargin = dp(14);
                             list.addView(card, cp);
 
-                            TextView tvName = chu("👤 Hội viên: " + mName, 17, 0xFF0F172A, true);
+                            TextView tvName = chu("👤 Hội viên: " + mName, 17, TRANG, true);
                             card.addView(tvName);
 
-                            TextView tvStreak = chu("🏃 Chuyên cần tháng này: " + daysCount + "/30 ngày tập", 13, 0xFFE53935, true);
+                            TextView tvStreak = chu("🏃 Chuyên cần tháng này: " + daysCount + "/30 ngày tập", 13, 0xFFFF777D, true);
                             tvStreak.setPadding(0, dp(4), 0, dp(8));
                             card.addView(tvStreak);
 
@@ -3947,7 +5061,7 @@ public class MainActivity extends AppCompatActivity {
                             bar.setMax(30);
                             bar.setProgress(daysCount);
                             bar.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFE53935));
-                            bar.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFE0E0E0));
+                            bar.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF454248));
                             LinearLayout.LayoutParams barP = new LinearLayout.LayoutParams(-1, dp(12));
                             barP.bottomMargin = dp(10);
                             card.addView(bar, barP);
@@ -3962,6 +5076,22 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override public void thatBai(String error) { baoLoi("Không tải được điểm danh: " + error); }
         });
+    }
+
+    private TextView taoTheThongKeDiemDanh(LinearLayout parent, String label, String value) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL); card.setGravity(Gravity.CENTER);
+        card.setPadding(dp(5), dp(12), dp(5), dp(12));
+        GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                new int[]{0xFF292326, 0xFF1B1A1D});
+        bg.setCornerRadius(dp(14)); bg.setStroke(dp(1), 0xFF4D353B); card.setBackground(bg);
+        TextView caption = chu(label, 9, 0xFFD0C9CD, true); caption.setGravity(Gravity.CENTER);
+        TextView number = chu(value, 20, TRANG, true); number.setGravity(Gravity.CENTER);
+        card.addView(caption); LinearLayout.LayoutParams n = new LinearLayout.LayoutParams(-1, -2);
+        n.topMargin = dp(5); card.addView(number, n);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(0, dp(88), 1);
+        p.setMargins(0, 0, dp(7), 0); parent.addView(card, p);
+        return number;
     }
 
     private void hienChiTietDiemDanhHoiVien(String memberName, List<Map<String, Object>> checkins) {
@@ -4003,10 +5133,49 @@ public class MainActivity extends AppCompatActivity {
 
     private void hienFormCaiDatGym(Map<String, Object> gym) {
         taoTrang("THÔNG TIN THƯƠNG HIỆU", "Thông tin công khai để hội viên nhận diện Gym", this::hienBangDieuKhien, false);
-        EditText name = truong("Tên thương hiệu Gym", "Tên thương hiệu", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")));
-        EditText address = truong("Địa chỉ", "Địa chỉ", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, KhoDuLieu.chuoi(gym.get("dia_chi")));
-        EditText phone = truong("Số điện thoại", "0123456789", InputType.TYPE_CLASS_PHONE, KhoDuLieu.chuoi(gym.get("so_dien_thoai")));
-        nut("LƯU THÔNG TIN", true, () -> {
+        thanTrang.setPadding(dp(16), dp(12), dp(16), dp(28));
+
+        // Banner nhận diện thương hiệu theo phong cách đỏ - đen của GymManagement.
+        LinearLayout brandBanner = new LinearLayout(this);
+        brandBanner.setGravity(Gravity.CENTER_VERTICAL);
+        brandBanner.setPadding(dp(16), dp(18), dp(16), dp(18));
+        brandBanner.setBackground(taoNenGradient(new int[]{0xFF351014, 0xFF171315, 0xFF101010}, 22, 0xFF8D292F));
+        ImageView brandIcon = new ImageView(this);
+        brandIcon.setImageResource(R.drawable.ic_store);
+        brandIcon.setColorFilter(Color.WHITE);
+        brandIcon.setPadding(dp(13), dp(13), dp(13), dp(13));
+        brandIcon.setBackground(nenVien(0xFFE52D32, 0xFFFF7777, 16));
+        brandBanner.addView(brandIcon, new LinearLayout.LayoutParams(dp(62), dp(62)));
+        LinearLayout brandTexts = new LinearLayout(this);
+        brandTexts.setOrientation(LinearLayout.VERTICAL);
+        brandTexts.setPadding(dp(14), 0, 0, 0);
+        TextView brandName = chu(KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")).isEmpty() ? "THƯƠNG HIỆU CỦA BẠN" : KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")).toUpperCase(new Locale("vi", "VN")), 17, TRANG, true);
+        TextView brandCaption = chu("THÔNG TIN CÔNG KHAI · GYM MANAGEMENT", 10, 0xFFFFA0A0, true);
+        brandCaption.setPadding(0, dp(5), 0, 0);
+        brandTexts.addView(brandName);
+        brandTexts.addView(brandCaption);
+        brandBanner.addView(brandTexts, new LinearLayout.LayoutParams(0, -2, 1));
+        LinearLayout.LayoutParams bannerParams = new LinearLayout.LayoutParams(-1, dp(116));
+        bannerParams.bottomMargin = dp(22);
+        thanTrang.addView(brandBanner, bannerParams);
+
+        LinearLayout sectionTitle = new LinearLayout(this);
+        sectionTitle.setGravity(Gravity.CENTER_VERTICAL);
+        TextView sectionIcon = chu("ⓘ", 23, 0xFFFF555B, true);
+        sectionTitle.addView(sectionIcon, new LinearLayout.LayoutParams(dp(34), -2));
+        sectionTitle.addView(chu("Thông tin thương hiệu", 19, TRANG, true));
+        thanTrang.addView(sectionTitle);
+        View accent = new View(this);
+        accent.setBackground(taoNenGradient(new int[]{0xFF68151B, 0xFFFF343B, 0xFF68151B}, 3, 0x00FFFFFF));
+        LinearLayout.LayoutParams accentP = new LinearLayout.LayoutParams(-1, dp(2));
+        accentP.topMargin = dp(10); accentP.bottomMargin = dp(18);
+        thanTrang.addView(accent, accentP);
+
+        EditText name = taoTruongThuongHieu(R.drawable.ic_gym, "Tên thương hiệu Gym", "Nhập tên thương hiệu", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, KhoDuLieu.chuoi(gym.get("ten_thuong_hieu")));
+        EditText address = taoTruongThuongHieu(R.drawable.ic_location, "Địa chỉ", "Nhập địa chỉ phòng Gym", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES, KhoDuLieu.chuoi(gym.get("dia_chi")));
+        EditText phone = taoTruongThuongHieu(R.drawable.ic_phone, "Số điện thoại", "Nhập số điện thoại liên hệ", InputType.TYPE_CLASS_PHONE, KhoDuLieu.chuoi(gym.get("so_dien_thoai")));
+
+        Button save = taoNut("▣   LƯU THÔNG TIN", true, () -> {
             String n = name.getText().toString().trim().replaceAll("\\s+", " ");
             String a = address.getText().toString().trim();
             String p = phone.getText().toString().trim();
@@ -4046,6 +5215,55 @@ public class MainActivity extends AppCompatActivity {
                 @Override public void thatBai(String error) { baoLoi(error); }
             });
         });
+        save.setTextSize(16);
+        save.setMinHeight(dp(58));
+        save.setBackground(taoNenGradient(new int[]{0xFFFF343A, 0xFFB80F1B, 0xFFEA252D}, 30, 0xFFFF7777));
+        LinearLayout.LayoutParams saveP = new LinearLayout.LayoutParams(-1, dp(60));
+        saveP.topMargin = dp(10);
+        saveP.bottomMargin = dp(18);
+        thanTrang.addView(save, saveP);
+    }
+
+    private EditText taoTruongThuongHieu(int iconRes, String label, String hint, int inputType, String value) {
+        LinearLayout card = new LinearLayout(this);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setPadding(dp(13), dp(13), dp(13), dp(13));
+        card.setBackground(taoNenGradient(new int[]{0xFF21191C, 0xFF151315}, 19, 0xFF593039));
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(iconRes);
+        icon.setColorFilter(0xFFFF7777);
+        icon.setPadding(dp(12), dp(12), dp(12), dp(12));
+        icon.setBackground(nenVien(0xFF45191E, 0xFF743039, 15));
+        card.addView(icon, new LinearLayout.LayoutParams(dp(58), dp(58)));
+
+        LinearLayout fields = new LinearLayout(this);
+        fields.setOrientation(LinearLayout.VERTICAL);
+        fields.setPadding(dp(13), 0, 0, 0);
+        fields.addView(chu(label, 13, 0xFFC8BFC2, false));
+        EditText edit = new EditText(this);
+        edit.setSingleLine(true);
+        edit.setTextSize(16);
+        edit.setTextColor(TRANG);
+        edit.setHintTextColor(0xFF81777B);
+        edit.setHint(hint);
+        edit.setInputType(inputType);
+        edit.setPadding(0, dp(5), 0, 0);
+        edit.setBackgroundColor(Color.TRANSPARENT);
+        if (!TextUtils.isEmpty(value)) edit.setText(value);
+        fields.addView(edit, new LinearLayout.LayoutParams(-1, -2));
+        card.addView(fields, new LinearLayout.LayoutParams(0, -2, 1));
+
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2);
+        p.bottomMargin = dp(14);
+        thanTrang.addView(card, p);
+        return edit;
+    }
+
+    private GradientDrawable taoNenGradient(int[] colors, int radius, int stroke) {
+        GradientDrawable bg = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors);
+        bg.setCornerRadius(dp(radius));
+        if (stroke != 0) bg.setStroke(dp(1), stroke);
+        return bg;
     }
 
     // ---------------------------------------------------------------------
@@ -4429,20 +5647,115 @@ public class MainActivity extends AppCompatActivity {
     private void hienFormHoSo() {
         String title = getString(R.string.profile_edit).toUpperCase(new Locale("vi", "VN"));
         taoTrang(title, "Cập nhật tên và số điện thoại", this::hienHoSo, false);
-        the("VAI TRÒ", laQuanTri() ? "Quản trị Gym" : "Hội viên");
-        if (laQuanTri()) the("THƯƠNG HIỆU GYM", tenGymHienTai);
-        EditText name = truong("Họ và tên", "Họ tên", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS, KhoDuLieu.chuoi(nguoiDung.get("ho_ten")));
-        EditText email = truong("Email tài khoản", "Email", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, KhoDuLieu.chuoi(nguoiDung.get("email")));
+        thanTrang.setPadding(dp(16), dp(10), dp(16), dp(30));
+
+        // Hero profile: tách rõ màn hình chỉnh sửa khỏi màn hình Hồ sơ tổng quan.
+        LinearLayout hero = new LinearLayout(this);
+        hero.setOrientation(LinearLayout.VERTICAL);
+        hero.setGravity(Gravity.CENTER);
+        hero.setPadding(dp(18), dp(20), dp(18), dp(20));
+        hero.setBackground(taoNenGradient(new int[]{0xFF401017, 0xFF211014, 0xFF111114}, 26, 0xFF9E303A));
+        TextView avatar = chu("T", 32, TRANG, true);
+        avatar.setGravity(Gravity.CENTER);
+        avatar.setBackground(nenVien(0xFFF4F7F2, 0xFFFF3945, 50));
+        avatar.setTextColor(0xFF17171B);
+        LinearLayout.LayoutParams avatarP = new LinearLayout.LayoutParams(dp(82), dp(82));
+        hero.addView(avatar, avatarP);
+        TextView camera = chu("📷", 14, TRANG, true);
+        camera.setGravity(Gravity.CENTER);
+        camera.setBackground(nenVien(0xFFE53935, 0xFFFF7777, 30));
+        LinearLayout.LayoutParams cameraP = new LinearLayout.LayoutParams(dp(32), dp(32));
+        cameraP.topMargin = dp(-18);
+        cameraP.leftMargin = dp(48);
+        hero.addView(camera, cameraP);
+        TextView memberName = chu(tenNguoiDung(), 20, TRANG, true);
+        memberName.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams memberP = new LinearLayout.LayoutParams(-1, -2);
+        memberP.topMargin = dp(2);
+        hero.addView(memberName, memberP);
+        TextView role = chu("✦   " + (laQuanTri() ? "CHỦ GYM" : "HỘI VIÊN") + "   ✦", 11, 0xFFFF7777, true);
+        role.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams roleP = new LinearLayout.LayoutParams(-1, -2);
+        roleP.topMargin = dp(7);
+        hero.addView(role, roleP);
+        TextView emailHero = chu(KhoDuLieu.chuoi(nguoiDung.get("email")), 12, 0xFFBDB0B2, false);
+        emailHero.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams emailHeroP = new LinearLayout.LayoutParams(-1, -2);
+        emailHeroP.topMargin = dp(3);
+        hero.addView(emailHero, emailHeroP);
+        LinearLayout.LayoutParams heroP = new LinearLayout.LayoutParams(-1, -2);
+        heroP.bottomMargin = dp(16);
+        thanTrang.addView(hero, heroP);
+
+        if (laQuanTri()) {
+            LinearLayout brand = the("THƯƠNG HIỆU GYM", tenGymHienTai);
+            brand.setBackground(taoNenGradient(new int[]{0xFF30151A, 0xFF191519}, 17, 0xFF71343B));
+        }
+
+        LinearLayout personal = new LinearLayout(this);
+        personal.setOrientation(LinearLayout.VERTICAL);
+        personal.setPadding(dp(16), dp(16), dp(16), dp(8));
+        personal.setBackground(taoNenGradient(new int[]{0xFF291317, 0xFF171518}, 23, 0xFF71343B));
+        TextView personalTitle = chu("👤  THÔNG TIN CÁ NHÂN", 16, TRANG, true);
+        personal.addView(personalTitle);
+        View accent = new View(this);
+        accent.setBackground(taoNenGradient(new int[]{0xFFFF2635, 0xFF6F2028}, 4, 0x00FFFFFF));
+        LinearLayout.LayoutParams accentP = new LinearLayout.LayoutParams(dp(72), dp(3));
+        accentP.topMargin = dp(10);
+        accentP.bottomMargin = dp(14);
+        personal.addView(accent, accentP);
+
+        EditText name = themTruongHoSo(personal, "♙", "Họ và tên", "Nhập họ và tên", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS, KhoDuLieu.chuoi(nguoiDung.get("ho_ten")), true);
+        EditText email = themTruongHoSo(personal, "✉", "Email tài khoản", "Email đăng nhập", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, KhoDuLieu.chuoi(nguoiDung.get("email")), false);
         email.setEnabled(false);
-        email.setAlpha(0.7f);
-        EditText phone = truong("Số điện thoại", "0123456789", InputType.TYPE_CLASS_PHONE, KhoDuLieu.chuoi(nguoiDung.get("so_dien_thoai")));
+        email.setAlpha(0.72f);
+        EditText phone = themTruongHoSo(personal, "☎", "Số điện thoại", "Nhập số điện thoại", InputType.TYPE_CLASS_PHONE, KhoDuLieu.chuoi(nguoiDung.get("so_dien_thoai")), true);
+        TextView genderLabel = chu("Giới tính", 11, 0xFFFFA0A5, true);
+        LinearLayout.LayoutParams genderLabelP = new LinearLayout.LayoutParams(-1, -2); genderLabelP.topMargin = dp(10); personal.addView(genderLabel, genderLabelP);
+        Spinner genderSpinner = new Spinner(this);
+        List<String> genderOptions = new ArrayList<>();
+        genderOptions.add("Chọn giới tính"); genderOptions.add("Nam"); genderOptions.add("Nữ");
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genderOptions);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(genderAdapter);
+        genderSpinner.setBackground(nenVien(0xFF1C191B, 0xFF754047, 12));
+        LinearLayout.LayoutParams genderP = new LinearLayout.LayoutParams(-1, dp(48)); genderP.topMargin = dp(5); genderP.bottomMargin = dp(8); personal.addView(genderSpinner, genderP);
+        String savedGender = KhoDuLieu.chuoi(nguoiDung.get("gioi_tinh")).toLowerCase(new Locale("vi", "VN"));
+        if (savedGender.isEmpty()) savedGender = KhoDuLieu.chuoi(nguoiDung.get("gender")).toLowerCase(Locale.ROOT);
+        genderSpinner.setSelection(savedGender.equals("nữ") || savedGender.equals("nu") || savedGender.equals("female") ? 2 : savedGender.isEmpty() ? 0 : 1);
+        LinearLayout.LayoutParams personalP = new LinearLayout.LayoutParams(-1, -2);
+        personalP.bottomMargin = dp(16);
+        thanTrang.addView(personal, personalP);
+
+        LinearLayout security = new LinearLayout(this);
+        security.setOrientation(LinearLayout.VERTICAL);
+        security.setPadding(dp(16), dp(16), dp(16), dp(8));
+        security.setBackground(taoNenGradient(new int[]{0xFF291317, 0xFF171518}, 23, 0xFF71343B));
+        security.addView(chu("🛡  BẢO MẬT TÀI KHOẢN", 16, TRANG, true));
+        View securityAccent = new View(this);
+        securityAccent.setBackground(taoNenGradient(new int[]{0xFFFF2635, 0xFF6F2028}, 4, 0x00FFFFFF));
+        LinearLayout.LayoutParams securityAccentP = new LinearLayout.LayoutParams(dp(72), dp(3));
+        securityAccentP.topMargin = dp(10);
+        securityAccentP.bottomMargin = dp(12);
+        security.addView(securityAccent, securityAccentP);
+        Button passwordButton = taoNutNho("🔑   ĐỔI / ĐẶT LẠI MẬT KHẨU     ›", false, this::guiEmailDatLaiMatKhauHoSo);
+        passwordButton.setMinHeight(dp(54));
+        passwordButton.setTextSize(13);
+        passwordButton.setBackground(taoNenGradient(new int[]{0xFF352025, 0xFF1B181B}, 15, 0xFF5B3439));
+        security.addView(passwordButton);
+        LinearLayout.LayoutParams securityP = new LinearLayout.LayoutParams(-1, -2);
+        securityP.bottomMargin = dp(16);
+        thanTrang.addView(security, securityP);
+
         nut("LƯU HỒ SƠ", true, () -> {
             String n = name.getText().toString().trim(), p = phone.getText().toString().trim();
             if (n.isEmpty()) { name.setError("Vui lòng nhập họ tên"); return; }
             if (!p.matches("[0-9]{9,11}")) { phone.setError("Số điện thoại gồm 9–11 chữ số"); return; }
+            if (genderSpinner.getSelectedItemPosition() == 0) { baoLoi("Vui lòng chọn giới tính để hiển thị hình thể chính xác."); return; }
             Map<String, Object> patch = new HashMap<>();
             patch.put("ho_ten", n);
             patch.put("so_dien_thoai", p);
+            patch.put("gioi_tinh", genderSpinner.getSelectedItemPosition() == 2 ? "nu" : "nam");
             kho.capNhat("nguoi_dung", uid, patch, new KhoDuLieu.KetQua<Boolean>() {
                 @Override public void thanhCong(Boolean ok) {
                     nguoiDung.putAll(patch);
@@ -4452,8 +5765,59 @@ public class MainActivity extends AppCompatActivity {
                 @Override public void thatBai(String error) { baoLoi(error); }
             });
         });
-        nut("ĐỔI / ĐẶT LẠI MẬT KHẨU", false, this::guiEmailDatLaiMatKhauHoSo);
-        nut("ĐĂNG XUẤT", false, this::xuLyDangXuat);
+        Button save = (Button) thanTrang.getChildAt(thanTrang.getChildCount() - 1);
+        save.setText("▣    LƯU THAY ĐỔI");
+        save.setTextSize(16);
+        save.setMinHeight(dp(58));
+        save.setBackground(taoNenGradient(new int[]{0xFFFF2635, 0xFFCE0714, 0xFF9E0710}, 32, 0xFFFF5962));
+        Button logout = taoNut("⇥   ĐĂNG XUẤT", false, this::xuLyDangXuat);
+        logout.setTextColor(0xFFFF7777);
+        logout.setBackground(nenVien(0xFF1A1417, 0xFF9E303A, 30));
+        logout.setMinHeight(dp(52));
+        LinearLayout.LayoutParams logoutP = new LinearLayout.LayoutParams(-1, -2);
+        logoutP.topMargin = dp(2);
+        thanTrang.addView(logout, logoutP);
+        TextView footer = chu("GYMMANAGEMENT  •  THÔNG TIN ĐƯỢC BẢO MẬT", 9, 0xFF796D70, true);
+        footer.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams footerP = new LinearLayout.LayoutParams(-1, -2);
+        footerP.topMargin = dp(18);
+        thanTrang.addView(footer, footerP);
+    }
+
+    private EditText themTruongHoSo(LinearLayout parent, String icon, String label, String hint,
+                                    int inputType, String value, boolean editable) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(13), dp(8), dp(13), dp(8));
+        row.setBackground(nenVien(0xFF211A1D, editable ? 0xFFE53946 : 0xFF51484B, 17));
+        TextView glyph = chu(icon, 22, editable ? 0xFFFF7777 : 0xFF999397, true);
+        glyph.setGravity(Gravity.CENTER);
+        row.addView(glyph, new LinearLayout.LayoutParams(dp(34), dp(42)));
+        LinearLayout column = new LinearLayout(this);
+        column.setOrientation(LinearLayout.VERTICAL);
+        column.setPadding(dp(9), dp(2), 0, dp(2));
+        TextView caption = chu(label, 11, 0xFFBDB0B2, false);
+        column.addView(caption);
+        EditText edit = new EditText(this);
+        edit.setSingleLine(true);
+        edit.setTextSize(15);
+        edit.setTextColor(TRANG);
+        edit.setHintTextColor(0xFF81777A);
+        edit.setHint(hint);
+        edit.setInputType(inputType);
+        edit.setText(value == null ? "" : value);
+        edit.setPadding(0, dp(4), 0, 0);
+        edit.setBackgroundColor(Color.TRANSPARENT);
+        edit.setEnabled(editable);
+        column.addView(edit, new LinearLayout.LayoutParams(-1, -2));
+        row.addView(column, new LinearLayout.LayoutParams(0, -2, 1));
+        if (editable) row.addView(chu("✎", 19, 0xFFFF7777, true));
+        else row.addView(chu("🔒", 15, 0xFF8D8588, false));
+        LinearLayout.LayoutParams rowP = new LinearLayout.LayoutParams(-1, -2);
+        rowP.bottomMargin = dp(11);
+        parent.addView(row, rowP);
+        return edit;
     }
     // ---------------------------------------------------------------------
     // ĐIỀU HƯỚNG BACK
